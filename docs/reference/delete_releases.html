@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get information about all the tags in a repository — gh_tags • githapi</title>
+<title>Delete releases. — delete_releases • githapi</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Get information about all the tags in a repository — gh_tags" />
+<meta property="og:title" content="Delete releases. — delete_releases" />
 
-<meta property="og:description" content="https://developer.github.com/v3/repos/#list-tags" />
+<meta property="og:description" content="This function deletes the specified releases. It also deletes the tags associated with the
+releases from the repository." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,18 +98,19 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get information about all the tags in a repository</h1>
+    <h1>Delete releases.</h1>
     <small class="dont-index">Source: <a href='https://github.com/ChadGoymer/githapi/blob/master/R/repositories.R'><code>R/repositories.R</code></a></small>
-    <div class="hidden name"><code>gh_tags.Rd</code></div>
+    <div class="hidden name"><code>delete_releases.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><a href='https://developer.github.com/v3/repos/#list-tags'>https://developer.github.com/v3/repos/#list-tags</a></p>
+    <p>This function deletes the specified releases. It also deletes the tags associated with the
+releases from the repository.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>gh_tags</span>(<span class='no'>repo</span>, <span class='kw'>n_max</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='fu'><a href='gh_token.html'>gh_token</a></span>(),
+    <pre class="usage"><span class='fu'>delete_releases</span>(<span class='no'>repo</span>, <span class='no'>tags</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='fu'><a href='gh_token.html'>gh_token</a></span>(),
   <span class='kw'>api</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"github.api"</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -119,8 +121,8 @@
       <td><p>(string) The repository specified in the format: <code>owner/repo</code>.</p></td>
     </tr>
     <tr>
-      <th>n_max</th>
-      <td><p>(integer, optional) Maximum number to return. Default: 1000.</p></td>
+      <th>tags</th>
+      <td><p>(character) The tag names associated with the releases.</p></td>
     </tr>
     <tr>
       <th>token</th>
@@ -134,13 +136,17 @@ environment variable <code>GITHUB_API</code> or <code>https://api.github.com</co
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Parameters passed to <code><a href='gh_page.html'>gh_page()</a></code>.</p></td>
+      <td><p>Parameters passed to <code><a href='gh_request.html'>gh_request()</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A tibble describing all the tags (see GitHub's API documentation for details).</p>
+    <p>A named list containing <code>TRUE</code> if the release was deleted. An error is thrown otherwise.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><a href='https://developer.github.com/v3/repos/releases/#delete-a-release'>https://developer.github.com/v3/repos/releases/#delete-a-release</a></p>
     
 
   </div>
@@ -150,6 +156,8 @@ environment variable <code>GITHUB_API</code> or <code>https://api.github.com</co
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
           </ul>
 
   </div>

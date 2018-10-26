@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get information about all the tags in a repository — gh_tags • githapi</title>
+<title>Send a http request to the specified GitHub url — gh_request • githapi</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Get information about all the tags in a repository — gh_tags" />
+<meta property="og:title" content="Send a http request to the specified GitHub url — gh_request" />
 
-<meta property="og:description" content="https://developer.github.com/v3/repos/#list-tags" />
+<meta property="og:description" content="Send a http request to the specified GitHub url" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,50 +97,54 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get information about all the tags in a repository</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ChadGoymer/githapi/blob/master/R/repositories.R'><code>R/repositories.R</code></a></small>
-    <div class="hidden name"><code>gh_tags.Rd</code></div>
+    <h1>Send a http request to the specified GitHub url</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ChadGoymer/githapi/blob/master/R/githapi.R'><code>R/githapi.R</code></a></small>
+    <div class="hidden name"><code>gh_request.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><a href='https://developer.github.com/v3/repos/#list-tags'>https://developer.github.com/v3/repos/#list-tags</a></p>
+    <p>Send a http request to the specified GitHub url</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>gh_tags</span>(<span class='no'>repo</span>, <span class='kw'>n_max</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='fu'><a href='gh_token.html'>gh_token</a></span>(),
-  <span class='kw'>api</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"github.api"</span>), <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>gh_request</span>(<span class='no'>type</span>, <span class='no'>url</span>, <span class='kw'>payload</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>accept</span> <span class='kw'>=</span> <span class='st'>"json"</span>, <span class='kw'>parse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>token</span> <span class='kw'>=</span> <span class='fu'><a href='gh_token.html'>gh_token</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>repo</th>
-      <td><p>(string) The repository specified in the format: <code>owner/repo</code>.</p></td>
+      <th>type</th>
+      <td><p>(string) The type of the request. Either "GET", "POST", "DELETE" or "PATCH".</p></td>
     </tr>
     <tr>
-      <th>n_max</th>
-      <td><p>(integer, optional) Maximum number to return. Default: 1000.</p></td>
+      <th>url</th>
+      <td><p>(string) URL to the GitHub API.</p></td>
+    </tr>
+    <tr>
+      <th>payload</th>
+      <td><p>(list) The information to send, which is converted to JSON.</p></td>
+    </tr>
+    <tr>
+      <th>accept</th>
+      <td><p>(string) The format of the returned result. Either "json", "raw" or other
+GitHub accepted format. Default: "json".</p></td>
+    </tr>
+    <tr>
+      <th>parse</th>
+      <td><p>(boolean) Whether to parse the response.</p></td>
     </tr>
     <tr>
       <th>token</th>
       <td><p>(string, optional) The personal access token for GitHub authorisation. Default:
 value stored in the environment variable <code>GITHUB_TOKEN</code> or <code>GITHUB_PAT</code>.</p></td>
     </tr>
-    <tr>
-      <th>api</th>
-      <td><p>(string, optional) The URL of GitHub's API. Default: the value stored in the
-environment variable <code>GITHUB_API</code> or <code>https://api.github.com</code>.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Parameters passed to <code><a href='gh_page.html'>gh_page()</a></code>.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A tibble describing all the tags (see GitHub's API documentation for details).</p>
+    <p>A list of the parsed response</p>
     
 
   </div>

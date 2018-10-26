@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.7.0</span>
       </span>
     </div>
 
@@ -689,21 +689,483 @@
       <tr>
         
         <td>
-          <p><code><a href="is_url.html">is_url()</a></code> </p>
+          <p><code><a href="create_releases.html">create_releases()</a></code> </p>
         </td>
-        <td><p>Checks whether the supplied object is a valid URL</p></td>
+        <td><p>Create releases at specified commits.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="is_sha.html">is_sha()</a></code> </p>
+          <p><code><a href="create_tags.html">create_tags()</a></code> </p>
         </td>
-        <td><p>Checks whether the supplied object is a valid SHA</p></td>
+        <td><p>Create tags at specified commits.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="is_repo.html">is_repo()</a></code> </p>
+          <p><code><a href="delete_releases.html">delete_releases()</a></code> </p>
         </td>
-        <td><p>Checks whether the supplied object is a valid repo name</p></td>
+        <td><p>Delete releases.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="delete_tags.html">delete_tags()</a></code> </p>
+        </td>
+        <td><p>Delete tags.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_asset.html">gh_asset()</a></code> </p>
+        </td>
+        <td><p>Get a single release asset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_assets.html">gh_assets()</a></code> </p>
+        </td>
+        <td><p>List assets for a release</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_assignees.html">gh_assignees()</a></code> </p>
+        </td>
+        <td><p>List assignees for issues in a repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_branch.html">gh_branch()</a></code> </p>
+        </td>
+        <td><p>Get information about a branch</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_branches.html">gh_branches()</a></code> </p>
+        </td>
+        <td><p>Get information about all the head commits in each branch</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_card.html">gh_card()</a></code> </p>
+        </td>
+        <td><p>Get a project card</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_cards.html">gh_cards()</a></code> </p>
+        </td>
+        <td><p>List project cards</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_collaborators.html">gh_collaborators()</a></code> </p>
+        </td>
+        <td><p>List collaborators</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_column.html">gh_column()</a></code> </p>
+        </td>
+        <td><p>Get a project column</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_columns.html">gh_columns()</a></code> </p>
+        </td>
+        <td><p>List project columns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_commit.html">gh_commit()</a></code> </p>
+        </td>
+        <td><p>Get information about a commit</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_commits.html">gh_commits()</a></code> </p>
+        </td>
+        <td><p>Get information about all the history of commits</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_commit_comment.html">gh_commit_comment()</a></code> </p>
+        </td>
+        <td><p>Get a single commit comment</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_commit_comments.html">gh_commit_comments()</a></code> </p>
+        </td>
+        <td><p>List comments for a single commit or entire repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_commit_sha.html">gh_commit_sha()</a></code> </p>
+        </td>
+        <td><p>Get the SHA-1 of a commit reference</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_compare_commits.html">gh_compare_commits()</a></code> </p>
+        </td>
+        <td><p>Compare two commits</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_compare_files.html">gh_compare_files()</a></code> </p>
+        </td>
+        <td><p>Compare the files of two commits</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_contents.html">gh_contents()</a></code> </p>
+        </td>
+        <td><p>Get contents of a file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_contributers.html">gh_contributers()</a></code> </p>
+        </td>
+        <td><p>List contributors</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_download.html">gh_download()</a></code> </p>
+        </td>
+        <td><p>Download the entire tree from a commit</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_download_binary.html">gh_download_binary()</a></code> </p>
+        </td>
+        <td><p>Download a binary file from GitHub</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_event.html">gh_event()</a></code> </p>
+        </td>
+        <td><p>Get a single event</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_events.html">gh_events()</a></code> </p>
+        </td>
+        <td><p>List events for an issue or all issues in a repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_get.html">gh_get()</a></code> </p>
+        </td>
+        <td><p>Send a http GET request to the specified GitHub url</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_gist.html">gh_gist()</a></code> </p>
+        </td>
+        <td><p>Get a single gist</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_gists.html">gh_gists()</a></code> </p>
+        </td>
+        <td><p>List a user's gists, or all public or starred gists</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_gist_comment.html">gh_gist_comment()</a></code> </p>
+        </td>
+        <td><p>Get a single comment</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_gist_comments.html">gh_gist_comments()</a></code> </p>
+        </td>
+        <td><p>List comments on a gist</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_gist_commits.html">gh_gist_commits()</a></code> </p>
+        </td>
+        <td><p>List gist commits</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_gist_forks.html">gh_gist_forks()</a></code> </p>
+        </td>
+        <td><p>List gist forks</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_git_blob.html">gh_git_blob()</a></code> </p>
+        </td>
+        <td><p>Get a blob</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_git_commit.html">gh_git_commit()</a></code> </p>
+        </td>
+        <td><p>Get a commit</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_git_reference.html">gh_git_reference()</a></code> </p>
+        </td>
+        <td><p>Get a reference</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_git_references.html">gh_git_references()</a></code> </p>
+        </td>
+        <td><p>Get all references</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_git_tag.html">gh_git_tag()</a></code> </p>
+        </td>
+        <td><p>Get an annotated tag</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_git_tree.html">gh_git_tree()</a></code> </p>
+        </td>
+        <td><p>Get a tree</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_issue.html">gh_issue()</a></code> </p>
+        </td>
+        <td><p>Get a single issue</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_issues.html">gh_issues()</a></code> </p>
+        </td>
+        <td><p>List issues for a repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_issue_comment.html">gh_issue_comment()</a></code> </p>
+        </td>
+        <td><p>Get a single issue comment</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_issue_comments.html">gh_issue_comments()</a></code> </p>
+        </td>
+        <td><p>List comments on an issue</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_label.html">gh_label()</a></code> </p>
+        </td>
+        <td><p>Get a single label</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_labels.html">gh_labels()</a></code> </p>
+        </td>
+        <td><p>List all labels for an issue, milestone or repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_languages.html">gh_languages()</a></code> </p>
+        </td>
+        <td><p>List languages</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_members.html">gh_members()</a></code> </p>
+        </td>
+        <td><p>Get Organization or team members list</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_membership.html">gh_membership()</a></code> </p>
+        </td>
+        <td><p>Get organization and team membership</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_memberships.html">gh_memberships()</a></code> </p>
+        </td>
+        <td><p>List your organization memberships</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_milestone.html">gh_milestone()</a></code> </p>
+        </td>
+        <td><p>Get a single milestone</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_milestones.html">gh_milestones()</a></code> </p>
+        </td>
+        <td><p>List milestones for a repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_organization.html">gh_organization()</a></code> </p>
+        </td>
+        <td><p>Get an organization</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_organizations.html">gh_organizations()</a></code> </p>
+        </td>
+        <td><p>List organizations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_page.html">gh_page()</a></code> </p>
+        </td>
+        <td><p>Get and parse the contents of multiple pages from a github http request</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_permissions.html">gh_permissions()</a></code> </p>
+        </td>
+        <td><p>Review a user's permission level</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_project.html">gh_project()</a></code> </p>
+        </td>
+        <td><p>Get a project</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_projects.html">gh_projects()</a></code> </p>
+        </td>
+        <td><p>List organisation or repository projects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_pull_comment.html">gh_pull_comment()</a></code> </p>
+        </td>
+        <td><p>Get a single pull request review comment</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_pull_comments.html">gh_pull_comments()</a></code> </p>
+        </td>
+        <td><p>List review comments on a pull request or all pull requests in a repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_pull_commits.html">gh_pull_commits()</a></code> </p>
+        </td>
+        <td><p>List commits on a pull request</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_pull_files.html">gh_pull_files()</a></code> </p>
+        </td>
+        <td><p>List pull requests files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_pull_request.html">gh_pull_request()</a></code> </p>
+        </td>
+        <td><p>Get a single pull request</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_pull_requests.html">gh_pull_requests()</a></code> </p>
+        </td>
+        <td><p>List pull requests</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_pull_review.html">gh_pull_review()</a></code> </p>
+        </td>
+        <td><p>Get a single review</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_pull_reviews.html">gh_pull_reviews()</a></code> </p>
+        </td>
+        <td><p>List reviews on a pull request</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_pull_review_requests.html">gh_pull_review_requests()</a></code> </p>
+        </td>
+        <td><p>List pull request review requests</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_readme.html">gh_readme()</a></code> </p>
+        </td>
+        <td><p>Get the README</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_release.html">gh_release()</a></code> </p>
+        </td>
+        <td><p>Get a single release</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_releases.html">gh_releases()</a></code> </p>
+        </td>
+        <td><p>List releases for a repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_repositories.html">gh_repositories()</a></code> </p>
+        </td>
+        <td><p>Get information about a user's, organisation's or team's repositories.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_repository.html">gh_repository()</a></code> </p>
+        </td>
+        <td><p>Get information about a repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_request.html">gh_request()</a></code> </p>
+        </td>
+        <td><p>Send a http request to the specified GitHub url</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_save.html">gh_save()</a></code> </p>
+        </td>
+        <td><p>Download files and save them to a location</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_save_gist.html">gh_save_gist()</a></code> </p>
+        </td>
+        <td><p>Save files in a gist</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_source.html">gh_source()</a></code> </p>
+        </td>
+        <td><p>Source an R file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_source_gist.html">gh_source_gist()</a></code> </p>
+        </td>
+        <td><p>Source an R file from a gist</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_tags.html">gh_tags()</a></code> </p>
+        </td>
+        <td><p>Get information about all the tags in a repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_team.html">gh_team()</a></code> </p>
+        </td>
+        <td><p>Get team</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_teams.html">gh_teams()</a></code> </p>
+        </td>
+        <td><p>List teams</p></td>
       </tr><tr>
         
         <td>
@@ -719,21 +1181,123 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="gh_get.html">gh_get()</a></code> </p>
+          <p><code><a href="gh_user.html">gh_user()</a></code> </p>
         </td>
-        <td><p>Send a http GET request to the specified GitHub url</p></td>
+        <td><p>Get a single user</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="gh_page.html">gh_page()</a></code> </p>
+          <p><code><a href="gh_users.html">gh_users()</a></code> </p>
         </td>
-        <td><p>Get and parse the contents of multiple pages from a github http request</p></td>
+        <td><p>Get all users</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="gh_download_binary.html">gh_download_binary()</a></code> </p>
+          <p><code><a href="gh_user_email.html">gh_user_email()</a></code> </p>
         </td>
-        <td><p>Download a binary file from GitHub</p></td>
+        <td><p>List email addresses for the authenticated user</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gh_user_issues.html">gh_user_issues()</a></code> </p>
+        </td>
+        <td><p>List issues assigned to the authenticated user</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="githapi.html">githapi</a></code> </p>
+        </td>
+        <td><p>User-friendly access to the GitHub API for R, consistent with the tidyverse.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_branch.html">is_branch()</a></code> </p>
+        </td>
+        <td><p>Checks whether the input is a valid branch</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_collaborator.html">is_collaborator()</a></code> </p>
+        </td>
+        <td><p>Check if a user is a collaborator</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_gist_starred.html">is_gist_starred()</a></code> </p>
+        </td>
+        <td><p>Check if a gist is starred</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_manager.html">is_manager()</a></code> </p>
+        </td>
+        <td><p>Check if a team manages a repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_member.html">is_member()</a></code> </p>
+        </td>
+        <td><p>Check membership</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_pull_merged.html">is_pull_merged()</a></code> </p>
+        </td>
+        <td><p>Get if a pull request has been merged</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_repo.html">is_repo()</a></code> </p>
+        </td>
+        <td><p>Checks whether the supplied object is a valid repo name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_repository.html">is_repository()</a></code> </p>
+        </td>
+        <td><p>Check whether the input is a valid repository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_sha.html">is_sha()</a></code> </p>
+        </td>
+        <td><p>Checks whether the supplied object is a valid SHA</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_tag.html">is_tag()</a></code> </p>
+        </td>
+        <td><p>Check whether the input is a valid tag</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_valid_sha.html">is_valid_sha()</a></code> </p>
+        </td>
+        <td><p>Check whether the input is a valid SHA-1</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="update_releases.html">update_releases()</a></code> </p>
+        </td>
+        <td><p>Update releases to new commits.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="update_tags.html">update_tags()</a></code> </p>
+        </td>
+        <td><p>Update tags to new commits.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="view_releases.html">view_releases()</a></code> </p>
+        </td>
+        <td><p>View information about a releases</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="view_tags.html">view_tags()</a></code> </p>
+        </td>
+        <td><p>View information about a tags</p></td>
       </tr>
     </tbody>
     </table>
