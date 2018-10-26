@@ -1,6 +1,6 @@
 Package: githapi
 Title: User-friendly access to the GitHub API for R, consistent with the tidyverse
-Version: 0.0.0
+Version: 0.7.0
 Authors@R: person("Chad", "Goymer", email = "chad.goymer@lloyds.com", role = c("aut", "cre"))
 Description: Provides a suite of functions which simplify working with GitHub's API.
 Imports:

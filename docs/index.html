@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">githapi</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.7.0</span>
       </span>
     </div>
 
@@ -105,15 +105,12 @@
 <a href="#getting-information-about-a-users-repositories" class="anchor"></a>Getting information about a user’s repositories</h3>
 <p>The main reason for using githapi is to extract information from GitHub. For example to find all the repositories a user has use the function <code><a href="reference/gh_repositories.html">gh_repositories()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/gh_repositories.html">gh_repositories</a></span>(<span class="st">"ChadGoymer"</span>)</code></pre></div>
-<pre><code>## [18:13:35] &gt; GET: https://api.github.com/users/ChadGoymer/repos?per_page=100</code></pre>
-<pre><code>## [18:13:36] &gt; Parsing content</code></pre>
-<pre><code>## [18:13:36] &gt; Done</code></pre>
 <pre><code>## # A tibble: 9 x 11
 ##   name  description owner_login owner_type default_branch open_issues  size
 ##   &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;                &lt;int&gt; &lt;int&gt;
 ## 1 chad~ My persona~ ChadGoymer  User       master                   0   156
 ## 2 git-~ Simple gui~ ChadGoymer  User       master                   0     2
-## 3 gith~ User-frien~ ChadGoymer  User       master                   8   724
+## 3 gith~ User-frien~ ChadGoymer  User       master                   4   733
 ## 4 logr  &lt;NA&gt;        ChadGoymer  User       master                   0     0
 ## 5 r-be~ A set of g~ ChadGoymer  User       master                   0 11306
 ## 6 r-py~ &lt;NA&gt;        ChadGoymer  User       master                   0  1172
@@ -124,33 +121,23 @@
 ## #   updated_at &lt;dttm&gt;</code></pre>
 <p>Information on the branches in a particular repository can then be obtained using <code><a href="reference/gh_branches.html">gh_branches()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/gh_branches.html">gh_branches</a></span>(<span class="st">"ChadGoymer/githapi"</span>)</code></pre></div>
-<pre><code>## [18:13:36] &gt; GET: https://api.github.com/repos/ChadGoymer/githapi/branches?per_page=100</code></pre>
-<pre><code>## [18:13:37] &gt; Parsing content</code></pre>
-<pre><code>## [18:13:37] &gt; Done</code></pre>
-<pre><code>## # A tibble: 4 x 3
-##   name        commit_sha             commit_url                           
-##   &lt;chr&gt;       &lt;chr&gt;                  &lt;chr&gt;                                
-## 1 0-test-bra~ e93edf23e95b59d08853e~ https://api.github.com/repos/ChadGoy~
-## 2 65-hook-up~ 5db96593332e004c30122~ https://api.github.com/repos/ChadGoy~
-## 3 develop     27097e72c1cba202c2390~ https://api.github.com/repos/ChadGoy~
-## 4 master      dc7da99ef557f362d5f2c~ https://api.github.com/repos/ChadGoy~</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   name      commit_sha              commit_url                            
+##   &lt;chr&gt;     &lt;chr&gt;                   &lt;chr&gt;                                 
+## 1 0-test-b~ e93edf23e95b59d08853e2~ https://api.github.com/repos/ChadGoym~
+## 2 develop   37e556f3947890c1a6b280~ https://api.github.com/repos/ChadGoym~
+## 3 master    9bb32a0c6ce901ceeab1f0~ https://api.github.com/repos/ChadGoym~</code></pre>
 <p>The history of a branch can be obtained using <code><a href="reference/gh_commits.html">gh_commits()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/gh_commits.html">gh_commits</a></span>(<span class="st">"master"</span>, <span class="st">"ChadGoymer/githapi"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</code></pre></div>
-<pre><code>## [18:13:37] &gt; GET: https://api.github.com/repos/ChadGoymer/githapi/commits?sha=master&amp;per_page=100</code></pre>
-<pre><code>## [18:13:38] &gt; Parsing content</code></pre>
-<pre><code>## [18:13:38] &gt; Done</code></pre>
-<pre><code>## [18:13:38] &gt; GET: https://api.github.com/repositories/93376315/commits?sha=master&amp;per_page=100&amp;page=2</code></pre>
-<pre><code>## [18:13:40] &gt; Parsing content</code></pre>
-<pre><code>## [18:13:40] &gt; Done</code></pre>
 <pre><code>## # A tibble: 6 x 10
 ##   sha   message author_name author_email committer_name committer_email
 ##   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;          &lt;chr&gt;          
-## 1 dc7d~ "Merge~ Chad Goymer chad.goymer~ GitHub         noreply@github~
-## 2 9b31~ Merge ~ Chad Goymer chad.goymer~ GitHub         noreply@github~
-## 3 abcc~ update~ Chad        chad.goymer~ Chad           chad.goymer@gm~
-## 4 2709~ "Merge~ Chad Goymer chad.goymer~ GitHub         noreply@github~
-## 5 0262~ update~ Chad        chad.goymer~ Chad           chad.goymer@gm~
-## 6 00fd~ "Merge~ Chad Goymer chad.goymer~ GitHub         noreply@github~
+## 1 9bb3~ "Merge~ Chad Goymer chad.goymer~ GitHub         noreply@github~
+## 2 fdec~ update~ Chad        chad.goymer~ Chad           chad.goymer@gm~
+## 3 261d~ Merge ~ Chad        chad.goymer~ Chad           chad.goymer@gm~
+## 4 6f16~ "Merge~ Chad Goymer chad.goymer~ GitHub         noreply@github~
+## 5 6d43~ Only m~ Chad        chad.goymer~ Chad           chad.goymer@gm~
+## 6 47c2~ "Merge~ Chad Goymer chad.goymer~ GitHub         noreply@github~
 ## # ... with 4 more variables: date &lt;dttm&gt;, url &lt;chr&gt;, tree_sha &lt;chr&gt;,
 ## #   tree_url &lt;chr&gt;</code></pre>
 </div>
@@ -159,15 +146,14 @@
 <a href="#getting-the-contents-of-files" class="anchor"></a>Getting the contents of files</h3>
 <p>There are a few ways of getting the content of a text file in GitHub. For files of less than 1 MB, you can use <code><a href="reference/gh_contents.html">gh_contents()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/gh_contents.html">gh_contents</a></span>(<span class="st">"DESCRIPTION"</span>, <span class="st">"master"</span>, <span class="st">"ChadGoymer/githapi"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cat</span>()</code></pre></div>
-<pre><code>## [18:13:40] &gt; GET: https://api.github.com/repos/ChadGoymer/githapi/contents/DESCRIPTION?ref=master</code></pre>
-<pre><code>## [18:13:40] &gt; Parsing content</code></pre>
-<pre><code>## [18:13:40] &gt; Done</code></pre>
 <pre><code>## Package: githapi
-## Title: User-friendly access to the GitHub API for R, consistent with the tidyverse.
-## Version: 0.6.1
+## Title: User-friendly access to the GitHub API for R, consistent with the tidyverse
+## Version: 0.6.3
 ## Authors@R: person("Chad", "Goymer", email = "chad.goymer@lloyds.com", role = c("aut", "cre"))
 ## Description: Provides a suite of functions which simplify working with GitHub's API.
 ## Imports:
+##     methods,
+##     utils,
 ##     curl,
 ##     jsonlite,
 ##     dplyr
