@@ -110,7 +110,7 @@
 ##   &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;                &lt;int&gt; &lt;int&gt;
 ## 1 chad~ My persona~ ChadGoymer  User       master                   0   156
 ## 2 git-~ Simple gui~ ChadGoymer  User       master                   0     2
-## 3 gith~ User-frien~ ChadGoymer  User       master                   4   733
+## 3 gith~ User-frien~ ChadGoymer  User       master                   5   802
 ## 4 logr  &lt;NA&gt;        ChadGoymer  User       master                   0     0
 ## 5 r-be~ A set of g~ ChadGoymer  User       master                   0 11306
 ## 6 r-py~ &lt;NA&gt;        ChadGoymer  User       master                   0  1172
@@ -121,12 +121,13 @@
 ## #   updated_at &lt;dttm&gt;</code></pre>
 <p>Information on the branches in a particular repository can then be obtained using <code><a href="reference/gh_branches.html">gh_branches()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/gh_branches.html">gh_branches</a></span>(<span class="st">"ChadGoymer/githapi"</span>)</code></pre></div>
-<pre><code>## # A tibble: 3 x 3
+<pre><code>## # A tibble: 4 x 3
 ##   name      commit_sha              commit_url                            
 ##   &lt;chr&gt;     &lt;chr&gt;                   &lt;chr&gt;                                 
 ## 1 0-test-b~ e93edf23e95b59d08853e2~ https://api.github.com/repos/ChadGoym~
-## 2 develop   37e556f3947890c1a6b280~ https://api.github.com/repos/ChadGoym~
-## 3 master    9bb32a0c6ce901ceeab1f0~ https://api.github.com/repos/ChadGoym~</code></pre>
+## 2 develop   95b7492bf99957f0215c5e~ https://api.github.com/repos/ChadGoym~
+## 3 master    9bb32a0c6ce901ceeab1f0~ https://api.github.com/repos/ChadGoym~
+## 4 release-~ 95b7492bf99957f0215c5e~ https://api.github.com/repos/ChadGoym~</code></pre>
 <p>The history of a branch can be obtained using <code><a href="reference/gh_commits.html">gh_commits()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/gh_commits.html">gh_commits</a></span>(<span class="st">"master"</span>, <span class="st">"ChadGoymer/githapi"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</code></pre></div>
 <pre><code>## # A tibble: 6 x 10
