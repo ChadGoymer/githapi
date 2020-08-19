@@ -5,9 +5,9 @@
 \alias{githapi}
 \title{User-friendly access to the GitHub API for R, consistent with the tidyverse}
 \description{
-Provides a suite of functions which simplify working with GitHub's API. The functions
-have a consistent API and return either lists for single entities and tibbles for
-collections.
+Provides a suite of functions which simplify working with GitHub's API. The
+functions have a consistent API and return either lists for single entities
+and tibbles for collections.
 }
 \seealso{
 Useful links:
