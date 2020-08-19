@@ -14,7 +14,8 @@ view_card(card, ...)
 
 \item{project}{(integer or string) Either the project number or name.}
 
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
 \item{user}{(string, optional) The login of the user.}
 
@@ -42,18 +43,18 @@ returns a list of properties for a single card.
 }
 }
 \description{
-\code{view_cards()} summarises cards in a table with the properties as columns and a row
-for each card in a column of a project. \code{view_card()} returns a list of all properties
-for a single card.
+\code{view_cards()} summarises cards in a table with the properties as columns and
+a row for each card in a column of a project. \code{view_card()} returns a list of
+all properties for a single card.
 }
 \details{
-You can summarise all the cards of a project associated with either a repository, user
-or organization, by supplying them as an input.
+You can summarise all the cards of a project associated with either a
+repository, user or organization, by supplying them as an input.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/projects/cards/#list-project-cards}
-\item \url{https://developer.github.com/v3/projects/cards/#get-a-project-card}
+\item \url{https://docs.github.com/en/rest/reference/projects#list-project-cards}
+\item \url{https://docs.github.com/en/rest/reference/projects#get-a-project-card}
 }
 }
 \examples{
@@ -63,19 +64,22 @@ For more details see the GitHub API documentation:
   cards <- view_cards(
     column  = "Test cards",
     project = "Test cards",
-    repo    = "ChadGoymer/githapi")
+    repo    = "ChadGoymer/githapi"
+  )
 
   # View cards in a user's project
   cards <- view_cards(
     column  = "Test cards",
     project = "Test cards",
-    user    = "ChadGoymer")
+    user    = "ChadGoymer"
+  )
 
   # View cards in an organization's project
   cards <- view_cards(
     column  = "Test cards",
     project = "Test cards",
-    org     = "HairyCoos")
+    org     = "HairyCoos"
+  )
 
   # View a single card
   view_card(card = 123456)

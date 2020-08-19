@@ -20,14 +20,17 @@ move_card(card, position, after, column, project, repo, user, org, ...)
 
 \item{position}{(string, optional) Either \code{"top"} or \code{"bottom"}.}
 
-\item{after}{(integer, optional) An ID of another card to place this one after.}
+\item{after}{(integer, optional) An ID of another card to place this one
+after.}
 
-\item{column}{(integer or string, optional) Either the ID or name of the column.}
+\item{column}{(integer or string, optional) Either the ID or name of the
+column.}
 
-\item{project}{(integer or string) Either the project number or name. Only required
-if moving the column.}
+\item{project}{(integer or string) Either the project number or name. Only
+required if moving the column.}
 
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
 \item{user}{(string, optional) The login of the user.}
 
@@ -48,20 +51,23 @@ if moving the column.}
 }
 }
 \description{
-\code{update_card()} can be used to change a card's note in a project in GitHub or archive it.
-\code{move_card()} can be used to reorder the cards or move them to other columns.
+\code{update_card()} can be used to change a card's note in a project in GitHub or
+archive it. \code{move_card()} can be used to reorder the cards or move them to
+other columns.
 }
 \details{
-You can update a card associated with either a repository, user or organization, by
-supplying them as an input, as long as you have appropriate permissions.
+You can update a card associated with either a repository, user or
+organization, by supplying them as an input, as long as you have appropriate
+permissions.
 
-You can move a card by either specifying the position, either \code{"top"} or \code{"bottom"},
-by specifying another card to place it after, or by specifying a column to move it to.
+You can move a card by either specifying the position, either \code{"top"} or
+\code{"bottom"}, by specifying another card to place it after, or by specifying a
+column to move it to.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/projects/cards/#update-a-project-card}
-\item \url{https://developer.github.com/v3/projects/cards/#move-a-project-card}
+\item \url{https://docs.github.com/en/rest/reference/projects#update-a-project-card}
+\item \url{https://docs.github.com/en/rest/reference/projects#move-a-project-card}
 }
 }
 \examples{
@@ -85,7 +91,8 @@ For more details see the GitHub API documentation:
     position = "top",
     column   = "Test column 2",
     project  = "Test project",
-    repo     = "ChadGoymer/githapi")
+    repo     = "ChadGoymer/githapi"
+  )
 
 }
 

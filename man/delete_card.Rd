@@ -15,23 +15,25 @@ delete_card(card, ...)
 \code{delete_card()} returns a TRUE if successfully deleted.
 }
 \description{
-This function deletes a card in a GitHub project. Care should be taken as it will not be
-recoverable. Instead, you may way to archive the card with \code{\link[=update_card]{update_card()}}.
+This function deletes a card in a GitHub project. Care should be taken as it
+will not be recoverable. Instead, you may way to archive the card with
+\code{\link[=update_card]{update_card()}}.
 }
 \details{
-You can delete a card associated with either a repository, user or organization, by
-supplying them as an input, as long as you have appropriate permissions.
+You can delete a card associated with either a repository, user or
+organization, by supplying them as an input, as long as you have appropriate
+permissions.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/projects/cards/#delete-a-project-card}
+\item \url{https://docs.github.com/en/rest/reference/projects#delete-a-project-card}
 }
 }
 \examples{
 \dontrun{
 
   # Delete a card
-  delete_card(123456)
+  delete_card(card = 123456)
 
 }
 

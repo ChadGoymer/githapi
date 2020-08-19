@@ -17,20 +17,21 @@ create_card(
 )
 }
 \arguments{
-\item{content_id}{(integer, optional) The issue or pull request id associated with this
-card. Note: \code{content_type} is also required.}
+\item{content_id}{(integer, optional) The issue or pull request id associated
+with this card. Note: \code{content_type} is also required.}
 
-\item{content_type}{(string, optional) Whether the \code{content_id} identifies an \code{"Issue"}
-or a \code{"PullRequest"}.}
+\item{content_type}{(string, optional) Whether the \code{content_id} identifies an
+\code{"Issue"} or a \code{"PullRequest"}.}
 
-\item{note}{(string, optional) The card's note content. Not used if \code{content_id} is
-specified.}
+\item{note}{(string, optional) The card's note content. Not used if
+\code{content_id} is specified.}
 
 \item{column}{(integer or string) Either the ID or name of the column.}
 
 \item{project}{(integer or string) Either the project number or name.}
 
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
 \item{user}{(string, optional) The login of the user.}
 
@@ -53,16 +54,18 @@ specified.}
 }
 }
 \description{
-This function creates a new card in the specified column in a project in GitHub. The
-card can either contain an existing issue or pull request or you can create a note.
+This function creates a new card in the specified column in a project in
+GitHub. The card can either contain an existing issue or pull request or you
+can create a note.
 }
 \details{
-You can create a card in a project associated with either a repository, user or
-organization, by supplying them as an input, as long as you have appropriate permissions.
+You can create a card in a project associated with either a repository, user
+or organization, by supplying them as an input, as long as you have
+appropriate permissions.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/projects/cards/#create-a-project-card}
+\item \url{https://docs.github.com/en/rest/reference/projects#create-a-project-card}
 }
 }
 \examples{
@@ -74,7 +77,8 @@ For more details see the GitHub API documentation:
     content_type = "Issue",
     column       = "Test column",
     project      = "Test project",
-    repo         = "ChadGoymer/githapi")
+    repo         = "ChadGoymer/githapi"
+  )
 
   # Create a pull request card in a user's project
   create_card(
@@ -82,14 +86,16 @@ For more details see the GitHub API documentation:
     content_type = "PullRequest",
     column       = "Test column",
     project      = "Test project",
-    user         = "ChadGoymer")
+    user         = "ChadGoymer"
+  )
 
   # Create a note card in an organization's project
   create_card(
     note    = "This is a note",
     column  = "Test column",
     project = "Test project",
-    org     = "HairyCoos")
+    org     = "HairyCoos"
+  )
 
 }
 
