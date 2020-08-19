@@ -19,8 +19,8 @@ view_branch(branch, repo, ...)
 \item{branch}{(string) The name of the branch.}
 }
 \value{
-\code{view_branches()} returns a tibble of branch properties. \code{view_branch()}
-returns a list of properties for a single branch.
+\code{view_branches()} returns a tibble of branch properties.
+\code{view_branch()} returns a list of properties for a single branch.
 
 \strong{Branch Properties:}
 \itemize{
@@ -30,25 +30,25 @@ returns a list of properties for a single branch.
 }
 }
 \description{
-\code{view_branches()} summarises branches in a table with the properties as columns and a row
-for each branch in the repository. \code{view_branch()} returns a list of all properties for a
-single branch.
+\code{view_branches()} summarises branches in a table with the properties as
+columns and a row for each branch in the repository. \code{view_branch()} returns
+a list of all properties for a single branch.
 }
 \details{
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/git/refs/#list-matching-references}
-\item \url{https://developer.github.com/v3/git/refs/#get-a-single-reference}
+\item \url{https://docs.github.com/en/rest/reference/git#list-matching-references}
+\item \url{https://docs.github.com/en/rest/reference/git#get-a-reference}
 }
 }
 \examples{
 \dontrun{
 
   # View all branches in a repository
-  view_branches("ChadGoymer/githapi")
+  view_branches(repo = "ChadGoymer/githapi")
 
   # View a single branch
-  view_label("new-branch", "ChadGoymer/githapi")
+  view_label(branch = "new-branch", repo = "ChadGoymer/githapi")
 
 }
 

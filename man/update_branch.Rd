@@ -9,12 +9,13 @@ update_branch(branch, ref, repo, force = FALSE, ...)
 \arguments{
 \item{branch}{(string) The name of the branch.}
 
-\item{ref}{(string) Either a SHA, branch or tag used to identify the new commit.}
+\item{ref}{(string) Either a SHA, branch or tag used to identify the new
+commit.}
 
 \item{repo}{(string) The repository specified in the format: \code{owner/repo}.}
 
-\item{force}{(boolean, optional) Whether to force the update if it is not a simple
-fast-forward. Default: \code{FALSE}.}
+\item{force}{(boolean, optional) Whether to force the update if it is not a
+simple fast-forward. Default: \code{FALSE}.}
 
 \item{...}{Parameters passed to \code{\link[=gh_request]{gh_request()}}.}
 }
@@ -29,14 +30,14 @@ fast-forward. Default: \code{FALSE}.}
 }
 }
 \description{
-This function updates a branch in the specified repository to point at a new commit. It
-must be pointed at a commit by providing a Git reference, which can be either a SHA, branch
-or tag. For a branch, the head commit is used.
+This function updates a branch in the specified repository to point at a new
+commit. It must be pointed at a commit by providing a Git reference, which
+can be either a SHA, branch or tag. For a branch, the head commit is used.
 }
 \details{
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/git/refs/#update-a-reference}
+\item \url{https://docs.github.com/en/rest/reference/git#update-a-reference}
 }
 }
 \examples{
@@ -45,7 +46,8 @@ For more details see the GitHub API documentation:
   update_branch(
     name = "new-branch",
     repo = "ChadGoymer/githapi",
-    ref  = "6b7b5a090d47fd3ef495620513a3f80da2487b1d")
+    ref  = "6b7b5a090d47fd3ef495620513a3f80da2487b1d"
+  )
 
 }
 

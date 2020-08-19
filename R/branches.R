@@ -1,13 +1,13 @@
-#  FUNCTION: create_branch --------------------------------------------------------------------
+#  FUNCTION: create_branch -----------------------------------------------------
 #
 #' Create a branch in a repository
 #'
-#' This function creates a new branch in the specified repository in GitHub. It must be
-#' pointed at a commit by providing a Git reference, which can be either a SHA, branch or
-#' tag. For a branch, the head commit is used.
+#' This function creates a new branch in the specified repository in GitHub. It
+#' must be pointed at a commit by providing a Git reference, which can be either
+#' a SHA, branch or tag. For a branch, the head commit is used.
 #'
 #' For more details see the GitHub API documentation:
-#' - <https://developer.github.com/v3/git/refs/#create-a-reference>
+#' - <https://docs.github.com/en/rest/reference/git#create-a-reference>
 #'
 #' @param name (string) The name of the branch.
 #' @param ref (string) Either a SHA, branch or tag used to identify the commit.
@@ -28,7 +28,8 @@
 #'   create_branch(
 #'     name = "new-branch",
 #'     ref  = "main",
-#'     repo = "ChadGoymer/githapi")
+#'     repo = "ChadGoymer/githapi"
+#'   )
 #'
 #' }
 #'
@@ -38,15 +39,24 @@ create_branch <- function(
   name,
   ref,
   repo,
-  ...)
-{
-  assert(is_ref(name), "'name' must be a valid git reference - see help(is_ref):\n  ", name)
-  assert(is_repo(repo), "'repo' must be a string in the format 'owner/repo':\n  ", repo)
+  ...
+) {
+  assert(
+    is_ref(name),
+    "'name' must be a valid git reference - see help(is_ref):\n  ", name
+  )
+  assert(
+    is_repo(repo),
+    "'repo' must be a string in the format 'owner/repo':\n  ", repo
+  )
 
   if (!is_sha(ref)) {
     ref <- view_sha(ref = ref, repo = repo, ...)
   }
-  assert(is_sha(ref), "'ref' must be a 40 character string:\n  ", ref)
+  assert(
+    is_sha(ref),
+    "'ref' must be a 40 character string:\n  ", ref
+  )
 
   payload <- list(ref = str_c("refs/heads/", name), sha = ref)
 
@@ -63,22 +73,23 @@ create_branch <- function(
 }
 
 
-#  FUNCTION: update_branch --------------------------------------------------------------------
+#  FUNCTION: update_branch -----------------------------------------------------
 #
 #' Update a branch in a repository
 #'
-#' This function updates a branch in the specified repository to point at a new commit. It
-#' must be pointed at a commit by providing a Git reference, which can be either a SHA, branch
-#' or tag. For a branch, the head commit is used.
+#' This function updates a branch in the specified repository to point at a new
+#' commit. It must be pointed at a commit by providing a Git reference, which
+#' can be either a SHA, branch or tag. For a branch, the head commit is used.
 #'
 #' For more details see the GitHub API documentation:
-#' - <https://developer.github.com/v3/git/refs/#update-a-reference>
+#' - <https://docs.github.com/en/rest/reference/git#update-a-reference>
 #'
 #' @param branch (string) The name of the branch.
-#' @param ref (string) Either a SHA, branch or tag used to identify the new commit.
+#' @param ref (string) Either a SHA, branch or tag used to identify the new
+#'   commit.
 #' @param repo (string) The repository specified in the format: `owner/repo`.
-#' @param force (boolean, optional) Whether to force the update if it is not a simple
-#'   fast-forward. Default: `FALSE`.
+#' @param force (boolean, optional) Whether to force the update if it is not a
+#'   simple fast-forward. Default: `FALSE`.
 #' @param ... Parameters passed to [gh_request()].
 #'
 #' @return `update_branch()` returns a list of the branch properties.
@@ -95,7 +106,8 @@ create_branch <- function(
 #'   update_branch(
 #'     name = "new-branch",
 #'     repo = "ChadGoymer/githapi",
-#'     ref  = "6b7b5a090d47fd3ef495620513a3f80da2487b1d")
+#'     ref  = "6b7b5a090d47fd3ef495620513a3f80da2487b1d"
+#'   )
 #'
 #' }
 #'
@@ -106,16 +118,28 @@ update_branch <- function(
   ref,
   repo,
   force = FALSE,
-  ...)
-{
-  assert(is_ref(branch), "'branch' must be a valid git reference - see help(is_ref):\n  ", branch)
-  assert(is_repo(repo), "'repo' must be a string in the format 'owner/repo':\n  ", repo)
-  assert(is_scalar_logical(force), "'force' must be boolean:\n  ", force)
+  ...
+) {
+  assert(
+    is_ref(branch),
+    "'branch' must be a valid git reference - see help(is_ref):\n  ", branch
+  )
+  assert(
+    is_repo(repo),
+    "'repo' must be a string in the format 'owner/repo':\n  ", repo
+  )
+  assert(
+    is_scalar_logical(force),
+    "'force' must be boolean:\n  ", force
+  )
 
   if (!is_sha(ref)) {
     ref <- view_sha(ref = ref, repo = repo, ...)
   }
-  assert(is_sha(ref), "'ref' must be a 40 character string:\n  ", ref)
+  assert(
+    is_sha(ref),
+    "'ref' must be a 40 character string:\n  ", ref
+  )
 
   info("Updating branch '", branch, "' in repository '", repo, "'")
   branch_lst <- gh_url("repos", repo, "git/refs/heads", branch) %>%
@@ -130,25 +154,25 @@ update_branch <- function(
 }
 
 
-#  FUNCTION: view_branches --------------------------------------------------------------------
+#  FUNCTION: view_branches -----------------------------------------------------
 #
 #' View branches within a repository
 #'
-#' `view_branches()` summarises branches in a table with the properties as columns and a row
-#' for each branch in the repository. `view_branch()` returns a list of all properties for a
-#' single branch.
+#' `view_branches()` summarises branches in a table with the properties as
+#' columns and a row for each branch in the repository. `view_branch()` returns
+#' a list of all properties for a single branch.
 #'
 #' For more details see the GitHub API documentation:
-#' - <https://developer.github.com/v3/git/refs/#list-matching-references>
-#' - <https://developer.github.com/v3/git/refs/#get-a-single-reference>
+#' - <https://docs.github.com/en/rest/reference/git#list-matching-references>
+#' - <https://docs.github.com/en/rest/reference/git#get-a-reference>
 #'
 #' @param branch (string) The name of the branch.
 #' @param repo (string) The repository specified in the format: `owner/repo`.
 #' @param n_max (integer, optional) Maximum number to return. Default: `1000`.
 #' @param ... Parameters passed to [gh_page()] or [gh_request()].
 #'
-#' @return `view_branches()` returns a tibble of branch properties. `view_branch()`
-#'   returns a list of properties for a single branch.
+#' @return `view_branches()` returns a tibble of branch properties.
+#'   `view_branch()` returns a list of properties for a single branch.
 #'
 #' **Branch Properties:**
 #'
@@ -160,10 +184,10 @@ update_branch <- function(
 #' \dontrun{
 #'
 #'   # View all branches in a repository
-#'   view_branches("ChadGoymer/githapi")
+#'   view_branches(repo = "ChadGoymer/githapi")
 #'
 #'   # View a single branch
-#'   view_label("new-branch", "ChadGoymer/githapi")
+#'   view_label(branch = "new-branch", repo = "ChadGoymer/githapi")
 #'
 #' }
 #'
@@ -172,9 +196,12 @@ update_branch <- function(
 view_branches <- function(
   repo,
   n_max = 1000,
-  ...)
-{
-  assert(is_repo(repo), "'repo' must be a string in the format 'owner/repo':\n  ", repo)
+  ...
+) {
+  assert(
+    is_repo(repo),
+    "'repo' must be a string in the format 'owner/repo':\n  ", repo
+  )
 
   info("Viewing branches for repository '", repo, "'")
   branches_lst <- gh_url("repos", repo, "git/refs/heads") %>%
@@ -189,7 +216,7 @@ view_branches <- function(
 }
 
 
-#  FUNCTION: view_branch ----------------------------------------------------------------------
+#  FUNCTION: view_branch -------------------------------------------------------
 #
 #' @rdname view_branches
 #' @export
@@ -197,10 +224,16 @@ view_branches <- function(
 view_branch <- function(
   branch,
   repo,
-  ...)
-{
-  assert(is_ref(branch), "'branch' must be a valid git reference - see help(is_ref):\n  ", branch)
-  assert(is_repo(repo), "'repo' must be a string in the format 'owner/repo':\n  ", repo)
+  ...
+) {
+  assert(
+    is_ref(branch),
+    "'branch' must be a valid git reference - see help(is_ref):\n  ", branch
+  )
+  assert(
+    is_repo(repo),
+    "'repo' must be a string in the format 'owner/repo':\n  ", repo
+  )
 
   info("Viewing branch '", branch, "' in repository '", repo, "'")
   branch_lst <- gh_url("repos", repo, "git/ref/heads", branch) %>%
@@ -215,15 +248,15 @@ view_branch <- function(
 }
 
 
-#  FUNCTION: delete_branch --------------------------------------------------------------------
+#  FUNCTION: delete_branch -----------------------------------------------------
 #
 #' Delete a branch from a repository
 #'
-#' This function deletes a branch from a repository, as long as you have appropriate
-#' permissions. Care should be taken as it will not be recoverable.
+#' This function deletes a branch from a repository, as long as you have
+#' appropriate permissions. Care should be taken as it will not be recoverable.
 #'
 #' For more details see the GitHub API documentation:
-#' - <https://developer.github.com/v3/git/refs/#delete-a-reference>
+#' - <https://docs.github.com/en/rest/reference/git#delete-a-reference>
 #'
 #' @param branch (string) The name of the branch.
 #' @param repo (string) The repository specified in the format: `owner/repo`.
@@ -234,7 +267,7 @@ view_branch <- function(
 #' @examples
 #' \dontrun{
 #'
-#'   delete_branch("new-branch", repo = "ChadGoymer/githapi")
+#'   delete_branch(branch = "new-branch", repo = "ChadGoymer/githapi")
 #'
 #' }
 #'
@@ -243,10 +276,16 @@ view_branch <- function(
 delete_branch <- function(
   branch,
   repo,
-  ...)
-{
-  assert(is_ref(branch), "'branch' must be a valid git reference - see help(is_ref):\n  ", branch)
-  assert(is_repo(repo), "'repo' must be a string in the format 'owner/repo':\n  ", repo)
+  ...
+) {
+  assert(
+    is_ref(branch),
+    "'branch' must be a valid git reference - see help(is_ref):\n  ", branch
+  )
+  assert(
+    is_repo(repo),
+    "'repo' must be a string in the format 'owner/repo':\n  ", repo
+  )
 
   info("Deleting branch '", branch, "' in repository '", repo, "'")
   response <- gh_url("repos", repo, "git/refs/heads", branch) %>%
@@ -259,5 +298,6 @@ delete_branch <- function(
     url     = attr(response, "url"),
     request = attr(response, "request"),
     status  = attr(response, "status"),
-    header  = attr(response, "header"))
+    header  = attr(response, "header")
+  )
 }

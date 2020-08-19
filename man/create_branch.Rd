@@ -26,14 +26,14 @@ create_branch(name, ref, repo, ...)
 }
 }
 \description{
-This function creates a new branch in the specified repository in GitHub. It must be
-pointed at a commit by providing a Git reference, which can be either a SHA, branch or
-tag. For a branch, the head commit is used.
+This function creates a new branch in the specified repository in GitHub. It
+must be pointed at a commit by providing a Git reference, which can be either
+a SHA, branch or tag. For a branch, the head commit is used.
 }
 \details{
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/git/refs/#create-a-reference}
+\item \url{https://docs.github.com/en/rest/reference/git#create-a-reference}
 }
 }
 \examples{
@@ -42,7 +42,8 @@ For more details see the GitHub API documentation:
   create_branch(
     name = "new-branch",
     ref  = "main",
-    repo = "ChadGoymer/githapi")
+    repo = "ChadGoymer/githapi"
+  )
 
 }
 

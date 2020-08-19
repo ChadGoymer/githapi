@@ -17,19 +17,19 @@ delete_branch(branch, repo, ...)
 \code{delete_branch()} returns a TRUE if successfully deleted.
 }
 \description{
-This function deletes a branch from a repository, as long as you have appropriate
-permissions. Care should be taken as it will not be recoverable.
+This function deletes a branch from a repository, as long as you have
+appropriate permissions. Care should be taken as it will not be recoverable.
 }
 \details{
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/git/refs/#delete-a-reference}
+\item \url{https://docs.github.com/en/rest/reference/git#delete-a-reference}
 }
 }
 \examples{
 \dontrun{
 
-  delete_branch("new-branch", repo = "ChadGoymer/githapi")
+  delete_branch(branch = "new-branch", repo = "ChadGoymer/githapi")
 
 }
 
