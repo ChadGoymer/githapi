@@ -9,15 +9,18 @@ update_collaborator(user, repo, project, org, permission, ...)
 \arguments{
 \item{user}{(string) The login of the user.}
 
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
-\item{project}{(integer or string, optional) Either the project number or name.}
+\item{project}{(integer or string, optional) Either the project number or
+name.}
 
-\item{org}{(string, optional) The name of the organization. Only required for projects.}
+\item{org}{(string, optional) The name of the organization. Only required for
+projects.}
 
-\item{permission}{(string, optional) The permission to give the user. For a repository
-this is either \code{"pull"}, \code{"push"} or \code{"admin"}, for a project it is either \code{"read"},
-\code{"write"} or \code{"admin"}.}
+\item{permission}{(string, optional) The permission to give the user. For a
+repository this is either \code{"pull"}, \code{"push"} or \code{"admin"}, for a project it
+is either \code{"read"}, \code{"write"} or \code{"admin"}.}
 
 \item{...}{Parameters passed to \code{\link[=gh_request]{gh_request()}}.}
 }
@@ -25,43 +28,47 @@ this is either \code{"pull"}, \code{"push"} or \code{"admin"}, for a project it 
 \code{update_collaborator()} returns \code{TRUE} if successful.
 }
 \description{
-This function can be used to invite a user to collaborate on either a repository or project,
-or update their permission within the repository or project.
+This function can be used to invite a user to collaborate on either a
+repository or project, or update their permission within the repository or
+project.
 }
 \details{
-Note: you can only invite or update a user if the authenticate user is an "admin" of the
-repository or project.
+Note: you can only invite or update a user if the authenticate user is an
+"admin" of the repository or project.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator}
-\item \url{https://developer.github.com/v3/projects/collaborators/#add-user-as-a-collaborator}
+\item \url{https://docs.github.com/en/rest/reference/repos#add-a-repository-collaborator}
+\item \url{https://docs.github.com/en/rest/reference/projects#add-project-collaborator}
 }
 }
 \examples{
 \dontrun{
 
   # Invite a user to collaborate on a repository
-  update_collaborator("ChadGoymer2", repo = "ChadGoymer/githapi")
+  update_collaborator(user = "ChadGoymer2", repo = "ChadGoymer/githapi")
 
   # Invite a user to collaborate on a project
   update_collaborator(
     user    = "ChadGoymer2",
     project = "TestProject",
-    org     = "HairyCoos")
+    org     = "HairyCoos"
+  )
 
   # Update a user's permissions on a repository
   update_collaborator(
     user       = "ChadGoymer2",
     repo       = "ChadGoymer/githapi",
-    permission = "admin")
+    permission = "admin"
+  )
 
   # Update a user's permissions on a project
   update_collaborator(
     user       = "ChadGoymer2",
     project    = "TestProject",
     org        = "HairyCoos",
-    permission = "read")
+    permission = "read"
+  )
 
 }
 

@@ -10,14 +10,17 @@ view_collaborators(repo, project, org, affiliation = "all", n_max = 1000, ...)
 view_collaborator(user, repo, project, org, ...)
 }
 \arguments{
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
-\item{project}{(integer or string, optional) Either the project number or name.}
+\item{project}{(integer or string, optional) Either the project number or
+name.}
 
-\item{org}{(string, optional) The name of the organization. Only required for projects.}
+\item{org}{(string, optional) The name of the organization. Only required for
+projects.}
 
-\item{affiliation}{(string, optional) Filter by the affiliation of the user. This is either
-\code{"outside"}, \code{"direct"} or \code{"all"}.}
+\item{affiliation}{(string, optional) Filter by the affiliation of the user.
+This is either \code{"outside"}, \code{"direct"} or \code{"all"}.}
 
 \item{n_max}{(integer, optional) Maximum number to return. Default: \code{1000}.}
 
@@ -27,7 +30,8 @@ view_collaborator(user, repo, project, org, ...)
 }
 \value{
 \code{view_collaborators()} returns a tibble of collaborator properties.
-\code{view_collaborator()} returns a list of properties for a single collaborator.
+\code{view_collaborator()} returns a list of properties for a single
+collaborator.
 
 \strong{Collaborator Properties:}
 \itemize{
@@ -35,26 +39,25 @@ view_collaborator(user, repo, project, org, ...)
 \item \strong{login}: The login name of the collaborator.
 \item \strong{site_admin}: Whether the collaborator is an administrator.
 \item \strong{html_url}: The GitHub page for the collaborator.
-\item \strong{permission}: The permission the collaborator has (only available in \code{view_collaborator()}).
+\item \strong{permission}: The permission the collaborator has (only available in
+\code{view_collaborator()}).
 }
 }
 \description{
-\code{view_collaborators()} summarises the collaborators in a repository, project or
-organization in a table with the properties as columns and a row for each collaborator.
-\code{view_collaborator()} returns a list of all collaborator's properties including their
-permission.
+\code{view_collaborators()} summarises the collaborators in a repository, project
+or organization in a table with the properties as columns and a row for each
+collaborator. \code{view_collaborator()} returns a list of all collaborator's
+properties including their permission.
 }
 \details{
-Note: you can only view collaborators in an organization if the authenticate user is also
-a member.
+Note: you can only view collaborators in an organization if the authenticate
+user is also a member.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/repos/collaborators/#list-collaborators}
-\item \url{https://developer.github.com/v3/projects/collaborators/#list-collaborators}
-\item \url{https://developer.github.com/v3/orgs/outside_collaborators/#list-outside-collaborators}
-\item \url{https://developer.github.com/v3/repos/collaborators/#review-a-users-permission-level}
-\item \url{https://developer.github.com/v3/projects/collaborators/#review-a-users-permission-level}
+\item \url{https://docs.github.com/en/rest/reference/repos#list-repository-collaborators}
+\item \url{https://docs.github.com/en/rest/reference/projects#list-project-collaborators}
+\item \url{https://docs.github.com/en/rest/reference/orgs#list-outside-collaborators-for-an-organization}
 }
 }
 \examples{
@@ -70,13 +73,14 @@ For more details see the GitHub API documentation:
   view_collaborators(org = "HairyCoos")
 
   # View collaborator on a repository
-  view_collaborator("ChadGoymer", repo = "ChadGoymer/githapi")
+  view_collaborator(user = "ChadGoymer", repo = "ChadGoymer/githapi")
 
   # View collaborator on a project
   view_collaborator(
     user    = "ChadGoymer",
     project = "Test project",
-    org     = "HairyCoos")
+    org     = "HairyCoos"
+  )
 
 }
 

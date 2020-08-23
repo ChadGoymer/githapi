@@ -9,11 +9,14 @@ delete_collaborator(user, repo, project, org, ...)
 \arguments{
 \item{user}{(string) The login of the user.}
 
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
-\item{project}{(integer or string, optional) Either the project number or name.}
+\item{project}{(integer or string, optional) Either the project number or
+name.}
 
-\item{org}{(string, optional) The name of the organization. Only required for projects.}
+\item{org}{(string, optional) The name of the organization. Only required for
+projects.}
 
 \item{...}{Parameters passed to \code{\link[=gh_request]{gh_request()}}.}
 }
@@ -21,36 +24,37 @@ delete_collaborator(user, repo, project, org, ...)
 \code{delete_collaborator()} returns a TRUE if successfully deleted.
 }
 \description{
-This function removes a collaborator from a repository, project or organization. Removing
-someone from a repository or project does not remove them from the organization, whereas
-removing them from an organization also removes them from any repositories and projects
-within the organization.
+This function removes a collaborator from a repository, project or
+organization. Removing someone from a repository or project does not remove
+them from the organization, whereas removing them from an organization also
+removes them from any repositories and project within the organization.
 }
 \details{
-Note: you can only remove a user if the authenticate user is an organization "owner" or a
-team "maintainer".
+Note: you can only remove a user if the authenticate user is an organization
+"owner" or a team "maintainer".
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/repos/collaborators/#remove-user-as-a-collaborator}
-\item \url{https://developer.github.com/v3/projects/collaborators/#remove-user-as-a-collaborator}
-\item \url{https://developer.github.com/v3/orgs/outside_collaborators/#remove-outside-collaborator}
+\item \url{https://docs.github.com/en/rest/reference/repos#remove-a-repository-collaborator}
+\item \url{https://docs.github.com/en/rest/reference/projects#remove-project-collaborator}
+\item \url{https://docs.github.com/en/rest/reference/orgs#remove-outside-collaborator-from-an-organization}
 }
 }
 \examples{
 \dontrun{
 
   # Remove a collaborator from a repository
-  delete_collaborator("ChadGoymer", repo = "ChadGoymer/githapi")
+  delete_collaborator(user = "ChadGoymer", repo = "ChadGoymer/githapi")
 
   # Remove a collaborator from a project
   delete_collaborator(
     user    = "ChadGoymer",
     project = "Test project",
-    org     = "HairyCoos")
+    org     = "HairyCoos"
+  )
 
   # Remove a collaborator from an organization
-  delete_collaborator("ChadGoymer", org = "HairyCoos")
+  delete_collaborator(user = "ChadGoymer", org = "HairyCoos")
 
 }
 
