@@ -12,7 +12,8 @@ view_column(column, project, repo, user, org, ...)
 \arguments{
 \item{project}{(integer or string) Either the project number or name.}
 
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
 \item{user}{(string, optional) The login of the user.}
 
@@ -25,8 +26,8 @@ view_column(column, project, repo, user, org, ...)
 \item{column}{(integer or string) The number or name of the column.}
 }
 \value{
-\code{view_columns()} returns a tibble of column properties. \code{view_column()}
-returns a list of properties for a single column.
+\code{view_columns()} returns a tibble of column properties.
+\code{view_column()} returns a list of properties for a single column.
 
 \strong{Column Properties:}
 \itemize{
@@ -37,18 +38,18 @@ returns a list of properties for a single column.
 }
 }
 \description{
-\code{view_columns()} summarises columns in a table with the properties as columns and a row
-for each column in the project. \code{view_column()} returns a list of all properties for a
-single column.
+\code{view_columns()} summarises columns in a table with the properties as columns
+and a row for each column in the project. \code{view_column()} returns a list of
+all properties for a single column.
 }
 \details{
-You can summarise all the columns of a project associated with either a repository, user
-or organization, by supplying them as an input.
+You can summarise all the columns of a project associated with either a
+repository, user or organization, by supplying them as an input.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/projects/columns/#list-project-columns}
-\item \url{https://developer.github.com/v3/projects/columns/#get-a-project-column}
+\item \url{https://docs.github.com/en/rest/reference/projects#list-project-columns}
+\item \url{https://docs.github.com/en/rest/reference/projects#get-a-project-column}
 }
 }
 \examples{
@@ -57,35 +58,41 @@ For more details see the GitHub API documentation:
   # View columns in a repository project
   view_columns(
     project = "Test columns",
-    repo    = "ChadGoymer/githapi")
+    repo    = "ChadGoymer/githapi"
+  )
 
   # View columns in a user's project
   view_columns(
     project = "Test columns",
-    user    = "ChadGoymer")
+    user    = "ChadGoymer"
+  )
 
   # View columns in an organization's project
   view_column(
     project = "Test columns",
-    org     = "HairyCoos")
+    org     = "HairyCoos"
+  )
 
   # View a column in a repository project
   view_column(
     column  = "Test column",
     project = "Test columns",
-    repo    = "ChadGoymer/githapi")
+    repo    = "ChadGoymer/githapi"
+  )
 
   # View a column in a user's project
   view_column(
     column  = "Test column",
     project = "Test columns",
-    user    = "ChadGoymer")
+    user    = "ChadGoymer"
+  )
 
   # View a column in an organization's project
   view_column(
     column  = "Test column",
     project = "Test columns",
-    org     = "HairyCoos")
+    org     = "HairyCoos"
+  )
 
   # View column by ID
   view_column(123456)

@@ -11,7 +11,8 @@ create_column(name, project, repo, user, org, ...)
 
 \item{project}{(integer or string) Either the project number or name.}
 
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
 \item{user}{(string, optional) The login of the user.}
 
@@ -31,16 +32,17 @@ create_column(name, project, repo, user, org, ...)
 }
 }
 \description{
-This function creates a new column in a project in GitHub. The column will be empty so you
-will need to add cards separately.
+This function creates a new column in a project in GitHub. The column will be
+empty so you will need to add cards separately.
 }
 \details{
-You can create a column in a project associated with either a repository, user or
-organization, by supplying them as an input, as long as you have appropriate permissions.
+You can create a column in a project associated with either a repository,
+user or organization, by supplying them as an input, as long as you have
+appropriate permissions.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/projects/columns/#create-a-project-column}
+\item \url{https://docs.github.com/en/rest/reference/projects#create-a-project-column}
 }
 }
 \examples{
@@ -50,19 +52,22 @@ For more details see the GitHub API documentation:
   create_column(
     name    = "Test column",
     project = "Test project",
-    repo    = "ChadGoymer/githapi")
+    repo    = "ChadGoymer/githapi"
+  )
 
   # Create a column in a user's project
   create_column(
     name    = "Test column",
     project = "Test project",
-    user    = "ChadGoymer")
+    user    = "ChadGoymer"
+  )
 
   # Create a column in an organization's project
   create_column(
     name    = "Test column",
     project = "Test project",
-    org     = "HairyCoos")
+    org     = "HairyCoos"
+  )
 
 }
 

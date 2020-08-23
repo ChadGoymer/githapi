@@ -1,19 +1,25 @@
-#  FUNCTION: create_column -------------------------------------------------------------------
+#  FUNCTION: create_column -----------------------------------------------------
 #
 #' Create a column in a GitHub project
 #'
-#' This function creates a new column in a project in GitHub. The column will be empty so you
-#' will need to add cards separately.
+#' This function creates a new column in a project in GitHub. The column will be
+#' empty so you will need to add cards separately.
 #'
-#' You can create a column in a project associated with either a repository, user or
-#' organization, by supplying them as an input, as long as you have appropriate permissions.
+#' You can create a column in a project associated with either a repository,
+#' user or organization, by supplying them as an input, as long as you have
+#' appropriate permissions.
 #'
 #' For more details see the GitHub API documentation:
-#' - <https://developer.github.com/v3/projects/columns/#create-a-project-column>
+#'
+#' ```{r echo=FALSE, results='asis'}
+#' docs_url <- "https://docs.github.com/en/rest/reference/"
+#' cat(paste0("- <", docs_url, "projects#create-a-project-column", ">"))
+#' ```
 #'
 #' @param name (string) The name of the column.
 #' @param project (integer or string) Either the project number or name.
-#' @param repo (string, optional) The repository specified in the format: `owner/repo`.
+#' @param repo (string, optional) The repository specified in the format:
+#'   `owner/repo`.
 #' @param user (string, optional) The login of the user.
 #' @param org (string, optional) The name of the organization.
 #' @param ... Parameters passed to [gh_request()].
@@ -34,19 +40,22 @@
 #'   create_column(
 #'     name    = "Test column",
 #'     project = "Test project",
-#'     repo    = "ChadGoymer/githapi")
+#'     repo    = "ChadGoymer/githapi"
+#'   )
 #'
 #'   # Create a column in a user's project
 #'   create_column(
 #'     name    = "Test column",
 #'     project = "Test project",
-#'     user    = "ChadGoymer")
+#'     user    = "ChadGoymer"
+#'   )
 #'
 #'   # Create a column in an organization's project
 #'   create_column(
 #'     name    = "Test column",
 #'     project = "Test project",
-#'     org     = "HairyCoos")
+#'     org     = "HairyCoos"
+#'   )
 #'
 #' }
 #'
@@ -58,16 +67,20 @@ create_column <- function(
   repo,
   user,
   org,
-  ...)
-{
-  assert(is_scalar_character(name), "'name' must be a string:\n  ", name)
+  ...
+) {
+  assert(
+    is_scalar_character(name),
+    "'name' must be a string:\n  ", name
+  )
 
   project <- view_project(
     project = project,
     repo    = repo,
     user    = user,
     org     = org,
-    ...)
+    ...
+  )
 
   info("Creating column '", name, "' in project '", project$name, "'")
   column_lst <- gh_url("projects", project$id, "columns") %>%
@@ -75,7 +88,8 @@ create_column <- function(
       type    = "POST",
       payload = list(name = name),
       accept  = "application/vnd.github.inertia-preview+json",
-      ...)
+      ...
+    )
 
   info("Transforming results", level = 4)
   column_gh <- select_properties(column_lst, properties$column)
@@ -85,30 +99,38 @@ create_column <- function(
 }
 
 
-#  FUNCTION: update_column -------------------------------------------------------------------
+#  FUNCTION: update_column -----------------------------------------------------
 #
 #' Update a column in a GitHub project
 #'
-#' `update_column()` can be used to change the column name in a project in GitHub.
-#' `move_column()` can be used to reorder the columns.
+#' `update_column()` can be used to change the column name in a project in
+#'  GitHub. `move_column()` can be used to reorder the columns.
 #'
-#' You can update a column associated with either a repository, user or organization, by
-#' supplying them as an input, as long as you have appropriate permissions.
+#' You can update a column associated with either a repository, user or
+#' organization, by supplying them as an input, as long as you have appropriate
+#' permissions.
 #'
-#' You can move a column by either specifying the position, either `"first"` or `"last"`, or
-#' by specifying another column to place it after.
+#' You can move a column by either specifying the position, either `"first"` or
+#' `"last"`, or by specifying another column to place it after.
 #'
 #' For more details see the GitHub API documentation:
-#' - <https://developer.github.com/v3/projects/columns/#update-a-project-column>
-#' - <https://developer.github.com/v3/projects/columns/#move-a-project-column>
+#'
+#' ```{r echo=FALSE, results='asis'}
+#' docs_url <- "https://docs.github.com/en/rest/reference/"
+#' cat(paste0("- <", docs_url, "projects#update-a-project-column", ">"))
+#' ```
+#' ```{r echo=FALSE, results='asis'}
+#' cat(paste0("- <", docs_url, "projects#move-a-project-column", ">"))
+#' ```
 #'
 #' @param column (integer or string) Either the column number or name.
 #' @param name (string, optional) The new name for the column.
 #' @param position (string, optional) Either `"first"` or `"last"`.
-#' @param after (integer or string, optional) An ID or name of another column to place this
-#'   one after.
+#' @param after (integer or string, optional) An ID or name of another column to
+#'   place this one after.
 #' @param project (integer or string) Either the project number or name.
-#' @param repo (string, optional) The repository specified in the format: `owner/repo`.
+#' @param repo (string, optional) The repository specified in the format:
+#'   `owner/repo`.
 #' @param user (string, optional) The login of the user.
 #' @param org (string, optional) The name of the organization.
 #' @param ... Parameters passed to [gh_request()].
@@ -130,19 +152,22 @@ create_column <- function(
 #'     column  = "Test column",
 #'     name    = "Updated test column",
 #'     project = "Test project",
-#'     repo    = "ChadGoymer/githapi")
+#'     repo    = "ChadGoymer/githapi"
+#'   )
 #'
 #'   # Move a column to the first position in a user's project
 #'   move_column(
 #'     name     = "Test column",
 #'     position = "first",
-#'     user     = "ChadGoymer")
+#'     user     = "ChadGoymer"
+#'   )
 #'
 #'   # Move a column after another on in an organization's project
 #'   move_column(
 #'     name  = "Test column",
 #'     after = "Test column 2",
-#'     org   = "HairyCoos")
+#'     org   = "HairyCoos"
+#'   )
 #'
 #' }
 #'
@@ -155,9 +180,12 @@ update_column <- function(
   repo,
   user,
   org,
-  ...)
-{
-  assert(is_scalar_character(name), "'name' must be a string:\n  ", name)
+  ...
+) {
+  assert(
+    is_scalar_character(name),
+    "'name' must be a string:\n  ", name
+  )
 
   column <- view_column(
     column  = column,
@@ -165,7 +193,8 @@ update_column <- function(
     repo    = repo,
     user    = user,
     org     = org,
-    ...)
+    ...
+  )
 
   info("Updating column '", column$name, "' in project '", project, "'")
   column_lst <- gh_url("projects/columns", column$id) %>%
@@ -173,7 +202,8 @@ update_column <- function(
       type    = "PATCH",
       payload = list(name = name),
       accept  = "application/vnd.github.inertia-preview+json",
-      ...)
+      ...
+    )
 
   info("Transforming results", level = 4)
   column_gh <- select_properties(column_lst, properties$column)
@@ -183,7 +213,7 @@ update_column <- function(
 }
 
 
-#  FUNCTION: move_column ----------------------------------------------------------------------
+#  FUNCTION: move_column -------------------------------------------------------
 #
 #' @rdname update_column
 #' @export
@@ -196,12 +226,15 @@ move_column <- function(
   repo,
   user,
   org,
-  ...)
-{
+  ...
+) {
   if (!missing(position)) {
     assert(
       is_scalar_character(position) && position %in% values$column$position,
-      "'position' must be one of '", str_c(values$column$position, collapse = "', '"), "':\n  ", position)
+      "'position' must be one of '",
+      str_c(values$column$position, collapse = "', '"), "':\n  ",
+      position
+    )
 
     payload <- list(position = position)
   }
@@ -212,7 +245,8 @@ move_column <- function(
       repo    = repo,
       user    = user,
       org     = org,
-      ...)
+      ...
+    )
 
     payload <- list(position = str_c("after:", after_column$id))
   }
@@ -226,7 +260,8 @@ move_column <- function(
     repo    = repo,
     user    = user,
     org     = org,
-    ...)
+    ...
+  )
 
   info("Moving column '", column$name, "' in project '", project, "'")
   response <- gh_url("projects/columns", column$id, "moves") %>%
@@ -234,7 +269,8 @@ move_column <- function(
       type    = "POST",
       payload = payload,
       accept  = "application/vnd.github.inertia-preview+json",
-      ...)
+      ...
+    )
 
   info("Done", level = 7)
   structure(
@@ -243,35 +279,37 @@ move_column <- function(
     url     = attr(response, "url"),
     request = attr(response, "request"),
     status  = attr(response, "status"),
-    header  = attr(response, "header"))
+    header  = attr(response, "header")
+  )
 }
 
 
-#  FUNCTION: view_columns --------------------------------------------------------------------
+#  FUNCTION: view_columns ------------------------------------------------------
 #
 #' View columns within a GitHub project
 #'
-#' `view_columns()` summarises columns in a table with the properties as columns and a row
-#' for each column in the project. `view_column()` returns a list of all properties for a
-#' single column.
+#' `view_columns()` summarises columns in a table with the properties as columns
+#' and a row for each column in the project. `view_column()` returns a list of
+#' all properties for a single column.
 #'
-#' You can summarise all the columns of a project associated with either a repository, user
-#' or organization, by supplying them as an input.
+#' You can summarise all the columns of a project associated with either a
+#' repository, user or organization, by supplying them as an input.
 #'
 #' For more details see the GitHub API documentation:
-#' - <https://developer.github.com/v3/projects/columns/#list-project-columns>
-#' - <https://developer.github.com/v3/projects/columns/#get-a-project-column>
+#' - <https://docs.github.com/en/rest/reference/projects#list-project-columns>
+#' - <https://docs.github.com/en/rest/reference/projects#get-a-project-column>
 #'
 #' @param column (integer or string) The number or name of the column.
 #' @param project (integer or string) Either the project number or name.
-#' @param repo (string, optional) The repository specified in the format: `owner/repo`.
+#' @param repo (string, optional) The repository specified in the format:
+#'   `owner/repo`.
 #' @param user (string, optional) The login of the user.
 #' @param org (string, optional) The name of the organization.
 #' @param n_max (integer, optional) Maximum number to return. Default: `1000`.
 #' @param ... Parameters passed to [gh_page()] or [gh_request()].
 #'
-#' @return `view_columns()` returns a tibble of column properties. `view_column()`
-#'   returns a list of properties for a single column.
+#' @return `view_columns()` returns a tibble of column properties.
+#'   `view_column()` returns a list of properties for a single column.
 #'
 #' **Column Properties:**
 #'
@@ -286,35 +324,41 @@ move_column <- function(
 #'   # View columns in a repository project
 #'   view_columns(
 #'     project = "Test columns",
-#'     repo    = "ChadGoymer/githapi")
+#'     repo    = "ChadGoymer/githapi"
+#'   )
 #'
 #'   # View columns in a user's project
 #'   view_columns(
 #'     project = "Test columns",
-#'     user    = "ChadGoymer")
+#'     user    = "ChadGoymer"
+#'   )
 #'
 #'   # View columns in an organization's project
 #'   view_column(
 #'     project = "Test columns",
-#'     org     = "HairyCoos")
+#'     org     = "HairyCoos"
+#'   )
 #'
 #'   # View a column in a repository project
 #'   view_column(
 #'     column  = "Test column",
 #'     project = "Test columns",
-#'     repo    = "ChadGoymer/githapi")
+#'     repo    = "ChadGoymer/githapi"
+#'   )
 #'
 #'   # View a column in a user's project
 #'   view_column(
 #'     column  = "Test column",
 #'     project = "Test columns",
-#'     user    = "ChadGoymer")
+#'     user    = "ChadGoymer"
+#'   )
 #'
 #'   # View a column in an organization's project
 #'   view_column(
 #'     column  = "Test column",
 #'     project = "Test columns",
-#'     org     = "HairyCoos")
+#'     org     = "HairyCoos"
+#'   )
 #'
 #'   # View column by ID
 #'   view_column(123456)
@@ -329,21 +373,23 @@ view_columns <- function(
   user,
   org,
   n_max = 1000,
-  ...)
-{
+  ...
+) {
   project <- view_project(
     project = project,
     repo    = repo,
     user    = user,
     org     = org,
-    ...)
+    ...
+  )
 
   info("Viewing columns in project '", project$name, "'")
   columns_lst <- gh_url("projects", project$id, "columns") %>%
     gh_page(
       accept = "application/vnd.github.inertia-preview+json",
       n_max  = n_max,
-      ...)
+      ...
+    )
 
   info("Transforming results", level = 4)
   columns_gh <- bind_properties(columns_lst, properties$column)
@@ -353,7 +399,7 @@ view_columns <- function(
 }
 
 
-#  FUNCTION: view_column ---------------------------------------------------------------------
+#  FUNCTION: view_column -------------------------------------------------------
 #
 #' @rdname view_columns
 #' @export
@@ -364,15 +410,16 @@ view_column <- function(
   repo,
   user,
   org,
-  ...)
-{
+  ...
+) {
   if (is_scalar_integerish(column)) {
     info("Viewing column '", column, "''")
     column_lst <- gh_url("projects/columns", column) %>%
       gh_request(
-          type   = "GET",
+        type   = "GET",
         accept = "application/vnd.github.inertia-preview+json",
-        ...)
+        ...
+      )
   }
   else if (is_scalar_character(column)) {
     project <- view_project(
@@ -380,7 +427,8 @@ view_column <- function(
       repo    = repo,
       user    = user,
       org     = org,
-      ...)
+      ...
+    )
 
     info("Viewing column '", column, "' in project '", project$name, "'")
     column_lst <- gh_url("projects", project$id, "columns") %>%
@@ -388,7 +436,8 @@ view_column <- function(
         property = "name",
         value    = column,
         accept   = "application/vnd.github.inertia-preview+json",
-        ...)
+        ...
+      )
   }
   else {
     error("'column' must be either an integer or a string:\n  ", column)
@@ -402,22 +451,28 @@ view_column <- function(
 }
 
 
-#  FUNCTION: delete_column -------------------------------------------------------------------
+#  FUNCTION: delete_column -----------------------------------------------------
 #
 #' Delete a column in a GitHub project
 #'
-#' This function deletes a column in a GitHub project. Care should be taken as it will not be
-#' recoverable.
+#' This function deletes a column in a GitHub project. Care should be taken as
+#' it will not be recoverable.
 #'
-#' You can delete a column associated with either a repository, user or organization, by
-#' supplying them as an input, as long as you have appropriate permissions.
+#' You can delete a column associated with either a repository, user or
+#' organization, by supplying them as an input, as long as you have appropriate
+#' permissions.
 #'
 #' For more details see the GitHub API documentation:
-#' - <https://developer.github.com/v3/columns/#delete-a-column>
+#'
+#' ```{r echo=FALSE, results='asis'}
+#' docs_url <- "https://docs.github.com/en/rest/reference/"
+#' cat(paste0("- <", docs_url, "projects#delete-a-project-column", ">"))
+#' ```
 #'
 #' @param column (integer or string) Either the column number or name.
 #' @param project (integer or string) Either the project number or name.
-#' @param repo (string, optional) The repository specified in the format: `owner/repo`.
+#' @param repo (string, optional) The repository specified in the format:
+#'   `owner/repo`.
 #' @param user (string, optional) The login of the user.
 #' @param org (string, optional) The name of the organization.
 #' @param ... Parameters passed to [gh_request()].
@@ -431,19 +486,22 @@ view_column <- function(
 #'   delete_column(
 #'     column  = "Test column",
 #'     project = "Test project",
-#'     repo    = "ChadGoymer/githapi")
+#'     repo    = "ChadGoymer/githapi"
+#'   )
 #'
 #'   # Delete a column in a user's project
 #'   delete_column(
 #'     column  = "Test column",
 #'     project = "Test project",
-#'     user    = "ChadGoymer")
+#'     user    = "ChadGoymer"
+#'   )
 #'
 #'   # Delete a column in an organization's project
 #'   delete_column(
 #'     column  = "Test column",
 #'     project = "Test project",
-#'     org     = "HairyCoos")
+#'     org     = "HairyCoos"
+#'   )
 #'
 #' }
 #'
@@ -455,22 +513,24 @@ delete_column <- function(
   repo,
   user,
   org,
-  ...)
-{
+  ...
+) {
   column <- view_column(
     column  = column,
     project = project,
     repo    = repo,
     user    = user,
     org     = org,
-    ...)
+    ...
+  )
 
   info("Deleting column '", column$name, "' in project '", project, "'")
   response <- gh_url("projects/columns", column$id) %>%
     gh_request(
       type   = "DELETE",
       accept = "application/vnd.github.inertia-preview+json",
-      ...)
+      ...
+    )
 
   info("Done", level = 7)
   structure(
@@ -479,5 +539,6 @@ delete_column <- function(
     url     = attr(response, "url"),
     request = attr(response, "request"),
     status  = attr(response, "status"),
-    header  = attr(response, "header"))
+    header  = attr(response, "header")
+  )
 }

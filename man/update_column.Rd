@@ -16,7 +16,8 @@ move_column(column, position, after, project, repo, user, org, ...)
 
 \item{project}{(integer or string) Either the project number or name.}
 
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
 \item{user}{(string, optional) The login of the user.}
 
@@ -26,8 +27,8 @@ move_column(column, position, after, project, repo, user, org, ...)
 
 \item{position}{(string, optional) Either \code{"first"} or \code{"last"}.}
 
-\item{after}{(integer or string, optional) An ID or name of another column to place this
-one after.}
+\item{after}{(integer or string, optional) An ID or name of another column to
+place this one after.}
 }
 \value{
 \code{update_column()} returns a list of the column properties.
@@ -41,20 +42,21 @@ one after.}
 }
 }
 \description{
-\code{update_column()} can be used to change the column name in a project in GitHub.
-\code{move_column()} can be used to reorder the columns.
+\code{update_column()} can be used to change the column name in a project in
+GitHub. \code{move_column()} can be used to reorder the columns.
 }
 \details{
-You can update a column associated with either a repository, user or organization, by
-supplying them as an input, as long as you have appropriate permissions.
+You can update a column associated with either a repository, user or
+organization, by supplying them as an input, as long as you have appropriate
+permissions.
 
-You can move a column by either specifying the position, either \code{"first"} or \code{"last"}, or
-by specifying another column to place it after.
+You can move a column by either specifying the position, either \code{"first"} or
+\code{"last"}, or by specifying another column to place it after.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/projects/columns/#update-a-project-column}
-\item \url{https://developer.github.com/v3/projects/columns/#move-a-project-column}
+\item \url{https://docs.github.com/en/rest/reference/projects#update-a-project-column}
+\item \url{https://docs.github.com/en/rest/reference/projects#move-a-project-column}
 }
 }
 \examples{
@@ -65,19 +67,22 @@ For more details see the GitHub API documentation:
     column  = "Test column",
     name    = "Updated test column",
     project = "Test project",
-    repo    = "ChadGoymer/githapi")
+    repo    = "ChadGoymer/githapi"
+  )
 
   # Move a column to the first position in a user's project
   move_column(
     name     = "Test column",
     position = "first",
-    user     = "ChadGoymer")
+    user     = "ChadGoymer"
+  )
 
   # Move a column after another on in an organization's project
   move_column(
     name  = "Test column",
     after = "Test column 2",
-    org   = "HairyCoos")
+    org   = "HairyCoos"
+  )
 
 }
 

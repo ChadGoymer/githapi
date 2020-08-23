@@ -11,7 +11,8 @@ delete_column(column, project, repo, user, org, ...)
 
 \item{project}{(integer or string) Either the project number or name.}
 
-\item{repo}{(string, optional) The repository specified in the format: \code{owner/repo}.}
+\item{repo}{(string, optional) The repository specified in the format:
+\code{owner/repo}.}
 
 \item{user}{(string, optional) The login of the user.}
 
@@ -23,16 +24,17 @@ delete_column(column, project, repo, user, org, ...)
 \code{delete_column()} returns a TRUE if successfully deleted.
 }
 \description{
-This function deletes a column in a GitHub project. Care should be taken as it will not be
-recoverable.
+This function deletes a column in a GitHub project. Care should be taken as
+it will not be recoverable.
 }
 \details{
-You can delete a column associated with either a repository, user or organization, by
-supplying them as an input, as long as you have appropriate permissions.
+You can delete a column associated with either a repository, user or
+organization, by supplying them as an input, as long as you have appropriate
+permissions.
 
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://developer.github.com/v3/columns/#delete-a-column}
+\item \url{https://docs.github.com/en/rest/reference/projects#delete-a-project-column}
 }
 }
 \examples{
@@ -42,19 +44,22 @@ For more details see the GitHub API documentation:
   delete_column(
     column  = "Test column",
     project = "Test project",
-    repo    = "ChadGoymer/githapi")
+    repo    = "ChadGoymer/githapi"
+  )
 
   # Delete a column in a user's project
   delete_column(
     column  = "Test column",
     project = "Test project",
-    user    = "ChadGoymer")
+    user    = "ChadGoymer"
+  )
 
   # Delete a column in an organization's project
   delete_column(
     column  = "Test column",
     project = "Test project",
-    org     = "HairyCoos")
+    org     = "HairyCoos"
+  )
 
 }
 
