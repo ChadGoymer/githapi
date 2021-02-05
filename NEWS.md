@@ -1,3 +1,7 @@
+# githapi 0.10.20
+
+- Fixed `download_file()` so it can download files over 1 MB.
+
 # githapi 0.10.19
 
 - Allowed `create_file()` to create files in subfolders
