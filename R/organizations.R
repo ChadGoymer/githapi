@@ -114,7 +114,7 @@ update_organization <- function(
 ) {
   payload <- list()
 
-  if (!missing(name)) {
+  if (!is_missing_or_null(name)) {
     assert(
       is_scalar_character(name),
       "'name' must be a string:\n  ", name
@@ -122,7 +122,7 @@ update_organization <- function(
     payload$name <- name
   }
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -130,7 +130,7 @@ update_organization <- function(
     payload$description <- description
   }
 
-  if (!missing(email)) {
+  if (!is_missing_or_null(email)) {
     assert(
       is_scalar_character(email),
       "'email' must be a string:\n  ", email
@@ -138,7 +138,7 @@ update_organization <- function(
     payload$email <- email
   }
 
-  if (!missing(location)) {
+  if (!is_missing_or_null(location)) {
     assert(
       is_scalar_character(location),
       "'location' must be a string:\n  ", location
@@ -146,7 +146,7 @@ update_organization <- function(
     payload$location <- location
   }
 
-  if (!missing(company)) {
+  if (!is_missing_or_null(company)) {
     assert(
       is_scalar_character(company),
       "'company' must be a string:\n  ", company
@@ -154,7 +154,7 @@ update_organization <- function(
     payload$company <- company
   }
 
-  if (!missing(billing_email)) {
+  if (!is_missing_or_null(billing_email)) {
     assert(
       is_scalar_character(billing_email),
       "'billing_email' must be a string:\n  ", billing_email
@@ -162,7 +162,7 @@ update_organization <- function(
     payload$billing_email <- billing_email
   }
 
-  if (!missing(has_organization_projects)) {
+  if (!is_missing_or_null(has_organization_projects)) {
     assert(
       is_scalar_logical(has_organization_projects),
       "'has_organization_projects' must be a boolean:\n  ",
@@ -171,7 +171,7 @@ update_organization <- function(
     payload$has_organization_projects <- has_organization_projects
   }
 
-  if (!missing(has_repository_projects)) {
+  if (!is_missing_or_null(has_repository_projects)) {
     assert(
       is_scalar_logical(has_repository_projects),
       "'has_repository_projects' must be a boolean:\n  ",
@@ -180,7 +180,7 @@ update_organization <- function(
     payload$has_repository_projects <- has_repository_projects
   }
 
-  if (!missing(default_repository_permission)) {
+  if (!is_missing_or_null(default_repository_permission)) {
     assert(
       is_scalar_character(default_repository_permission) &&
         default_repository_permission %in%
@@ -195,7 +195,7 @@ update_organization <- function(
     payload$default_repository_permission <- default_repository_permission
   }
 
-  if (!missing(members_can_create_repositories)) {
+  if (!is_missing_or_null(members_can_create_repositories)) {
     assert(
       is_scalar_logical(members_can_create_repositories),
       "'members_can_create_repositories' must be a string:\n  ",

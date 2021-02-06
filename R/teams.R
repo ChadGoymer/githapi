@@ -105,7 +105,7 @@ create_team <- function(
 
   payload <- list(name = name)
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -113,7 +113,7 @@ create_team <- function(
     payload$description <- description
   }
 
-  if (!missing(maintainers)) {
+  if (!is_missing_or_null(maintainers)) {
     assert(
       is_character(maintainers),
       "'maintainers' must be a character vector:\n  ", maintainers
@@ -121,7 +121,7 @@ create_team <- function(
     payload$maintainers <- as.list(maintainers)
   }
 
-  if (!missing(repo_names)) {
+  if (!is_missing_or_null(repo_names)) {
     assert(
       is_character(repo_names),
       "'repo_names' must be a character vector:\n  ", repo_names
@@ -129,7 +129,7 @@ create_team <- function(
     payload$repo_names <- as.list(repo_names)
   }
 
-  if (!missing(privacy)) {
+  if (!is_missing_or_null(privacy)) {
     assert(
       is_scalar_character(privacy) && privacy %in% values$team$privacy,
       "'privacy' must be one of '",
@@ -138,7 +138,7 @@ create_team <- function(
     payload$privacy <- privacy
   }
 
-  if (!missing(parent_team)) {
+  if (!is_missing_or_null(parent_team)) {
     if (is_scalar_character(parent_team)) {
       parent_team <- gh_url("orgs", org, "teams") %>%
         gh_find(property = "name", value = parent_team, ...) %>%
@@ -244,7 +244,7 @@ update_team <- function(
 ) {
   payload <- list()
 
-  if (!missing(name)) {
+  if (!is_missing_or_null(name)) {
     assert(
       is_scalar_character(name),
       "'name' must be a string:\n  ", name
@@ -252,7 +252,7 @@ update_team <- function(
     payload$name <- name
   }
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -260,7 +260,7 @@ update_team <- function(
     payload$description <- description
   }
 
-  if (!missing(privacy)) {
+  if (!is_missing_or_null(privacy)) {
     assert(
       is_scalar_character(privacy) && privacy %in% values$team$privacy,
       "'privacy' must be one of '",
@@ -269,7 +269,7 @@ update_team <- function(
     payload$privacy <- privacy
   }
 
-  if (!missing(parent_team)) {
+  if (!is_missing_or_null(parent_team)) {
     if (is_scalar_character(parent_team)) {
       assert(
         is_scalar_character(org),
@@ -411,7 +411,7 @@ view_teams <- function(
   n_max = 1000,
   ...
 ) {
-  if (!missing(parent_team)) {
+  if (!is_missing_or_null(parent_team)) {
     if (is_scalar_character(parent_team)) {
       assert(
         is_scalar_character(org),
@@ -429,7 +429,7 @@ view_teams <- function(
     info("Viewing child teams of the team '", parent_team, "'")
     url <- gh_url("teams", parent_team, "teams")
   }
-  else if (!missing(org)) {
+  else if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org

@@ -347,7 +347,7 @@ upload_files <- function(
 
   payload <- list(message = message)
 
-  if (!missing(author)) {
+  if (!is_missing_or_null(author)) {
     assert(
       is_list(author) &&
         is_scalar_character(author$name) &&
@@ -357,7 +357,7 @@ upload_files <- function(
     payload$author <- author
   }
 
-  if (!missing(committer)) {
+  if (!is_missing_or_null(committer)) {
     assert(
       is_list(committer) &&
         is_scalar_character(committer$name) &&
@@ -367,7 +367,7 @@ upload_files <- function(
     payload$committer <- committer
   }
 
-  if (missing(parent)) {
+  if (is_missing_or_null(parent)) {
     parent <- branch
   }
   assert(
@@ -657,7 +657,7 @@ create_file <- function(
     message = message
   )
 
-  if (!missing(parent) && !identical(parent, branch)) {
+  if (!is_missing_or_null(parent) && !identical(parent, branch)) {
     assert(
       is_ref(parent),
       "'parent' must be a valid git reference - see help(is_ref):\n  ", parent
@@ -665,7 +665,7 @@ create_file <- function(
     create_branch(name = branch, ref = parent, repo = repo, ...)
   }
 
-  if (!missing(author)) {
+  if (!is_missing_or_null(author)) {
     assert(
       is_list(author) &&
         is_scalar_character(author$name) &&
@@ -675,7 +675,7 @@ create_file <- function(
     payload$author <- author
   }
 
-  if (!missing(committer)) {
+  if (!is_missing_or_null(committer)) {
     assert(
       is_list(committer) &&
         is_scalar_character(committer$name) &&
@@ -843,7 +843,7 @@ update_file <- function(
     message = message
   )
 
-  if (!missing(parent) && !identical(parent, branch)) {
+  if (!is_missing_or_null(parent) && !identical(parent, branch)) {
     assert(
       is_ref(parent),
       "'parent' must be a valid git reference - see help(is_ref):\n  ", parent
@@ -851,7 +851,7 @@ update_file <- function(
     create_branch(name = branch, ref = parent, repo = repo, ...)
   }
 
-  if (!missing(author)) {
+  if (!is_missing_or_null(author)) {
     assert(
       is_list(author) &&
         is_scalar_character(author$name) &&
@@ -861,7 +861,7 @@ update_file <- function(
     payload$author <- author
   }
 
-  if (!missing(committer)) {
+  if (!is_missing_or_null(committer)) {
     assert(
       is_list(committer) &&
         is_scalar_character(committer$name) &&
@@ -1017,7 +1017,7 @@ delete_file <- function(
 
   payload <- list(branch = branch, message = message)
 
-  if (!missing(parent) && !identical(parent, branch)) {
+  if (!is_missing_or_null(parent) && !identical(parent, branch)) {
     assert(
       is_ref(parent),
       "'parent' must be a valid git reference - see help(is_ref):\n  ", parent
@@ -1025,7 +1025,7 @@ delete_file <- function(
     create_branch(name = branch, ref = parent, repo = repo, ...)
   }
 
-  if (!missing(author)) {
+  if (!is_missing_or_null(author)) {
     assert(
       is_list(author) &&
         is_scalar_character(author$name) &&
@@ -1035,7 +1035,7 @@ delete_file <- function(
     payload$author <- author
   }
 
-  if (!missing(committer)) {
+  if (!is_missing_or_null(committer)) {
     assert(
       is_list(committer) &&
         is_scalar_character(committer$name) &&

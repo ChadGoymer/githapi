@@ -179,7 +179,7 @@ create_repository <- function(
     delete_branch_on_merge = delete_branch_on_merge
   )
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -187,7 +187,7 @@ create_repository <- function(
     payload$description <- description
   }
 
-  if (!missing(homepage)) {
+  if (!is_missing_or_null(homepage)) {
     assert(
       is_scalar_character(homepage),
       "'description' must be a string:\n  ", homepage
@@ -195,7 +195,7 @@ create_repository <- function(
     payload$homepage <- homepage
   }
 
-  if (!missing(org)) {
+  if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
@@ -407,7 +407,7 @@ update_repository <- function(
 
   payload <- list()
 
-  if (!missing(team)) {
+  if (!is_missing_or_null(team)) {
     assert(
       is_scalar_character(team),
       "'team' must be a string:\n  ", team
@@ -441,7 +441,7 @@ update_repository <- function(
       gh_request("GET", accept = gh_json, ...)
   }
   else {
-    if (!missing(name)) {
+    if (!is_missing_or_null(name)) {
       assert(
         is_scalar_character(name),
         "'name' must be a string:\n  ", name
@@ -449,7 +449,7 @@ update_repository <- function(
       payload$name <- name
     }
 
-    if (!missing(description)) {
+    if (!is_missing_or_null(description)) {
       assert(
         is_scalar_character(description),
         "'description' must be a string:\n  ", description
@@ -457,7 +457,7 @@ update_repository <- function(
       payload$description <- description
     }
 
-    if (!missing(homepage)) {
+    if (!is_missing_or_null(homepage)) {
       assert(
         is_scalar_character(homepage),
         "'description' must be a string:\n  ", homepage
@@ -465,7 +465,7 @@ update_repository <- function(
       payload$homepage <- homepage
     }
 
-    if (!missing(private)) {
+    if (!is_missing_or_null(private)) {
       assert(
         is_scalar_logical(private),
         "'private' must be a boolean:\n  ", private
@@ -473,7 +473,7 @@ update_repository <- function(
       payload$private <- private
     }
 
-    if (!missing(has_issues)) {
+    if (!is_missing_or_null(has_issues)) {
       assert(
         is_scalar_logical(has_issues),
         "'has_issues' must be a boolean:\n  ", has_issues
@@ -481,7 +481,7 @@ update_repository <- function(
       payload$has_issues <- has_issues
     }
 
-    if (!missing(has_projects)) {
+    if (!is_missing_or_null(has_projects)) {
       assert(
         is_scalar_logical(has_projects),
         "'has_projects' must be a boolean:\n  ", has_projects
@@ -489,7 +489,7 @@ update_repository <- function(
       payload$has_projects <- has_projects
     }
 
-    if (!missing(has_wiki)) {
+    if (!is_missing_or_null(has_wiki)) {
       assert(
         is_scalar_logical(has_wiki),
         "'has_wiki' must be a boolean:\n  ", has_wiki
@@ -497,7 +497,7 @@ update_repository <- function(
       payload$has_wiki <- has_wiki
     }
 
-    if (!missing(default_branch)) {
+    if (!is_missing_or_null(default_branch)) {
       assert(
         is_scalar_character(default_branch),
         "'default_branch' must be a string:\n  ", default_branch
@@ -505,7 +505,7 @@ update_repository <- function(
       payload$default_branch <- default_branch
     }
 
-    if (!missing(allow_squash_merge)) {
+    if (!is_missing_or_null(allow_squash_merge)) {
       assert(
         is_scalar_logical(allow_squash_merge),
         "'allow_squash_merge' must be a boolean:\n  ", allow_squash_merge
@@ -513,7 +513,7 @@ update_repository <- function(
       payload$allow_squash_merge <- allow_squash_merge
     }
 
-    if (!missing(allow_merge_commit)) {
+    if (!is_missing_or_null(allow_merge_commit)) {
       assert(
         is_scalar_logical(allow_merge_commit),
         "'allow_merge_commit' must be a boolean:\n  ", allow_merge_commit
@@ -521,7 +521,7 @@ update_repository <- function(
       payload$allow_merge_commit <- allow_merge_commit
     }
 
-    if (!missing(allow_rebase_merge)) {
+    if (!is_missing_or_null(allow_rebase_merge)) {
       assert(
         is_scalar_logical(allow_rebase_merge),
         "'allow_rebase_merge' must be a boolean:\n  ", allow_rebase_merge
@@ -529,7 +529,7 @@ update_repository <- function(
       payload$allow_rebase_merge <- allow_rebase_merge
     }
 
-    if (!missing(delete_branch_on_merge)) {
+    if (!is_missing_or_null(delete_branch_on_merge)) {
       assert(
         is_scalar_logical(delete_branch_on_merge),
         "'delete_branch_on_merge' must be a boolean:\n  ",
@@ -538,7 +538,7 @@ update_repository <- function(
       payload$delete_branch_on_merge <- delete_branch_on_merge
     }
 
-    if (!missing(archived)) {
+    if (!is_missing_or_null(archived)) {
       assert(
         is_scalar_logical(archived),
         "'archived' must be a boolean:\n  ", archived
@@ -741,7 +741,7 @@ view_repositories <- function(
     str_c(values$repository$direction, collapse = "', '"), "':\n  ", direction
   )
 
-  if (!missing(user)) {
+  if (!is_missing_or_null(user)) {
     assert(
       is_scalar_character(user),
       "'user' must be a string:\n  ", user
@@ -754,13 +754,13 @@ view_repositories <- function(
       direction = direction
     )
   }
-  else if (!missing(org)) {
+  else if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
     )
 
-    if (missing(team)) {
+    if (is_missing_or_null(team)) {
       info("Viewing repositories for organization '", org, "'")
       url <- gh_url(
         "orgs", org, "repos",
@@ -834,7 +834,7 @@ view_repository <- function(
     "'repo' must be a string in the format 'owner/repo':\n  ", repo
   )
 
-  if (missing(team)) {
+  if (is_missing_or_null(team)) {
     info("Viewing repository '", repo, "'")
     repo_lst <- gh_url("repos", repo) %>%
       gh_request("GET", ...)

@@ -108,7 +108,7 @@ create_release <- function(
     prerelease = prerelease
   )
 
-  if (!missing(name)) {
+  if (!is_missing_or_null(name)) {
     assert(
       is_scalar_character(name),
       "'name' must be a string:\n  ", name
@@ -116,7 +116,7 @@ create_release <- function(
     payload$name <- name
   }
 
-  if (!missing(body)) {
+  if (!is_missing_or_null(body)) {
     assert(
       is_scalar_character(body),
       "'body' must be a string:\n  ", body
@@ -124,7 +124,7 @@ create_release <- function(
     payload$body <- body
   }
 
-  if (!missing(ref)) {
+  if (!is_missing_or_null(ref)) {
     assert(
       is_ref(ref),
       "'ref' must be a valid git reference - see help(is_ref):\n  ", ref
@@ -253,7 +253,7 @@ update_release <- function(
     prerelease = prerelease
   )
 
-  if (!missing(tag)) {
+  if (!is_missing_or_null(tag)) {
     assert(
       is_ref(tag),
       "'tag' must be a valid git reference - see help(is_ref):\n  ", tag
@@ -261,7 +261,7 @@ update_release <- function(
     payload$tag_name <- tag
   }
 
-  if (!missing(name)) {
+  if (!is_missing_or_null(name)) {
     assert(
       is_scalar_character(name),
       "'name' must be a string:\n  ", name
@@ -269,7 +269,7 @@ update_release <- function(
     payload$name <- name
   }
 
-  if (!missing(body)) {
+  if (!is_missing_or_null(body)) {
     assert(
       is_scalar_character(body),
       "'body' must be a string:\n  ", body
@@ -277,7 +277,7 @@ update_release <- function(
     payload$body <- body
   }
 
-  if (!missing(ref)) {
+  if (!is_missing_or_null(ref)) {
     assert(
       is_ref(ref),
       "'ref' must be a valid git reference - see help(is_ref):\n  ", ref

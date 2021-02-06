@@ -85,6 +85,27 @@ test_that("is_hex returns TRUE with a valid hex color, FALSE otherwise", {
 
 })
 
+# TEST: is_missing_or_null -----------------------------------------------------
+
+test_that("is_missing_or_null returns TRUE if input is missing or NULL", {
+
+  expect_true(is_missing_or_null())
+  expect_true(is_missing_or_null(NULL))
+
+  expect_false(is_missing_or_null(1))
+  expect_false(is_missing_or_null("A"))
+
+  test_fun <- function(x) {
+    if (is_missing_or_null(x)) TRUE else FALSE
+  }
+
+  expect_true(test_fun())
+  expect_true(test_fun(NULL))
+
+  expect_false(test_fun(1))
+  expect_false(test_fun("A"))
+
+})
 
 
 # TEST: random_color -----------------------------------------------------------

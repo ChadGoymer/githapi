@@ -71,7 +71,7 @@ update_user <- function(
 ) {
   payload <- list()
 
-  if (!missing(name)) {
+  if (!is_missing_or_null(name)) {
     assert(
       is_scalar_character(name),
       "'name' must be a string:\n  ", name
@@ -79,7 +79,7 @@ update_user <- function(
     payload$name <- name
   }
 
-  if (!missing(email)) {
+  if (!is_missing_or_null(email)) {
     assert(
       is_scalar_character(email),
       "'email' must be a string:\n  ", email
@@ -87,7 +87,7 @@ update_user <- function(
     payload$email <- email
   }
 
-  if (!missing(blog)) {
+  if (!is_missing_or_null(blog)) {
     assert(
       is_scalar_character(blog),
       "'blog' must be a string:\n  ", blog
@@ -95,7 +95,7 @@ update_user <- function(
     payload$blog <- blog
   }
 
-  if (!missing(company)) {
+  if (!is_missing_or_null(company)) {
     assert(
       is_scalar_character(company),
       "'company' must be a string:\n  ", company
@@ -103,7 +103,7 @@ update_user <- function(
     payload$company <- company
   }
 
-  if (!missing(location)) {
+  if (!is_missing_or_null(location)) {
     assert(
       is_scalar_character(location),
       "'location' must be a string:\n  ", location
@@ -111,7 +111,7 @@ update_user <- function(
     payload$location <- location
   }
 
-  if (!missing(hireable)) {
+  if (!is_missing_or_null(hireable)) {
     assert(
       is_scalar_logical(hireable),
       "'hireable' must be a boolean:\n  ", hireable
@@ -119,7 +119,7 @@ update_user <- function(
     payload$hireable <- hireable
   }
 
-  if (!missing(bio)) {
+  if (!is_missing_or_null(bio)) {
     assert(
       is_scalar_character(bio),
       "'bio' must be a string:\n  ", bio
@@ -245,7 +245,7 @@ view_users <- function(
   n_max = 1000,
   ...
 ) {
-  if (!missing(org)) {
+  if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
@@ -256,7 +256,7 @@ view_users <- function(
       str_c(values$card$role, collapse = "', '"), "':\n  ", role
     )
 
-    if (!missing(team)) {
+    if (!is_missing_or_null(team)) {
       assert(
         is_scalar_character(team),
         "'team' must be a string:\n  ", team
@@ -297,7 +297,7 @@ view_user <- function(
   user,
   ...
 ) {
-  if (missing(user)) {
+  if (is_missing_or_null(user)) {
     info("Viewing authenticated user")
     url <- gh_url("user")
   }
