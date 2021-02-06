@@ -88,8 +88,8 @@ update_collaborator <- function(
 
   payload <- NULL
 
-  if (!missing(repo)) {
-    if (!missing(permission)) {
+  if (!is_missing_or_null(repo)) {
+    if (!is_missing_or_null(permission)) {
       assert(
         is_scalar_character(permission) &&
           permission %in% values$repository$permission,
@@ -108,8 +108,8 @@ update_collaborator <- function(
     response <- gh_url("repos", repo, "collaborators", user) %>%
       gh_request("PUT", payload = payload, ...)
   }
-  else if (!missing(project)) {
-    if (!missing(permission)) {
+  else if (!is_missing_or_null(project)) {
+    if (!is_missing_or_null(permission)) {
       assert(
         is_scalar_character(permission) &&
           permission %in% values$project$permission,
@@ -253,7 +253,7 @@ view_collaborators <- function(
     affiliation
   )
 
-  if (!missing(repo)) {
+  if (!is_missing_or_null(repo)) {
     assert(
       is_repo(repo),
       "'repo' must be a string in the format 'owner/repo':\n  ", repo
@@ -264,7 +264,7 @@ view_collaborators <- function(
     ) %>%
       gh_page(n_max = n_max, ...)
   }
-  else if (!missing(project)) {
+  else if (!is_missing_or_null(project)) {
     project <- view_project(project = project, org = org, ...)
 
     info("Viewing collaborators for project '", project$name, "'")
@@ -277,7 +277,7 @@ view_collaborators <- function(
         ...
       )
   }
-  else if (!missing(org)) {
+  else if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
@@ -320,7 +320,7 @@ view_collaborator <- function(
     "'user' must be a string:\n  ", user
   )
 
-  if (!missing(repo)) {
+  if (!is_missing_or_null(repo)) {
     assert(
       is_repo(repo),
       "'repo' must be a string in the format 'owner/repo':\n  ", repo
@@ -331,7 +331,7 @@ view_collaborator <- function(
     ) %>%
       gh_request("GET", ...)
   }
-  else if (!missing(project)) {
+  else if (!is_missing_or_null(project)) {
     project <- view_project(project = project, org = org, ...)
 
     info("Viewing collaborator '", user, "' for project '", project$name, "'")
@@ -447,7 +447,7 @@ delete_collaborator <- function(
     "'user' must be a string:\n  ", user
   )
 
-  if (!missing(repo)) {
+  if (!is_missing_or_null(repo)) {
     assert(
       is_repo(repo),
       "'repo' must be a string in the format 'owner/repo':\n  ", repo
@@ -456,7 +456,7 @@ delete_collaborator <- function(
     response <- gh_url("repos", repo, "collaborators", user) %>%
       gh_request("DELETE", ...)
   }
-  else if (!missing(project)) {
+  else if (!is_missing_or_null(project)) {
     project <- view_project(project = project, org = org, ...)
 
     info("Deleting collaborator '", user, "' from project '", project$name, "'")
@@ -467,7 +467,7 @@ delete_collaborator <- function(
         ...
       )
   }
-  else if (!missing(org)) {
+  else if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org

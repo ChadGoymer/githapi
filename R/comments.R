@@ -131,7 +131,7 @@ create_comment <- function(
 
   payload <- list(body = body)
 
-  if (!missing(gist)) {
+  if (!is_missing_or_null(gist)) {
     assert(
       is_scalar_character(gist),
       "'gist' must be a string:\n  ", gist
@@ -146,7 +146,7 @@ create_comment <- function(
       "'repo' must be a string in the format 'owner/repo':\n  ", repo
     )
 
-    if (!missing(issue)) {
+    if (!is_missing_or_null(issue)) {
       if (is_scalar_character(issue)) {
         issue <- view_issue(issue = issue, repo = repo, ...)$number
       }
@@ -161,7 +161,7 @@ create_comment <- function(
       )
       url <- gh_url("repos", repo, "issues", issue, "comments")
     }
-    else if (!missing(commit)) {
+    else if (!is_missing_or_null(commit)) {
       if (!is_sha(commit)) {
         commit <- view_sha(ref = commit, repo = repo, ...)
       }
@@ -181,7 +181,7 @@ create_comment <- function(
       payload$path <- path
       payload$position <- position
 
-      if (missing(pull_request)) {
+      if (is_missing_or_null(pull_request)) {
         info(
           "Creating comment for commit '", commit,
           "' in repository '", repo, "'"
@@ -219,7 +219,7 @@ create_comment <- function(
   comment_lst <- gh_request("POST", url = url, payload = payload, ...)
 
   info("Transforming results", level = 4)
-  if (missing(commit) && missing(pull_request)) {
+  if (is_missing_or_null(commit) && is_missing_or_null(pull_request)) {
     comment_gh <- select_properties(comment_lst, properties$issue_comment)
   }
   else {
@@ -353,7 +353,7 @@ update_comment <- function(
 
   payload <- list(body = body)
 
-  if (!missing(gist)) {
+  if (!is_missing_or_null(gist)) {
     info("Updating comment '", comment, "' for gist '", gist, "'")
     url <- gh_url("gists", gist, "comments", comment)
   }
@@ -388,7 +388,7 @@ update_comment <- function(
   comment_lst <- gh_request("PATCH", url = url, payload = payload, ...)
 
   info("Transforming results", level = 4)
-  if (!missing(gist) || identical(type, "issue")) {
+  if (!is_missing_or_null(gist) || identical(type, "issue")) {
     comment_gh <- select_properties(comment_lst, properties$issue_comment)
   }
   else {
@@ -587,7 +587,7 @@ view_comments <- function(
   n_max = 1000,
   ...
 ) {
-  if (!missing(gist)) {
+  if (!is_missing_or_null(gist)) {
     info("Viewing comments for gist '", gist, "'")
     url <- gh_url("gists", gist, "comments")
   }
@@ -597,7 +597,7 @@ view_comments <- function(
       "'repo' must be a string in the format 'owner/repo':\n  ", repo
     )
 
-    if (!missing(issue)) {
+    if (!is_missing_or_null(issue)) {
       if (is_scalar_character(issue)) {
         issue <- view_issue(issue = issue, repo = repo, ...)$number
       }
@@ -612,7 +612,7 @@ view_comments <- function(
       )
       url <- gh_url("repos", repo, "issues", issue, "comments")
     }
-    else if (!missing(commit)) {
+    else if (!is_missing_or_null(commit)) {
       if (!is_sha(commit)) {
         commit <- view_sha(ref = commit, repo = repo, ...)
       }
@@ -627,7 +627,7 @@ view_comments <- function(
       )
       url <- gh_url("repos", repo, "commits", commit, "comments")
     }
-    else if (!missing(pull_request)) {
+    else if (!is_missing_or_null(pull_request)) {
       if (is_scalar_character(pull_request)) {
         pull_request <- view_pull_request(
           pull_request = pull_request,
@@ -655,7 +655,7 @@ view_comments <- function(
   comment_lst <- gh_page(url = url, ...)
 
   info("Transforming results", level = 4)
-  if (missing(commit) && missing(pull_request)) {
+  if (is_missing_or_null(commit) && is_missing_or_null(pull_request)) {
     comment_gh <- bind_properties(comment_lst, properties$issue_comment)
   }
   else {
@@ -684,7 +684,7 @@ view_comment <- function(
     "'comment' must be a string or integer:\n  ", comment
   )
 
-  if (!missing(gist)) {
+  if (!is_missing_or_null(gist)) {
     info("Viewing comment '", comment, "' for gist '", gist, "'")
     url <- gh_url("gists", gist, "comments", comment)
   }
@@ -719,7 +719,7 @@ view_comment <- function(
   comment_lst <- gh_request("GET", url = url, ...)
 
   info("Transforming results", level = 4)
-  if (!missing(gist) || identical(type, "issue")) {
+  if (!is_missing_or_null(gist) || identical(type, "issue")) {
     comment_gh <- select_properties(comment_lst, properties$issue_comment)
   }
   else {
@@ -882,7 +882,7 @@ delete_comment <- function(
     "'comment' must be a string or integer:\n  ", comment
   )
 
-  if (!missing(gist)) {
+  if (!is_missing_or_null(gist)) {
     info("Deleting comment '", comment, "' for gist '", gist, "'")
     url <- gh_url("gists", gist, "comments", comment)
   }

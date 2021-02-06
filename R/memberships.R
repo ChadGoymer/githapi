@@ -87,8 +87,8 @@ update_membership <- function(
 
   payload <- NULL
 
-  if (missing(team)) {
-    if (!missing(role)) {
+  if (is_missing_or_null(team)) {
+    if (!is_missing_or_null(role)) {
       assert(
         is_scalar_character(role) && role %in% values$membership$org_role,
         "organization 'role' must be either '",
@@ -105,7 +105,7 @@ update_membership <- function(
     membership_gh <- select_properties(membership_lst, properties$memberships)
   }
   else {
-    if (!missing(role)) {
+    if (!is_missing_or_null(role)) {
       assert(
         is_scalar_character(role) && role %in% values$membership$team_role,
         "organization 'role' must be either '",
@@ -225,7 +225,7 @@ view_memberships <- function(
   n_max = 1000,
   ...
 ) {
-  if (!missing(state)) {
+  if (!is_missing_or_null(state)) {
     assert(
       is_scalar_character(state) || state %in% values$membership$state,
       "'state' must be one of '",
@@ -268,7 +268,7 @@ view_membership <- function(
     "'org' must be a string:\n  ", org
   )
 
-  if (missing(team)) {
+  if (is_missing_or_null(team)) {
     info("Viewing membership for '", user, "' in organization '", org, "'")
     membership_lst <- gh_url("orgs", org, "memberships", user) %>%
       gh_request("GET", ...)
@@ -370,7 +370,7 @@ delete_membership <- function(
     "'org' must be a string:\n  ", org
   )
 
-  if (missing(team)) {
+  if (is_missing_or_null(team)) {
     info("Deleting membership for '", user, "' in organization '", org, "'")
     response <- gh_url("orgs", org, "memberships", user) %>%
       gh_request("DELETE", ...)

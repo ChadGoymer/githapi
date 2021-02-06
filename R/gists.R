@@ -88,7 +88,7 @@ create_gist <- function(
   payload <- list(public = public)
   payload$files <- map(files, ~ list(content = .))
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -189,7 +189,7 @@ update_gist <- function(
 
   payload <- NULL
 
-  if (!missing(files)) {
+  if (!is_missing_or_null(files)) {
     assert(
       is_list(files) & has_names(files),
       "'files' must be a named list:\n  ", files
@@ -205,7 +205,7 @@ update_gist <- function(
     })
   }
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -320,7 +320,7 @@ view_gists <- function(
   n_max = 1000,
   ...
 ) {
-  if (!missing(since)) {
+  if (!is_missing_or_null(since)) {
     assert(
       is_scalar_character(since),
       "'since' must be a string:\n  ", since
@@ -339,7 +339,7 @@ view_gists <- function(
     since <- NULL
   }
 
-  if (missing(user)) {
+  if (is_missing_or_null(user)) {
     info("Viewing gists for authenticated user")
     url <- gh_url("gists", since = since)
   }
@@ -532,7 +532,7 @@ download_gist <- function(
   gist <- gh_url("gists", gist) %>%
     gh_request("GET", ...)
 
-  if (missing(files)) {
+  if (is_missing_or_null(files)) {
     files <- names(gist$files)
   }
   assert(
@@ -605,7 +605,7 @@ source_gist <- function(
   gist <- gh_url("gists", gist) %>%
     gh_request("GET")
 
-  if (missing(files)) {
+  if (is_missing_or_null(files)) {
     files <- names(gist$files)
   }
   assert(

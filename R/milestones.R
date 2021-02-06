@@ -80,7 +80,7 @@ create_milestone <- function(
 
   payload <- list(title = title, state = state)
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -88,7 +88,7 @@ create_milestone <- function(
     payload$description <- description
   }
 
-  if (!missing(due_on)) {
+  if (!is_missing_or_null(due_on)) {
     assert(
       is_scalar_character(due_on),
       "'due_on' must be a string:\n  ", due_on
@@ -199,7 +199,7 @@ update_milestone <- function(
 
   payload <- list()
 
-  if (!missing(title)) {
+  if (!is_missing_or_null(title)) {
     assert(
       is_scalar_character(title),
       "'title' must be a string:\n  ", title
@@ -207,7 +207,7 @@ update_milestone <- function(
     payload$title <- title
   }
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -215,7 +215,7 @@ update_milestone <- function(
     payload$description <- description
   }
 
-  if (!missing(due_on)) {
+  if (!is_missing_or_null(due_on)) {
     assert(
       is_scalar_character(due_on),
       "'due_on' must be a string:\n  ", due_on
@@ -229,7 +229,7 @@ update_milestone <- function(
     payload$due_on <- due_on
   }
 
-  if (!missing(state)) {
+  if (!is_missing_or_null(state)) {
     assert(
       is_scalar_character(state) && state %in% values$milestone$state,
       "'state' for milestones must be either '",

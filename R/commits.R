@@ -189,7 +189,7 @@ upload_commit <- function(
 
   payload <- list(message = message)
 
-  if (!missing(author)) {
+  if (!is_missing_or_null(author)) {
     assert(
       is_list(author) &&
         is_scalar_character(author$name) &&
@@ -199,7 +199,7 @@ upload_commit <- function(
     payload$author <- author
   }
 
-  if (!missing(committer)) {
+  if (!is_missing_or_null(committer)) {
     assert(
       is_list(committer) &&
         is_scalar_character(committer$name) &&
@@ -223,7 +223,7 @@ upload_commit <- function(
     on_error = function(e) NULL
   )
 
-  if (missing(parents)) {
+  if (is_missing_or_null(parents)) {
     if (is_null(branch_sha)) {
       parents <- NULL
     }
@@ -479,7 +479,7 @@ view_commits <- function(
     "'repo' must be a string in the format 'owner/repo':\n  ", repo
   )
 
-  if (!missing(path)) {
+  if (!is_missing_or_null(path)) {
     assert(
       is_scalar_character(path),
       "'path' must be a string:\n  ", path
@@ -490,7 +490,7 @@ view_commits <- function(
     path <- NULL
   }
 
-  if (!missing(author)) {
+  if (!is_missing_or_null(author)) {
     assert(
       is_scalar_character(author),
       "'author' must be a string:\n  ", author
@@ -501,7 +501,7 @@ view_commits <- function(
     author <- NULL
   }
 
-  if (!missing(since)) {
+  if (!is_missing_or_null(since)) {
     assert(
       is_scalar_character(since),
       "'since' must be a string:\n  ", since
@@ -518,7 +518,7 @@ view_commits <- function(
     since <- NULL
   }
 
-  if (!missing(until)) {
+  if (!is_missing_or_null(until)) {
     assert(
       is_scalar_character(until),
       "'until' must be a string:\n  ", until

@@ -144,7 +144,7 @@ create_pull_request <- function(
 
   payload <- list(title = title, head = head, base = base)
 
-  if (!missing(body)) {
+  if (!is_missing_or_null(body)) {
     assert(
       is_scalar_character(body),
       "'body' must be a string:\n  ", body
@@ -158,7 +158,7 @@ create_pull_request <- function(
 
   payload <- list()
 
-  if (!missing(assignees)) {
+  if (!is_missing_or_null(assignees)) {
     assert(
       is_character(assignees),
       "'assignees' must be a character vector:\n  ", assignees
@@ -166,7 +166,7 @@ create_pull_request <- function(
     payload$assignees <- as.list(assignees)
   }
 
-  if (!missing(labels)) {
+  if (!is_missing_or_null(labels)) {
     assert(
       is_character(labels),
       "'labels' must be a character vector:\n  ", labels
@@ -174,7 +174,7 @@ create_pull_request <- function(
     payload$labels <- as.list(labels)
   }
 
-  if (!missing(milestone)) {
+  if (!is_missing_or_null(milestone)) {
     if (is_scalar_character(milestone)) {
       milestone <- view_milestone(milestone, repo = repo, ...)$number
     }
@@ -196,7 +196,7 @@ create_pull_request <- function(
   }
 
   reviewers_lst <- list()
-  if (!missing(reviewers)) {
+  if (!is_missing_or_null(reviewers)) {
     assert(
       is_character(reviewers),
       "'reviewers' must be a character vector:\n  ", reviewers
@@ -354,7 +354,7 @@ update_pull_request <- function(
 
   payload <- list()
 
-  if (!missing(title)) {
+  if (!is_missing_or_null(title)) {
     assert(
       is_scalar_character(title),
       "'title' must be a string:\n  ", title
@@ -362,7 +362,7 @@ update_pull_request <- function(
     payload$title <- title
   }
 
-  if (!missing(body)) {
+  if (!is_missing_or_null(body)) {
     assert(
       is_scalar_character(body),
       "'body' must be a string:\n  ", body
@@ -370,7 +370,7 @@ update_pull_request <- function(
     payload$body <- body
   }
 
-  if (!missing(state)) {
+  if (!is_missing_or_null(state)) {
     assert(
       is_scalar_character(state) && state %in% values$pull_request$state,
       "'state' for milestones must be either '",
@@ -379,7 +379,7 @@ update_pull_request <- function(
     payload$state <- state
   }
 
-  if (!missing(base)) {
+  if (!is_missing_or_null(base)) {
     assert(
       is_scalar_character(base),
       "'base' must be a string:\n  ", base
@@ -415,7 +415,7 @@ update_pull_request <- function(
 
   payload <- list()
 
-  if (!missing(assignees)) {
+  if (!is_missing_or_null(assignees)) {
     assert(
       is_character(assignees),
       "'assignees' must be a character vector:\n  ", assignees
@@ -423,7 +423,7 @@ update_pull_request <- function(
     payload$assignees <- as.list(assignees)
   }
 
-  if (!missing(labels)) {
+  if (!is_missing_or_null(labels)) {
     assert(
       is_character(labels),
       "'labels' must be a character vector:\n  ", labels
@@ -431,7 +431,7 @@ update_pull_request <- function(
     payload$labels <- as.list(labels)
   }
 
-  if (!missing(milestone)) {
+  if (!is_missing_or_null(milestone)) {
     if (is_scalar_character(milestone)) {
       milestone <- view_milestone(milestone, repo = repo, ...)$number
     }
@@ -453,7 +453,7 @@ update_pull_request <- function(
   }
 
   reviewers_lst <- list()
-  if (!missing(reviewers)) {
+  if (!is_missing_or_null(reviewers)) {
     assert(
       is_character(reviewers),
       "'reviewers' must be a character vector:\n  ", reviewers
@@ -639,7 +639,7 @@ view_pull_requests <- function(
     "'repo' must be a string in the format 'owner/repo':\n  ", repo
   )
 
-  if (!missing(head)) {
+  if (!is_missing_or_null(head)) {
     assert(
       is_scalar_character(head),
       "'head' must be a string:\n  ", head
@@ -652,7 +652,7 @@ view_pull_requests <- function(
     head <- NULL
   }
 
-  if (!missing(base)) {
+  if (!is_missing_or_null(base)) {
     assert(
       is_scalar_character(base),
       "'base' must be a string:\n  ", base

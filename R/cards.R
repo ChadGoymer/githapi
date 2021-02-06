@@ -91,7 +91,7 @@ create_card <- function(
   org,
   ...
 ) {
-  if (!missing(content_id)) {
+  if (!is_missing_or_null(content_id)) {
     assert(
       is_scalar_integerish(content_id),
       "'content_id' must be an integer:\n  ", content_id
@@ -118,7 +118,7 @@ create_card <- function(
     info("Creating card for ", tolower(content_type), " '", content_id, "'")
     payload <- list(content_id = issue$id, content_type = content_type)
   }
-  else if (!missing(note)) {
+  else if (!is_missing_or_null(note)) {
     assert(
       is_scalar_character(note),
       "'note' must be an integer:\n  ", note
@@ -264,7 +264,7 @@ update_card <- function(
 ) {
   payload <- list()
 
-  if (!missing(note)) {
+  if (!is_missing_or_null(note)) {
     assert(
       is_scalar_character(note),
       "'note' must be a string:\n  ", note
@@ -272,7 +272,7 @@ update_card <- function(
     payload$note <- note
   }
 
-  if (!missing(archived)) {
+  if (!is_missing_or_null(archived)) {
     assert(
       is_scalar_logical(archived),
       "'archived' must be a boolean:\n  ", archived
@@ -327,7 +327,7 @@ move_card <- function(
 ) {
   payload <- list()
 
-  if (!missing(position)) {
+  if (!is_missing_or_null(position)) {
     assert(
       is_scalar_character(position) && position %in% values$card$position,
       "'position' must be one of '",
@@ -336,7 +336,7 @@ move_card <- function(
 
     payload <- list(position = position)
   }
-  else if (!missing(after)) {
+  else if (!is_missing_or_null(after)) {
     assert(
       is_scalar_integerish(after),
       "'after' must be an integer:\n  ", after
@@ -348,7 +348,7 @@ move_card <- function(
     error("Either 'position' or 'after' must be supplied")
   }
 
-  if (!missing(column)) {
+  if (!is_missing_or_null(column)) {
     column <- view_column(
       column  = column,
       project = project,

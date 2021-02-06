@@ -75,7 +75,7 @@ create_label <- function(
 
   payload <- list(name = name, color = color)
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -164,7 +164,7 @@ update_label <- function(
 
   payload <- list()
 
-  if (!missing(name)) {
+  if (!is_missing_or_null(name)) {
     assert(
       is_scalar_character(name),
       "'name' must be a string:\n  ", name
@@ -172,7 +172,7 @@ update_label <- function(
     payload$name <- name
   }
 
-  if (!missing(color)) {
+  if (!is_missing_or_null(color)) {
     assert(
       is_scalar_character(color),
       "'color' must be a string:\n  ", color
@@ -183,7 +183,7 @@ update_label <- function(
     payload$color <- str_remove(color, "^#")
   }
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -277,7 +277,7 @@ view_labels <- function(
     "'repo' must be a string in the format 'owner/repo':\n  ", repo
   )
 
-  if (missing(issue)) {
+  if (is_missing_or_null(issue)) {
     info("Viewing labels for repository '", repo, "'")
     url <- gh_url("repos", repo, "labels")
   }

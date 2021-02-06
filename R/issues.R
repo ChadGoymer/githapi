@@ -90,7 +90,7 @@ create_issue <- function(
 
   payload <- list(title = title)
 
-  if (!missing(body)) {
+  if (!is_missing_or_null(body)) {
     assert(
       is_scalar_character(body),
       "'body' must be a string:\n  ", body
@@ -98,7 +98,7 @@ create_issue <- function(
     payload$body <- body
   }
 
-  if (!missing(assignees)) {
+  if (!is_missing_or_null(assignees)) {
     assert(
       is_character(assignees),
       "'assignees' must be a character vector:\n  ", assignees
@@ -106,7 +106,7 @@ create_issue <- function(
     payload$assignees <- as.list(assignees)
   }
 
-  if (!missing(labels)) {
+  if (!is_missing_or_null(labels)) {
     assert(
       is_character(labels),
       "'labels' must be a character vector:\n  ", labels
@@ -114,7 +114,7 @@ create_issue <- function(
     payload$labels <- as.list(labels)
   }
 
-  if (!missing(milestone)) {
+  if (!is_missing_or_null(milestone)) {
     if (is_scalar_character(milestone)) {
       milestone <- view_milestone(milestone, repo = repo, ...)$number
     }
@@ -245,7 +245,7 @@ update_issue <- function(
 
   payload <- list()
 
-  if (!missing(title)) {
+  if (!is_missing_or_null(title)) {
     assert(
       is_scalar_character(title),
       "'title' must be a string:\n  ", title
@@ -253,7 +253,7 @@ update_issue <- function(
     payload$title <- title
   }
 
-  if (!missing(body)) {
+  if (!is_missing_or_null(body)) {
     assert(
       is_scalar_character(body),
       "'body' must be a string:\n  ", body
@@ -261,7 +261,7 @@ update_issue <- function(
     payload$body <- body
   }
 
-  if (!missing(assignees)) {
+  if (!is_missing_or_null(assignees)) {
     assert(
       is_null(assignees) || is_character(assignees),
       "'assignees' must be NULL or a character vector:\n  ", assignees
@@ -269,7 +269,7 @@ update_issue <- function(
     payload$assignees <- as.list(assignees)
   }
 
-  if (!missing(labels)) {
+  if (!is_missing_or_null(labels)) {
     assert(
       is_null(labels) || is_character(labels),
       "'labels' must be NULL or a character vector:\n  ", labels
@@ -277,7 +277,7 @@ update_issue <- function(
     payload$labels <- as.list(labels)
   }
 
-  if (!missing(milestone)) {
+  if (!is_missing_or_null(milestone)) {
     if (is_scalar_character(milestone)) {
       milestone <- view_milestone(milestone, repo = repo, ...)$number
     }
@@ -289,7 +289,7 @@ update_issue <- function(
     payload <- c(payload, list(milestone = milestone))
   }
 
-  if (!missing(state)) {
+  if (!is_missing_or_null(state)) {
     assert(
       is_scalar_character(state) && state %in% values$issue$state,
       "'state' for milestones must be either '",
@@ -457,7 +457,7 @@ view_issues <- function(
     str_c(values$issue$direction, collapse = "', '"), "':\n  ", direction
   )
 
-  if (!missing(since)) {
+  if (!is_missing_or_null(since)) {
     assert(
       is_scalar_character(since),
       "'since' must be a string:\n  ", since
@@ -474,7 +474,7 @@ view_issues <- function(
     since <- NULL
   }
 
-  if (!missing(labels)) {
+  if (!is_missing_or_null(labels)) {
     assert(
       is_character(labels),
       "'labels' must be a character vector:\n  ", labels
@@ -485,13 +485,13 @@ view_issues <- function(
     labels <- NULL
   }
 
-  if (!missing(repo)) {
+  if (!is_missing_or_null(repo)) {
     assert(
       is_repo(repo),
       "'repo' must be a string in the format 'owner/repo':\n  ", repo
     )
 
-    if (!missing(milestone)) {
+    if (!is_missing_or_null(milestone)) {
       if (is_scalar_character(milestone)) {
         milestone <- view_milestone(
           milestone = milestone,
@@ -520,7 +520,7 @@ view_issues <- function(
       since     = since
     )
   }
-  else if (!missing(org)) {
+  else if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org

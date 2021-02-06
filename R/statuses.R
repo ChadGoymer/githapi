@@ -100,7 +100,7 @@ create_status <- function(
 
   payload <- list(state = state, context = context)
 
-  if (!missing(description)) {
+  if (!is_missing_or_null(description)) {
     assert(
       is_scalar_character(description),
       "'description' must be a string:\n  ", description
@@ -108,7 +108,7 @@ create_status <- function(
     payload$description <- description
   }
 
-  if (!missing(target_url)) {
+  if (!is_missing_or_null(target_url)) {
     assert(
       is_scalar_character(target_url),
       "'target_url' must be a string:\n  ", target_url

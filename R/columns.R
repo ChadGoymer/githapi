@@ -240,7 +240,7 @@ move_column <- function(
   org,
   ...
 ) {
-  if (!missing(position)) {
+  if (!is_missing_or_null(position)) {
     assert(
       is_scalar_character(position) && position %in% values$column$position,
       "'position' must be one of '",
@@ -250,7 +250,7 @@ move_column <- function(
 
     payload <- list(position = position)
   }
-  else if (!missing(after)) {
+  else if (!is_missing_or_null(after)) {
     after_column <- view_column(
       column  = after,
       project = project,

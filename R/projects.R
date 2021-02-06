@@ -103,7 +103,7 @@ create_project <- function(
     "'body' must be a string:\n  ", body
   )
 
-  if (!missing(repo)) {
+  if (!is_missing_or_null(repo)) {
     assert(
       is_repo(repo),
       "'repo' must be a string in the format 'owner/repo':\n  ", repo
@@ -111,7 +111,7 @@ create_project <- function(
     info("Creating project '", name, "' for repository '", repo, "'")
     url <- gh_url("repos", repo, "projects")
   }
-  else if (!missing(org)) {
+  else if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
@@ -135,7 +135,7 @@ create_project <- function(
   info("Transforming results", level = 4)
   project_gh <- select_properties(project_lst, properties$project)
 
-  if (!missing(org)) {
+  if (!is_missing_or_null(org)) {
     project_gh <- project_gh %>%
       modify_list(
         private        = project_lst$private,
@@ -287,8 +287,8 @@ update_project <- function(
 
   payload <- NULL
 
-  if (!missing(team)) {
-    if (!missing(permission)) {
+  if (!is_missing_or_null(team)) {
+    if (!is_missing_or_null(permission)) {
       assert(
         is_scalar_character(permission) &&
           permission %in% values$project$permission,
@@ -340,7 +340,7 @@ update_project <- function(
     )
   }
   else {
-    if (!missing(permission)) {
+    if (!is_missing_or_null(permission)) {
       assert(
         is_scalar_character(permission) &&
           permission %in% values$project$permission,
@@ -351,7 +351,7 @@ update_project <- function(
       payload$organization_permission <- permission
     }
 
-    if (!missing(name)) {
+    if (!is_missing_or_null(name)) {
       assert(
         is_scalar_character(name),
         "'name' must be a string:\n  ", name
@@ -359,7 +359,7 @@ update_project <- function(
       payload$name <- name
     }
 
-    if (!missing(body)) {
+    if (!is_missing_or_null(body)) {
       assert(
         is_scalar_character(body),
         "'body' must be a string:\n  ", body
@@ -367,7 +367,7 @@ update_project <- function(
       payload$body <- body
     }
 
-    if (!missing(state)) {
+    if (!is_missing_or_null(state)) {
       assert(
         is_scalar_character(state) &&
           state %in% str_subset(values$project$state, "all", negate = TRUE),
@@ -377,7 +377,7 @@ update_project <- function(
       payload$state <- state
     }
 
-    if (!missing(private)) {
+    if (!is_missing_or_null(private)) {
       assert(
         is_scalar_logical(private),
         "'private' must be a boolean:\n  ", private
@@ -397,7 +397,7 @@ update_project <- function(
     info("Transforming results", level = 4)
     project_gh <- select_properties(project_lst, properties$project)
 
-    if (!missing(org)) {
+    if (!is_missing_or_null(org)) {
       project_gh <- project_gh %>%
         modify_list(
           private        = project_lst$private,
@@ -562,7 +562,7 @@ view_projects <- function(
     "':\n  ", state
   )
 
-  if (!missing(repo)) {
+  if (!is_missing_or_null(repo)) {
     assert(
       is_repo(repo),
       "'repo' must be a string in the format 'owner/repo':\n  ", repo
@@ -570,7 +570,7 @@ view_projects <- function(
     info("Viewing projects for repository '", repo, "'")
     url <- gh_url("repos", repo, "projects", state = state)
   }
-  else if (!missing(user)) {
+  else if (!is_missing_or_null(user)) {
     assert(
       is_scalar_character(user),
       "'user' must be a string:\n  ", user
@@ -578,7 +578,7 @@ view_projects <- function(
     info("Viewing projects for user '", user, "'")
     url <- gh_url("users", user, "projects", state = state)
   }
-  else if (!missing(team)) {
+  else if (!is_missing_or_null(team)) {
     team_id <- team
     if (is_scalar_character(team)) {
       assert(
@@ -597,7 +597,7 @@ view_projects <- function(
     info("Viewing projects for team '", team, "'")
     url <- gh_url("teams", team_id, "projects", state = state)
   }
-  else if (!missing(org)) {
+  else if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
@@ -619,7 +619,7 @@ view_projects <- function(
   info("Transforming results", level = 4)
   projects_gh <- bind_properties(projects_lst, properties$project)
 
-  if (!missing(team)) {
+  if (!is_missing_or_null(team)) {
     proj_order <- values$project$permission
     team_permission <- map_chr(projects_lst, function(p) {
       last(
@@ -635,7 +635,7 @@ view_projects <- function(
     )
   }
 
-  if (!missing(org)) {
+  if (!is_missing_or_null(org)) {
     org_permission <- map_chr(projects_lst, pluck, "organization_permission")
     private <- map_lgl(projects_lst, pluck, "private")
     projects_gh <- projects_gh %>%
@@ -671,7 +671,7 @@ view_project <- function(
     error("'project' must be either an integer or a string:\n  ", project)
   }
 
-  if (!missing(repo)) {
+  if (!is_missing_or_null(repo)) {
     assert(
       is_repo(repo),
       "'repo' must be a string in the format 'owner/repo':\n  ", repo
@@ -679,7 +679,7 @@ view_project <- function(
     info("Viewing project '", project, "' for repository '", repo, "'")
     url <- gh_url("repos", repo, "projects", state = "all")
   }
-  else if (!missing(user)) {
+  else if (!is_missing_or_null(user)) {
     assert(
       is_scalar_character(user),
       "'user' must be a string:\n  ", user
@@ -687,7 +687,7 @@ view_project <- function(
     info("Viewing project '", project, "' for user '", user, "'")
     url <- gh_url("users", user, "projects", state = "all")
   }
-  else if (!missing(team)) {
+  else if (!is_missing_or_null(team)) {
     team_id <- team
     if (is_scalar_character(team)) {
       assert(
@@ -706,7 +706,7 @@ view_project <- function(
     info("Viewing project '", project, "' for team '", team, "'")
     url <- gh_url("teams", team_id, "projects", state = "all")
   }
-  else if (!missing(org)) {
+  else if (!is_missing_or_null(org)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
@@ -729,7 +729,7 @@ view_project <- function(
   info("Transforming results", level = 4)
   project_gh <- select_properties(project_lst, properties$project)
 
-  if (!missing(team)) {
+  if (!is_missing_or_null(team)) {
     proj_order <- values$project$permission
     permission <- last(
       proj_order[
@@ -742,7 +742,7 @@ view_project <- function(
       modify_list(team_permission = permission, .after = "state")
   }
 
-  if (!missing(org)) {
+  if (!is_missing_or_null(org)) {
     project_gh <- project_gh %>%
       modify_list(
         private        = project_lst$private,
@@ -883,7 +883,7 @@ delete_project <- function(
     ...
   )
 
-  if (missing(team)) {
+  if (is_missing_or_null(team)) {
     info("Deleting project '", project$name, "'")
     url <- gh_url("projects", project$id)
   }
