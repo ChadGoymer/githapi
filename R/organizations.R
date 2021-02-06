@@ -336,7 +336,7 @@ view_organizations <- function(
   n_max = 1000,
   ...
 ) {
-  if (!is_missing_or_null(user)) {
+  if (!missing(user)) {
     if (is_null(user)) {
       info("Viewing organizations for authenticated user")
       url <- gh_url("user/orgs")

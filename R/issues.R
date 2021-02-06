@@ -261,7 +261,7 @@ update_issue <- function(
     payload$body <- body
   }
 
-  if (!is_missing_or_null(assignees)) {
+  if (!missing(assignees)) {
     assert(
       is_null(assignees) || is_character(assignees),
       "'assignees' must be NULL or a character vector:\n  ", assignees
@@ -269,7 +269,7 @@ update_issue <- function(
     payload$assignees <- as.list(assignees)
   }
 
-  if (!is_missing_or_null(labels)) {
+  if (!missing(labels)) {
     assert(
       is_null(labels) || is_character(labels),
       "'labels' must be NULL or a character vector:\n  ", labels
@@ -277,7 +277,7 @@ update_issue <- function(
     payload$labels <- as.list(labels)
   }
 
-  if (!is_missing_or_null(milestone)) {
+  if (!missing(milestone)) {
     if (is_scalar_character(milestone)) {
       milestone <- view_milestone(milestone, repo = repo, ...)$number
     }
