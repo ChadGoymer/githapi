@@ -138,6 +138,19 @@ as_hex <- function(color_name) {
 }
 
 
+# FUNCTION: is_missing_or_null --------------------------------------------
+#
+# Checks whether the supplied object is missing or NULL
+#
+# @param x Object to check
+#
+# @return TRUE if x is missing or NULL, FALSE otherwise
+#
+is_missing_or_null <- function(x) {
+  missing(x) || is_null(x)
+}
+
+
 # FUNCTION: random_color -------------------------------------------------------
 #
 # Select a color at random
@@ -305,10 +318,10 @@ modify_list <- function(
   .after
 ) {
   dots <- list(...)
-  if (!missing(.before)) {
+  if (!is_missing_or_null(.before)) {
     x <- prepend(.x, dots, before = which(names(.x) == .before))
   }
-  else if (!missing(.after)) {
+  else if (!is_missing_or_null(.after)) {
     x <- append(.x, dots, after = which(names(.x) == .after))
   }
   else {
