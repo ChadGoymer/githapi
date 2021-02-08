@@ -108,7 +108,7 @@ test_that("Options are  set correctly on load", {
 test_that("Specifying environment variables overrides default values", {
 
   original_env_vars <- list(
-    GITHUB_API     = Sys.getenv("GITHUB_API"),
+    GITHUB_API_URL = Sys.getenv("GITHUB_API_URL"),
     GITHUB_OAUTH   = Sys.getenv("GITHUB_OAUTH"),
     GITHUB_PROXY   = Sys.getenv("GITHUB_PROXY"),
     GITHAPI_TOKEN  = Sys.getenv("GITHAPI_TOKEN"),
@@ -117,12 +117,23 @@ test_that("Specifying environment variables overrides default values", {
     GITHAPI_CACHE  = Sys.getenv("GITHAPI_CACHE")
   )
 
+  original_options <- options(
+    github.api     = NULL,
+    github.oauth   = NULL,
+    github.proxy   = NULL,
+    github.token   = NULL,
+    githapi.id     = NULL,
+    githapi.secret = NULL,
+    githapi.cache  = NULL
+  )
+
   on.exit({
     do.call(Sys.setenv, original_env_vars)
+    do.call(options, original_options)
     .onLoad()
   })
 
-  Sys.setenv(GITHUB_API     = "https://github.acme.com/v3/api")
+  Sys.setenv(GITHUB_API_URL = "https://github.acme.com/v3/api")
   Sys.setenv(GITHUB_OAUTH   = "https://github.acme.com/login/oauth")
   Sys.setenv(GITHUB_PROXY   = "https://proxy.acme.com")
   Sys.setenv(GITHAPI_TOKEN  = "0cbe856d67619782748953e40ee97940b80b368a")
@@ -172,8 +183,19 @@ test_that("Setting the token in different ways works correctly", {
     GITHUB_TOKEN  = Sys.getenv("GITHUB_TOKEN")
   )
 
+  original_options <- options(
+    github.api     = NULL,
+    github.oauth   = NULL,
+    github.proxy   = NULL,
+    github.token   = NULL,
+    githapi.id     = NULL,
+    githapi.secret = NULL,
+    githapi.cache  = NULL
+  )
+
   on.exit({
     do.call(Sys.setenv, original_tokens)
+    do.call(options, original_options)
     .onLoad()
   })
 
@@ -189,6 +211,7 @@ test_that("Setting the token in different ways works correctly", {
   )
 
   Sys.setenv(GITHUB_PAT = "8255b036710a9a2a23e4ae807096e1b239b284b1")
+  options(github.token = NULL)
 
   .onLoad()
 
@@ -198,6 +221,7 @@ test_that("Setting the token in different ways works correctly", {
   )
 
   Sys.setenv(GITHAPI_TOKEN = "6a0aa8e47d7c30207480c60beaa377d01e003727")
+  options(github.token = NULL)
 
   .onLoad()
 
@@ -209,45 +233,10 @@ test_that("Setting the token in different ways works correctly", {
 })
 
 
-test_that("Setting the API URL in different ways works correctly", {
-
-  original_apis <- list(
-    GITHUB_API     = Sys.getenv("GITHUB_API"),
-    GITHUB_API_URL = Sys.getenv("GITHUB_API_URL")
-  )
-
-  on.exit({
-    do.call(Sys.setenv, original_apis)
-    .onLoad()
-  })
-
-  Sys.setenv(GITHUB_API     = "")
-  Sys.setenv(GITHUB_API_URL = "https://github-api-url.acme.com/login/oauth")
-
-  .onLoad()
-
-  expect_identical(
-    getOption("github.api"),
-    "https://github-api-url.acme.com/login/oauth"
-  )
-
-  Sys.setenv(GITHUB_API = "https://github-api.acme.com/login/oauth")
-
-  .onLoad()
-
-  expect_identical(
-    getOption("github.api"),
-    "https://github-api.acme.com/login/oauth"
-  )
-
-})
-
-
 test_that("Setting the GITHAPI_CONFIG reads the config file", {
 
   original_env_vars <- list(
     GITHAPI_CONFIG = Sys.getenv("GITHAPI_CONFIG"),
-    GITHUB_API     = Sys.getenv("GITHUB_API"),
     GITHUB_API_URL = Sys.getenv("GITHUB_API_URL"),
     GITHUB_OAUTH   = Sys.getenv("GITHUB_OAUTH"),
     GITHAPI_ID     = Sys.getenv("GITHAPI_ID"),
@@ -255,13 +244,23 @@ test_that("Setting the GITHAPI_CONFIG reads the config file", {
     GITHAPI_CACHE  = Sys.getenv("GITHAPI_CACHE")
   )
 
+  original_options <- options(
+    github.api     = NULL,
+    github.oauth   = NULL,
+    github.proxy   = NULL,
+    github.token   = NULL,
+    githapi.id     = NULL,
+    githapi.secret = NULL,
+    githapi.cache  = NULL
+  )
+
   on.exit({
     do.call(Sys.setenv, original_env_vars)
+    do.call(options, original_options)
     .onLoad()
   })
 
   Sys.setenv(GITHAPI_CONFIG = file.path(temp_path, "test-config.json"))
-  Sys.setenv(GITHUB_API     = "")
   Sys.setenv(GITHUB_API_URL = "")
   Sys.setenv(GITHUB_OAUTH   = "")
   Sys.setenv(GITHAPI_ID     = "")
@@ -299,7 +298,6 @@ test_that("Setting a different app sets the configuration correctly", {
   original_env_vars <- list(
     GITHAPI_CONFIG = Sys.getenv("GITHAPI_CONFIG"),
     GITHAPI_APP    = Sys.getenv("GITHAPI_APP"),
-    GITHUB_API     = Sys.getenv("GITHUB_API"),
     GITHUB_API_URL = Sys.getenv("GITHUB_API_URL"),
     GITHUB_OAUTH   = Sys.getenv("GITHUB_OAUTH"),
     GITHAPI_ID     = Sys.getenv("GITHAPI_ID"),
@@ -307,14 +305,24 @@ test_that("Setting a different app sets the configuration correctly", {
     GITHAPI_CACHE  = Sys.getenv("GITHAPI_CACHE")
   )
 
+  original_options <- options(
+    github.api     = NULL,
+    github.oauth   = NULL,
+    github.proxy   = NULL,
+    github.token   = NULL,
+    githapi.id     = NULL,
+    githapi.secret = NULL,
+    githapi.cache  = NULL
+  )
+
   on.exit({
     do.call(Sys.setenv, original_env_vars)
+    do.call(options, original_options)
     .onLoad()
   })
 
   Sys.setenv(GITHAPI_CONFIG = file.path(temp_path, "test-config.json"))
   Sys.setenv(GITHAPI_APP  = "newapp")
-  Sys.setenv(GITHUB_API     = "")
   Sys.setenv(GITHUB_API_URL = "")
   Sys.setenv(GITHUB_OAUTH   = "")
   Sys.setenv(GITHAPI_ID     = "")
@@ -352,7 +360,6 @@ test_that("Setting the ENVIRONMENT sets the configuration correctly", {
   original_env_vars <- list(
     GITHAPI_CONFIG = Sys.getenv("GITHAPI_CONFIG"),
     ENVIRONMENT    = Sys.getenv("ENVIRONMENT"),
-    GITHUB_API     = Sys.getenv("GITHUB_API"),
     GITHUB_API_URL = Sys.getenv("GITHUB_API_URL"),
     GITHUB_OAUTH   = Sys.getenv("GITHUB_OAUTH"),
     GITHAPI_ID     = Sys.getenv("GITHAPI_ID"),
@@ -360,14 +367,24 @@ test_that("Setting the ENVIRONMENT sets the configuration correctly", {
     GITHAPI_CACHE  = Sys.getenv("GITHAPI_CACHE")
   )
 
+  original_options <- options(
+    github.api     = NULL,
+    github.oauth   = NULL,
+    github.proxy   = NULL,
+    github.token   = NULL,
+    githapi.id     = NULL,
+    githapi.secret = NULL,
+    githapi.cache  = NULL
+  )
+
   on.exit({
     do.call(Sys.setenv, original_env_vars)
+    do.call(options, original_options)
     .onLoad()
   })
 
   Sys.setenv(GITHAPI_CONFIG = file.path(temp_path, "test-config.json"))
   Sys.setenv(ENVIRONMENT = "test")
-  Sys.setenv(GITHUB_API     = "")
   Sys.setenv(GITHUB_API_URL = "")
   Sys.setenv(GITHUB_OAUTH   = "")
   Sys.setenv(GITHAPI_ID     = "")
