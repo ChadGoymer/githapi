@@ -22,19 +22,19 @@ teardown(suppressMessages({
   })
 
   try(silent = TRUE, {
-    delete_repository(str_c("ChadGoymer/user-repository-", suffix))
+    delete_repository(str_c("ChadGoymer/test-user-repository-", suffix))
   })
 
   try(silent = TRUE, {
-    delete_repository(str_c("ChadGoymer/org-repository-", suffix))
+    delete_repository(str_c("HairyCoos/test-org-repository-", suffix))
   })
 
   try(silent = TRUE, {
-    delete_repository(str_c("ChadGoymer/updated-user-repository-", suffix))
+    delete_repository(str_c("ChadGoymer/test-updated-user-repository-", suffix))
   })
 
   try(silent = TRUE, {
-    delete_repository(str_c("ChadGoymer/updated-org-repository-", suffix))
+    delete_repository(str_c("HairyCoos/test-updated-org-repository-", suffix))
   })
 
 }))
@@ -44,7 +44,7 @@ teardown(suppressMessages({
 test_that("create_repository creates a repository and returns its properties", {
 
   user_repo <- create_repository(
-    name        = str_c("user-repository-", suffix),
+    name        = str_c("test-user-repository-", suffix),
     description = "This is a user repository",
     homepage    = "https://user-repository.com",
     auto_init   = TRUE
@@ -91,14 +91,14 @@ test_that("create_repository creates a repository and returns its properties", {
 
   expect_identical(
     user_repo$full_name,
-    str_c("ChadGoymer/user-repository-", suffix)
+    str_c("ChadGoymer/test-user-repository-", suffix)
   )
   expect_identical(user_repo$description, "This is a user repository")
   expect_identical(user_repo$homepage, "https://user-repository.com")
 
 
   org_repo <- create_repository(
-    name        = str_c("org-repository-", suffix),
+    name        = str_c("test-org-repository-", suffix),
     org         = "HairyCoos",
     description = "This is an organization respository",
     homepage    = "https://org-repository.com"
@@ -143,7 +143,7 @@ test_that("create_repository creates a repository and returns its properties", {
 
   expect_identical(
     org_repo$full_name,
-    str_c("HairyCoos/org-repository-", suffix)
+    str_c("HairyCoos/test-org-repository-", suffix)
   )
   expect_identical(org_repo$description, "This is an organization respository")
   expect_identical(org_repo$homepage, "https://org-repository.com")
@@ -156,8 +156,8 @@ test_that("create_repository creates a repository and returns its properties", {
 test_that("update_repository changes a repository's properties", {
 
   user_repo <- update_repository(
-    repo           = str_c("ChadGoymer/user-repository-", suffix),
-    name           = str_c("updated-user-repository-", suffix),
+    repo           = str_c("ChadGoymer/test-user-repository-", suffix),
+    name           = str_c("test-updated-user-repository-", suffix),
     description    = "This is an updated user respository",
     homepage       = "https://updated-user-repository.com",
     has_issues     = FALSE,
@@ -205,7 +205,7 @@ test_that("update_repository changes a repository's properties", {
 
   expect_identical(
     user_repo$full_name,
-    str_c("ChadGoymer/updated-user-repository-", suffix)
+    str_c("ChadGoymer/test-updated-user-repository-", suffix)
   )
   expect_identical(user_repo$description, "This is an updated user respository")
   expect_identical(user_repo$homepage, "https://updated-user-repository.com")
@@ -216,8 +216,8 @@ test_that("update_repository changes a repository's properties", {
 
 
   org_repo <- update_repository(
-    repo                   = str_c("HairyCoos/org-repository-", suffix),
-    name                   = str_c("updated-org-repository-", suffix),
+    repo                   = str_c("HairyCoos/test-org-repository-", suffix),
+    name                   = str_c("test-updated-org-repository-", suffix),
     description            = "This is an updated organization respository",
     homepage               = "https://updated-org-repository.com",
     private                = FALSE,
@@ -266,7 +266,7 @@ test_that("update_repository changes a repository's properties", {
 
   expect_identical(
     org_repo$full_name,
-    str_c("HairyCoos/updated-org-repository-", suffix)
+    str_c("HairyCoos/test-updated-org-repository-", suffix)
   )
   expect_identical(
     org_repo$description,
@@ -280,7 +280,7 @@ test_that("update_repository changes a repository's properties", {
 
 
   archived_repo <- update_repository(
-    repo     = str_c("ChadGoymer/updated-user-repository-", suffix),
+    repo     = str_c("ChadGoymer/test-updated-user-repository-", suffix),
     archived = TRUE
   )
 
@@ -325,7 +325,7 @@ test_that("update_repository changes a repository's properties", {
 
 
   added_team_repo <- update_repository(
-    repo       = str_c("HairyCoos/updated-org-repository-", suffix),
+    repo       = str_c("HairyCoos/test-updated-org-repository-", suffix),
     team       = str_c("test-repositories-", suffix),
     permission = "pull"
   )
@@ -368,7 +368,7 @@ test_that("update_repository changes a repository's properties", {
   )
 
   read_repo <- view_repository(
-    repo = str_c("HairyCoos/updated-org-repository-", suffix),
+    repo = str_c("HairyCoos/test-updated-org-repository-", suffix),
     team = str_c("test-repositories-", suffix),
     org  = "HairyCoos"
   )
@@ -377,7 +377,7 @@ test_that("update_repository changes a repository's properties", {
 
 
   updated_team_repo <- update_repository(
-    repo       = str_c("HairyCoos/updated-org-repository-", suffix),
+    repo       = str_c("HairyCoos/test-updated-org-repository-", suffix),
     team       = str_c("test-repositories-", suffix),
     permission = "maintain"
   )
@@ -420,7 +420,7 @@ test_that("update_repository changes a repository's properties", {
   )
 
   maintain_repo <- view_repository(
-    repo = str_c("HairyCoos/updated-org-repository-", suffix),
+    repo = str_c("HairyCoos/test-updated-org-repository-", suffix),
     team = str_c("test-repositories-", suffix),
     org  = "HairyCoos"
   )
@@ -473,7 +473,9 @@ test_that("view_repositories returns a tibble summarising the repositories", {
     )
   )
 
-  expect_true(str_c("updated-user-repository-", suffix) %in% user_repos$name)
+  expect_true(
+    str_c("test-updated-user-repository-", suffix) %in% user_repos$name
+  )
   expect_identical(
     sort(user_repos$created_at, decreasing = TRUE),
     user_repos$created_at
@@ -566,10 +568,10 @@ test_that("view_repositories returns a tibble summarising the repositories", {
     )
   )
 
-  expect_true(str_c("updated-org-repository-", suffix) %in% org_repos$name)
+  expect_true(str_c("test-updated-org-repository-", suffix) %in% org_repos$name)
   expect_identical(
     org_repos %>%
-      filter(name == str_c("updated-org-repository-", suffix)) %>%
+      filter(name == str_c("test-updated-org-repository-", suffix)) %>%
       pull("permission"),
     "admin"
   )
@@ -618,10 +620,12 @@ test_that("view_repositories returns a tibble summarising the repositories", {
     )
   )
 
-  expect_true(str_c("updated-org-repository-", suffix) %in% team_repos$name)
+  expect_true(
+    str_c("test-updated-org-repository-", suffix) %in% team_repos$name
+  )
   expect_identical(
     team_repos %>%
-      filter(name == str_c("updated-org-repository-", suffix)) %>%
+      filter(name == str_c("test-updated-org-repository-", suffix)) %>%
       pull("permission"),
     "maintain"
   )
@@ -666,7 +670,9 @@ test_that("view_repositories returns a tibble summarising the repositories", {
     )
   )
 
-  expect_true(str_c("updated-user-repository-", suffix) %in% auth_repos$name)
+  expect_true(
+    str_c("test-updated-user-repository-", suffix) %in% auth_repos$name
+  )
 
 })
 
@@ -676,7 +682,7 @@ test_that("view_repositories returns a tibble summarising the repositories", {
 test_that("view_repository returns a list of repository properties", {
 
   test_repo <- view_repository(
-    repo = str_c("ChadGoymer/updated-user-repository-", suffix)
+    repo = str_c("ChadGoymer/test-updated-user-repository-", suffix)
   )
 
   expect_is(test_repo, "list")
@@ -716,7 +722,10 @@ test_that("view_repository returns a list of repository properties", {
     )
   )
 
-  expect_identical(test_repo$name, str_c("updated-user-repository-", suffix))
+  expect_identical(
+    test_repo$name,
+    str_c("test-updated-user-repository-", suffix)
+  )
 
 })
 
@@ -728,14 +737,14 @@ test_that("browse_repository opens the repository's page in the browser", {
   skip_if(!interactive(), "browse_repository must be tested manually")
 
   repo <- browse_repository(
-    repo = str_c("ChadGoymer/updated-user-repository-", suffix)
+    repo = str_c("ChadGoymer/test-updated-user-repository-", suffix)
   )
 
   expect_is(repo, "character")
   expect_identical(attr(repo, "status"), 200L)
   expect_identical(
     as.character(repo),
-    str_c("https://github.com/ChadGoymer/updated-user-repository-", suffix)
+    str_c("https://github.com/ChadGoymer/test-updated-user-repository-", suffix)
   )
 
 })
@@ -746,7 +755,7 @@ test_that("browse_repository opens the repository's page in the browser", {
 test_that("delete_repository removes a repository and returns TRUE", {
 
   user_repo <- delete_repository(
-    repo = str_c("ChadGoymer/updated-user-repository-", suffix)
+    repo = str_c("ChadGoymer/test-updated-user-repository-", suffix)
   )
 
   expect_is(user_repo, "logical")
@@ -754,7 +763,7 @@ test_that("delete_repository removes a repository and returns TRUE", {
   expect_identical(as.logical(user_repo), TRUE)
 
   org_repo <- delete_repository(
-    repo = str_c("HairyCoos/updated-org-repository-", suffix)
+    repo = str_c("HairyCoos/test-updated-org-repository-", suffix)
   )
 
   expect_is(org_repo, "logical")
