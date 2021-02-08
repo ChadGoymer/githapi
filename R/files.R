@@ -506,20 +506,15 @@ download_file <- function(
     "' exists in repository '", repo, "'",
     level = 3
   )
-  file <- gh_url("repos", repo, "contents", dirname(from_path), ref = ref) %>%
-    gh_request("GET", ...) %>%
-    keep(~ .$name == basename(from_path))
 
-  assert(
-    length(file) == 1,
-    "Specified file cannot be found:\n  ", from_path
-  )
+  file <- gh_url("repos", repo, "contents", dirname(from_path), ref = ref) %>%
+    gh_find(property = "name", value = basename(from_path), ...)
 
   info(
     "Downloading file '", basename(from_path),
     "' in repository '", repo, "'"
   )
-  path_gh <- gh_url("repos", repo, "git/blobs", file[[1]]$sha) %>%
+  path_gh <- gh_url("repos", repo, "git/blobs", file$sha) %>%
     gh_download(to_path, accept = "application/vnd.github.v3.raw", ...)
 
   info("Done", level = 3)
