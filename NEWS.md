@@ -1,10 +1,14 @@
+# githapi 0.10.22
+
+- Only set githapi options on-load if they are not already set
+
 # githapi 0.10.21
 
 - Allowed all optional arguments to be set to `NULL`
 
 # githapi 0.10.20
 
-- Fixed `download_file()` so it can download files over 1 MB.
+- Fixed `download_file()` so it can download files over 1 MB
 
 # githapi 0.10.19
 
