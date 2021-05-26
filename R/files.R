@@ -147,7 +147,7 @@ upload_tree <- function(
       path = basename(path)
     ) %>%
     select("path", "mode", "type", "sha") %>%
-    filter(!is.na(sha))
+    filter(!is.na(.data$sha))
 
   payload <- tibble(
     path = tree$path,
