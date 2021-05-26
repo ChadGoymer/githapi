@@ -115,8 +115,11 @@ upload_tree <- function(
     include.dirs = TRUE,
     full.names   = TRUE
   ) %>%
-    discard(~ basename(.) %in% ignore) %>%
-    file.info() %>%
+    discard(~ basename(.) %in% ignore)
+
+  if (length(tree) == 0) return(list(tree_sha = NA))
+
+  tree <- file.info(tree) %>%
     rownames_to_column("path") %>%
     mutate(sha = map2_chr(.data$path, .data$isdir, function(path, isdir) {
       if (isdir) {
@@ -143,7 +146,8 @@ upload_tree <- function(
       mode = ifelse(.data$isdir, "040000", "100644"),
       path = basename(path)
     ) %>%
-    select("path", "mode", "type", "sha")
+    select("path", "mode", "type", "sha") %>%
+    filter(!is.na(sha))
 
   payload <- tibble(
     path = tree$path,
