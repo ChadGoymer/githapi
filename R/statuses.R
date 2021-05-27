@@ -35,7 +35,7 @@
 #'
 #' **Status Properties:**
 #'
-#' - **id**: The id of the release.
+#' - **id**: The id of the status.
 #' - **state**: The state of the status.
 #' - **description**: The description of the status.
 #' - **target_url**: The URL linked to the status.
@@ -168,7 +168,7 @@ create_status <- function(
 #'
 #' **Status Properties:**
 #'
-#' - **id**: The id of the release.
+#' - **id**: The id of the status.
 #' - **state**: The state of the status.
 #' - **description**: The description of the status.
 #' - **target_url**: The URL linked to the status.
