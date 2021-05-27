@@ -182,21 +182,8 @@ update_branch <- function(
 #'
 #' For more details see the GitHub API documentation:
 #'
-#' ```{r echo=FALSE, results='asis'}
-#' docs_url <- "https://docs.github.com/en/free-pro-team@latest/rest/reference/"
-#' cat(paste0(
-#'   "- <", docs_url,
-#'   "git#list-matching-references",
-#'   ">"
-#' ))
-#' ```
-#' ```{r echo=FALSE, results='asis'}
-#' cat(paste0(
-#'   "- <", docs_url,
-#'   "git#get-a-reference",
-#'   ">"
-#' ))
-#' ```
+#' - <https://docs.github.com/en/rest/reference/repos#list-branches>
+#' - <https://docs.github.com/en/rest/reference/repos#get-a-branch>
 #'
 #' @param branch (string) The name of the branch.
 #' @param repo (string) The repository specified in the format: `owner/repo`.
@@ -209,8 +196,9 @@ update_branch <- function(
 #' **Branch Properties:**
 #'
 #' - **name**: The name of the branch.
-#' - **ref**: The full Git reference of the branch.
 #' - **sha**: The commit SHA the branch is pointing at.
+#' - **protected**: Whether the branch is protected.
+#' - **html_url**: The address of the branch's web page in GitHub.
 #'
 #' @examples
 #' \dontrun{
@@ -236,12 +224,11 @@ view_branches <- function(
   )
 
   info("Viewing branches for repository '", repo, "'")
-  branches_lst <- gh_url("repos", repo, "git/refs/heads") %>%
+  branches_lst <- gh_url("repos", repo, "branches") %>%
     gh_page(n_max = n_max, ...)
 
   info("Transforming results", level = 4)
-  branches_gh <- bind_properties(branches_lst, properties$reference) %>%
-    add_column(name = basename(.$ref), .before = "ref")
+  branches_gh <- bind_properties(branches_lst, properties$branch)
 
   info("Done", level = 7)
   branches_gh

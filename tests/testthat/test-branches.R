@@ -117,7 +117,12 @@ test_that("view_branches returns a tibble of branch properties", {
   expect_identical(attr(all_branches, "status"), 200L)
   expect_identical(
     map_chr(all_branches, ~ class(.)[[1]]),
-    c(name = "character", ref  = "character", sha  = "character")
+    c(
+      name      = "character",
+      sha       = "character",
+      protected = "logical",
+      html_url  = "character"
+    )
   )
 
   expect_true(
