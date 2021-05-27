@@ -60,9 +60,16 @@ can create a note." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -76,7 +83,7 @@ can create a note." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
       </span>
     </div>
 
@@ -126,7 +133,7 @@ GitHub. The card can either contain an existing issue or pull request or you
 can create a note.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_card</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>create_card</span><span class='op'>(</span>
   <span class='va'>content_id</span>,
   <span class='va'>content_type</span>,
   <span class='va'>note</span>,
@@ -136,7 +143,7 @@ can create a note.</p>
   <span class='va'>user</span>,
   <span class='va'>org</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -207,37 +214,37 @@ appropriate permissions.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='co'># Create an issue card in a repository project</span>
-  <span class='fu'>create_card</span><span class='op'>(</span>
-    content_id   <span class='op'>=</span> <span class='fl'>1</span>,
-    content_type <span class='op'>=</span> <span class='st'>"Issue"</span>,
-    column       <span class='op'>=</span> <span class='st'>"Test column"</span>,
-    project      <span class='op'>=</span> <span class='st'>"Test project"</span>,
-    repo         <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span>
-  <span class='op'>)</span>
-
-  <span class='co'># Create a pull request card in a user's project</span>
-  <span class='fu'>create_card</span><span class='op'>(</span>
-    content_id   <span class='op'>=</span> <span class='fl'>2</span>,
-    content_type <span class='op'>=</span> <span class='st'>"PullRequest"</span>,
-    column       <span class='op'>=</span> <span class='st'>"Test column"</span>,
-    project      <span class='op'>=</span> <span class='st'>"Test project"</span>,
-    user         <span class='op'>=</span> <span class='st'>"ChadGoymer"</span>
-  <span class='op'>)</span>
-
-  <span class='co'># Create a note card in an organization's project</span>
-  <span class='fu'>create_card</span><span class='op'>(</span>
-    note    <span class='op'>=</span> <span class='st'>"This is a note"</span>,
-    column  <span class='op'>=</span> <span class='st'>"Test column"</span>,
-    project <span class='op'>=</span> <span class='st'>"Test project"</span>,
-    org     <span class='op'>=</span> <span class='st'>"HairyCoos"</span>
-  <span class='op'>)</span>
-
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Create an issue card in a repository project</span></span>
+<span class='r-in'>  <span class='fu'>create_card</span><span class='op'>(</span></span>
+<span class='r-in'>    content_id   <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>    content_type <span class='op'>=</span> <span class='st'>"Issue"</span>,</span>
+<span class='r-in'>    column       <span class='op'>=</span> <span class='st'>"Test column"</span>,</span>
+<span class='r-in'>    project      <span class='op'>=</span> <span class='st'>"Test project"</span>,</span>
+<span class='r-in'>    repo         <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Create a pull request card in a user's project</span></span>
+<span class='r-in'>  <span class='fu'>create_card</span><span class='op'>(</span></span>
+<span class='r-in'>    content_id   <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span class='r-in'>    content_type <span class='op'>=</span> <span class='st'>"PullRequest"</span>,</span>
+<span class='r-in'>    column       <span class='op'>=</span> <span class='st'>"Test column"</span>,</span>
+<span class='r-in'>    project      <span class='op'>=</span> <span class='st'>"Test project"</span>,</span>
+<span class='r-in'>    user         <span class='op'>=</span> <span class='st'>"ChadGoymer"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Create a note card in an organization's project</span></span>
+<span class='r-in'>  <span class='fu'>create_card</span><span class='op'>(</span></span>
+<span class='r-in'>    note    <span class='op'>=</span> <span class='st'>"This is a note"</span>,</span>
+<span class='r-in'>    column  <span class='op'>=</span> <span class='st'>"Test column"</span>,</span>
+<span class='r-in'>    project <span class='op'>=</span> <span class='st'>"Test project"</span>,</span>
+<span class='r-in'>    org     <span class='op'>=</span> <span class='st'>"HairyCoos"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -249,11 +256,11 @@ appropriate permissions.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Chad Goymer.</p>
+  <p><p>Developed by Chad Goymer.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -261,6 +268,8 @@ appropriate permissions.</p>
 
   
 
+
+  
 
   </body>
 </html>

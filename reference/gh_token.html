@@ -61,9 +61,16 @@ returns a token which can be used for all calls to the githapi API." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -77,7 +84,7 @@ returns a token which can be used for all calls to the githapi API." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
       </span>
     </div>
 
@@ -128,7 +135,7 @@ password. Once complete the user can close the window and this function
 returns a token which can be used for all calls to the githapi API.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gh_token</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>gh_token</span><span class='op'>(</span>
   token <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"github.token"</span><span class='op'>)</span>,
   oauth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"github.oauth"</span><span class='op'>)</span>,
   proxy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"github.proxy"</span><span class='op'>)</span>,
@@ -136,7 +143,7 @@ returns a token which can be used for all calls to the githapi API.</p>
   secret <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"githapi.secret"</span><span class='op'>)</span>,
   cache <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"githapi.cache"</span><span class='op'>)</span>,
   refresh <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,13 +205,13 @@ either as an R option (<code>"github.token"</code>) or as an environment variabl
 (either <code>GITHAPI_TOKEN</code>, <code>GITHUB_PAT</code>, or <code>GITHUB_TOKEN</code>).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='va'>token</span> <span class='op'>&lt;-</span> <span class='fu'>gh_token</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='va'>token</span> <span class='op'>&lt;-</span> <span class='fu'>gh_token</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -216,11 +223,11 @@ either as an R option (<code>"github.token"</code>) or as an environment variabl
 
       <footer>
       <div class="copyright">
-  <p>Developed by Chad Goymer.</p>
+  <p><p>Developed by Chad Goymer.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -228,6 +235,8 @@ either as an R option (<code>"github.token"</code>) or as an environment variabl
 
   
 
+
+  
 
   </body>
 </html>

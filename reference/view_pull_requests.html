@@ -62,9 +62,16 @@ the default browser." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -78,7 +85,7 @@ the default browser." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
       </span>
     </div>
 
@@ -130,7 +137,7 @@ request. <code>browse_pull_request()</code> opens the web page for the pull requ
 the default browser.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>view_pull_requests</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>view_pull_requests</span><span class='op'>(</span>
   <span class='va'>repo</span>,
   <span class='va'>head</span>,
   <span class='va'>base</span>,
@@ -143,7 +150,7 @@ the default browser.</p>
 
 <span class='fu'>view_pull_request</span><span class='op'>(</span><span class='va'>pull_request</span>, <span class='va'>repo</span>, n_max <span class='op'>=</span> <span class='fl'>1000</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>browse_pull_request</span><span class='op'>(</span><span class='va'>pull_request</span>, <span class='va'>repo</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>browse_pull_request</span><span class='op'>(</span><span class='va'>pull_request</span>, <span class='va'>repo</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -273,33 +280,33 @@ merge in and the branch to merge into) or the state (whether they are
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='co'># View all open pull requests</span>
-  <span class='fu'>view_pull_requests</span><span class='op'>(</span><span class='st'>"ChadGoymer/githapi"</span><span class='op'>)</span>
-
-  <span class='co'># View all closed pull requests</span>
-  <span class='fu'>view_pull_requests</span><span class='op'>(</span><span class='st'>"ChadGoymer/githapi"</span>, state <span class='op'>=</span> <span class='st'>"closed"</span><span class='op'>)</span>
-
-  <span class='co'># View all pull requests for the "main" branch</span>
-  <span class='fu'>view_pull_requests</span><span class='op'>(</span><span class='st'>"ChadGoymer/githapi"</span>, base <span class='op'>=</span> <span class='st'>"main"</span><span class='op'>)</span>
-
-  <span class='co'># View pull requests, sorted by the most recently updated</span>
-  <span class='fu'>view_pull_requests</span><span class='op'>(</span>
-    repo      <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span>,
-    sort      <span class='op'>=</span> <span class='st'>"updated"</span>,
-    direction <span class='op'>=</span> <span class='st'>"desc"</span>
-  <span class='op'>)</span>
-
-  <span class='co'># View single pull request</span>
-  <span class='fu'>view_pull_request</span><span class='op'>(</span><span class='st'>"test pull request"</span>, repo <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span><span class='op'>)</span>
-
-  <span class='co'># Open a pull request's page in a browser</span>
-  <span class='fu'>browse_pull_request</span><span class='op'>(</span><span class='st'>"test pull request"</span>, repo <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span><span class='op'>)</span>
-
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># View all open pull requests</span></span>
+<span class='r-in'>  <span class='fu'>view_pull_requests</span><span class='op'>(</span><span class='st'>"ChadGoymer/githapi"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># View all closed pull requests</span></span>
+<span class='r-in'>  <span class='fu'>view_pull_requests</span><span class='op'>(</span><span class='st'>"ChadGoymer/githapi"</span>, state <span class='op'>=</span> <span class='st'>"closed"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># View all pull requests for the "main" branch</span></span>
+<span class='r-in'>  <span class='fu'>view_pull_requests</span><span class='op'>(</span><span class='st'>"ChadGoymer/githapi"</span>, base <span class='op'>=</span> <span class='st'>"main"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># View pull requests, sorted by the most recently updated</span></span>
+<span class='r-in'>  <span class='fu'>view_pull_requests</span><span class='op'>(</span></span>
+<span class='r-in'>    repo      <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span>,</span>
+<span class='r-in'>    sort      <span class='op'>=</span> <span class='st'>"updated"</span>,</span>
+<span class='r-in'>    direction <span class='op'>=</span> <span class='st'>"desc"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># View single pull request</span></span>
+<span class='r-in'>  <span class='fu'>view_pull_request</span><span class='op'>(</span><span class='st'>"test pull request"</span>, repo <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Open a pull request's page in a browser</span></span>
+<span class='r-in'>  <span class='fu'>browse_pull_request</span><span class='op'>(</span><span class='st'>"test pull request"</span>, repo <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -311,11 +318,11 @@ merge in and the branch to merge into) or the state (whether they are
 
       <footer>
       <div class="copyright">
-  <p>Developed by Chad Goymer.</p>
+  <p><p>Developed by Chad Goymer.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -323,6 +330,8 @@ merge in and the branch to merge into) or the state (whether they are
 
   
 
+
+  
 
   </body>
 </html>

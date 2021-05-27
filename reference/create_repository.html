@@ -61,9 +61,16 @@ behaviour when merging pull requests." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -77,7 +84,7 @@ behaviour when merging pull requests." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
       </span>
     </div>
 
@@ -128,7 +135,7 @@ private or has issues, projects or a wiki and can define the allowed
 behaviour when merging pull requests.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_repository</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>create_repository</span><span class='op'>(</span>
   <span class='va'>name</span>,
   <span class='va'>org</span>,
   <span class='va'>description</span>,
@@ -143,7 +150,7 @@ behaviour when merging pull requests.</p>
   allow_rebase_merge <span class='op'>=</span> <span class='cn'>TRUE</span>,
   delete_branch_on_merge <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -265,24 +272,24 @@ requests.</p></li>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='fu'>create_repository</span><span class='op'>(</span>
-    name        <span class='op'>=</span> <span class='st'>"user-repository"</span>,
-    description <span class='op'>=</span> <span class='st'>"This is a user repository"</span>,
-    homepage    <span class='op'>=</span> <span class='st'>"https://user-repository.com"</span>
-  <span class='op'>)</span>
-
-  <span class='fu'>create_repository</span><span class='op'>(</span>
-    name        <span class='op'>=</span> <span class='st'>"org-repository"</span>,
-    org         <span class='op'>=</span> <span class='st'>"HairyCoos"</span>,
-    description <span class='op'>=</span> <span class='st'>"This is a organization repository"</span>,
-    homepage    <span class='op'>=</span> <span class='st'>"https://org-repository.com"</span>
-  <span class='op'>)</span>
-
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='fu'>create_repository</span><span class='op'>(</span></span>
+<span class='r-in'>    name        <span class='op'>=</span> <span class='st'>"user-repository"</span>,</span>
+<span class='r-in'>    description <span class='op'>=</span> <span class='st'>"This is a user repository"</span>,</span>
+<span class='r-in'>    homepage    <span class='op'>=</span> <span class='st'>"https://user-repository.com"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='fu'>create_repository</span><span class='op'>(</span></span>
+<span class='r-in'>    name        <span class='op'>=</span> <span class='st'>"org-repository"</span>,</span>
+<span class='r-in'>    org         <span class='op'>=</span> <span class='st'>"HairyCoos"</span>,</span>
+<span class='r-in'>    description <span class='op'>=</span> <span class='st'>"This is a organization repository"</span>,</span>
+<span class='r-in'>    homepage    <span class='op'>=</span> <span class='st'>"https://org-repository.com"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -294,11 +301,11 @@ requests.</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Chad Goymer.</p>
+  <p><p>Developed by Chad Goymer.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -306,6 +313,8 @@ requests.</p></li>
 
   
 
+
+  
 
   </body>
 </html>

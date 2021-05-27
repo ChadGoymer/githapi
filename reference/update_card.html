@@ -60,9 +60,16 @@ other columns." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -76,7 +83,7 @@ other columns." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
       </span>
     </div>
 
@@ -126,9 +133,9 @@ archive it. <code>move_card()</code> can be used to reorder the cards or move th
 other columns.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>update_card</span><span class='op'>(</span><span class='va'>card</span>, <span class='va'>note</span>, <span class='va'>archived</span>, <span class='va'>...</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>update_card</span><span class='op'>(</span><span class='va'>card</span>, <span class='va'>note</span>, <span class='va'>archived</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>move_card</span><span class='op'>(</span><span class='va'>card</span>, <span class='va'>position</span>, <span class='va'>after</span>, <span class='va'>column</span>, <span class='va'>project</span>, <span class='va'>repo</span>, <span class='va'>user</span>, <span class='va'>org</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>move_card</span><span class='op'>(</span><span class='va'>card</span>, <span class='va'>position</span>, <span class='va'>after</span>, <span class='va'>column</span>, <span class='va'>project</span>, <span class='va'>repo</span>, <span class='va'>user</span>, <span class='va'>org</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,32 +218,32 @@ column to move it to.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='co'># Update a note in a card</span>
-  <span class='fu'>update_card</span><span class='op'>(</span>card <span class='op'>=</span> <span class='fl'>123456</span>, note <span class='op'>=</span> <span class='st'>"This is an updated note"</span><span class='op'>)</span>
-
-  <span class='co'># Archive a card</span>
-  <span class='fu'>update_card</span><span class='op'>(</span>card <span class='op'>=</span> <span class='fl'>654321</span>, archived <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-  <span class='co'># Move a card to the top of a column</span>
-  <span class='fu'>move_card</span><span class='op'>(</span>card <span class='op'>=</span> <span class='fl'>123456</span>, position <span class='op'>=</span> <span class='st'>"top"</span><span class='op'>)</span>
-
-  <span class='co'># Move a card after another card</span>
-  <span class='fu'>move_card</span><span class='op'>(</span>card  <span class='op'>=</span> <span class='fl'>123456</span>, after <span class='op'>=</span> <span class='fl'>654321</span><span class='op'>)</span>
-
-  <span class='co'># Move card to another column</span>
-  <span class='fu'>move_card</span><span class='op'>(</span>
-    card     <span class='op'>=</span> <span class='fl'>123456</span>,
-    position <span class='op'>=</span> <span class='st'>"top"</span>,
-    column   <span class='op'>=</span> <span class='st'>"Test column 2"</span>,
-    project  <span class='op'>=</span> <span class='st'>"Test project"</span>,
-    repo     <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span>
-  <span class='op'>)</span>
-
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Update a note in a card</span></span>
+<span class='r-in'>  <span class='fu'>update_card</span><span class='op'>(</span>card <span class='op'>=</span> <span class='fl'>123456</span>, note <span class='op'>=</span> <span class='st'>"This is an updated note"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Archive a card</span></span>
+<span class='r-in'>  <span class='fu'>update_card</span><span class='op'>(</span>card <span class='op'>=</span> <span class='fl'>654321</span>, archived <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Move a card to the top of a column</span></span>
+<span class='r-in'>  <span class='fu'>move_card</span><span class='op'>(</span>card <span class='op'>=</span> <span class='fl'>123456</span>, position <span class='op'>=</span> <span class='st'>"top"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Move a card after another card</span></span>
+<span class='r-in'>  <span class='fu'>move_card</span><span class='op'>(</span>card  <span class='op'>=</span> <span class='fl'>123456</span>, after <span class='op'>=</span> <span class='fl'>654321</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Move card to another column</span></span>
+<span class='r-in'>  <span class='fu'>move_card</span><span class='op'>(</span></span>
+<span class='r-in'>    card     <span class='op'>=</span> <span class='fl'>123456</span>,</span>
+<span class='r-in'>    position <span class='op'>=</span> <span class='st'>"top"</span>,</span>
+<span class='r-in'>    column   <span class='op'>=</span> <span class='st'>"Test column 2"</span>,</span>
+<span class='r-in'>    project  <span class='op'>=</span> <span class='st'>"Test project"</span>,</span>
+<span class='r-in'>    repo     <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -248,11 +255,11 @@ column to move it to.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Chad Goymer.</p>
+  <p><p>Developed by Chad Goymer.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -260,6 +267,8 @@ column to move it to.</p>
 
   
 
+
+  
 
   </body>
 </html>

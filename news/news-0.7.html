@@ -57,9 +57,16 @@
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-news">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -73,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
       </span>
     </div>
 
@@ -118,73 +125,59 @@
 
     <div id="githapi-070" class="section level1">
 <h1 class="page-header" data-toc-text="0.7.0">
-<a href="#githapi-070" class="anchor"></a>githapi 0.7.0</h1>
+<a href="#githapi-070" class="anchor" aria-hidden="true"></a>githapi 0.7.0</h1>
 <p>This release starts the process of replacing the naming convention of functions and adding support for creating, updated and deleting objects in GitHub. It also adds useful messages, and logging.</p>
-<ul>
-<li>Added <code>info()</code>, <code>warn()</code> and <code>error()</code> functions which give nice messages to the users and optionally logs them to a file.</li>
+<ul><li>Added <code>info()</code>, <code>warn()</code> and <code>error()</code> functions which give nice messages to the users and optionally logs them to a file.</li>
 <li>Added <code><a href="../reference/view_tags.html">view_tags()</a></code>, <code>create_tags()</code>, <code>update_tags()</code> and <code>delete_tags()</code>
 </li>
 <li>Added <code><a href="../reference/view_releases.html">view_releases()</a></code>, <code>create_releases()</code>, <code>update_releases()</code> and <code>delete_releases()</code>
 </li>
-</ul>
-</div>
+</ul></div>
     <div id="githapi-071" class="section level1">
 <h1 class="page-header" data-toc-text="0.7.1">
-<a href="#githapi-071" class="anchor"></a>githapi 0.7.1</h1>
+<a href="#githapi-071" class="anchor" aria-hidden="true"></a>githapi 0.7.1</h1>
 <p>No functional changes, change fixed broken tests and refactored new functions.</p>
 </div>
     <div id="githapi-072" class="section level1">
 <h1 class="page-header" data-toc-text="0.7.2">
-<a href="#githapi-072" class="anchor"></a>githapi 0.7.2</h1>
+<a href="#githapi-072" class="anchor" aria-hidden="true"></a>githapi 0.7.2</h1>
 <p>Added: - <code><a href="../reference/view_files.html">view_files()</a></code> - <code>create_files()</code> - <code>update_files()</code> - <code>delete_files()</code> - <code>view_readme()</code> - <code>view_contents()</code></p>
 </div>
     <div id="githapi-073" class="section level1">
 <h1 class="page-header" data-toc-text="0.7.3">
-<a href="#githapi-073" class="anchor"></a>githapi 0.7.3</h1>
+<a href="#githapi-073" class="anchor" aria-hidden="true"></a>githapi 0.7.3</h1>
 <p>Added repository commits functions:</p>
-<ul>
-<li><code><a href="../reference/download_commit.html">download_commit()</a></code></li>
+<ul><li><code><a href="../reference/download_commit.html">download_commit()</a></code></li>
 <li><code><a href="../reference/view_commits.html">view_commits()</a></code></li>
 <li><code>view_shas()</code></li>
 <li><code><a href="../reference/compare_commits.html">compare_commits()</a></code></li>
 <li><code><a href="../reference/compare_files.html">compare_files()</a></code></li>
-</ul>
-<p>Added git blobs functions:</p>
-<ul>
-<li><code>view_blobs()</code></li>
+</ul><p>Added git blobs functions:</p>
+<ul><li><code>view_blobs()</code></li>
 <li><code>create_blobs()</code></li>
 <li><code>update_blobs()</code></li>
 <li><code>read_files()</code></li>
 <li><code>download_files()</code></li>
 <li><code>blob_exists()</code></li>
-</ul>
-<p>Added git trees functions:</p>
-<ul>
-<li><code>view_trees()</code></li>
+</ul><p>Added git trees functions:</p>
+<ul><li><code>view_trees()</code></li>
 <li><code>create_tree()</code></li>
 <li><code>upload_tree()</code></li>
 <li><code>tree_exists()</code></li>
-</ul>
-<p>Added git commits functions:</p>
-<ul>
-<li><code><a href="../reference/view_commits.html">view_commits()</a></code></li>
+</ul><p>Added git commits functions:</p>
+<ul><li><code><a href="../reference/view_commits.html">view_commits()</a></code></li>
 <li><code>create_commit()</code></li>
 <li><code><a href="../reference/upload_commit.html">upload_commit()</a></code></li>
 <li><code>commit_exists()</code></li>
-</ul>
-<p>Added git branches functions:</p>
-<ul>
-<li><code><a href="../reference/view_branches.html">view_branches()</a></code></li>
+</ul><p>Added git branches functions:</p>
+<ul><li><code><a href="../reference/view_branches.html">view_branches()</a></code></li>
 <li><code>create_branches()</code></li>
 <li><code>update_branches()</code></li>
 <li><code>delete_branches()</code></li>
 <li><code>branch_exists()</code></li>
-</ul>
-<p>Added git tags functions:</p>
-<ul>
-<li><code>tag_exists()</code></li>
-</ul>
-</div>
+</ul><p>Added git tags functions:</p>
+<ul><li><code>tag_exists()</code></li>
+</ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -198,11 +191,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Chad Goymer.</p>
+  <p><p>Developed by Chad Goymer.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -210,6 +203,8 @@
 
   
 
+
+  
 
   </body>
 </html>

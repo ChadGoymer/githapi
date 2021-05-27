@@ -62,9 +62,16 @@ review comment is created for pull requests and commits." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -78,7 +85,7 @@ review comment is created for pull requests and commits." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
       </span>
     </div>
 
@@ -130,7 +137,7 @@ created if the <code>issue</code> argument is set to the pull request number) an
 review comment is created for pull requests and commits.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_comment</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>create_comment</span><span class='op'>(</span>
   <span class='va'>body</span>,
   <span class='va'>gist</span>,
   <span class='va'>issue</span>,
@@ -140,7 +147,7 @@ review comment is created for pull requests and commits.</p>
   <span class='va'>path</span>,
   <span class='va'>position</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -218,43 +225,43 @@ or <code>commit</code> reference, <code>repo</code>, <code>path</code> and <code
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='co'># Create a comment on a gist</span>
-  <span class='fu'>create_comment</span><span class='op'>(</span>
-    body <span class='op'>=</span> <span class='st'>"This is a comment created by create_comment()"</span>,
-    gist <span class='op'>=</span> <span class='st'>"806dca6b09a39e7b6326a0c8137583e6"</span>
-  <span class='op'>)</span>
-
-  <span class='co'># Create a comment on an issue</span>
-  <span class='fu'>create_comment</span><span class='op'>(</span>
-    body  <span class='op'>=</span> <span class='st'>"This is a comment created by create_comment()"</span>,
-    issue <span class='op'>=</span> <span class='st'>"test issue"</span>,
-    repo  <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span>
-  <span class='op'>)</span>
-
-  <span class='co'># Create a comment on a pull request</span>
-  <span class='fu'>create_comment</span><span class='op'>(</span>
-    body         <span class='op'>=</span> <span class='st'>"This is a comment created by create_comment()"</span>,
-    pull_request <span class='op'>=</span> <span class='st'>"test pull request"</span>,
-    commit       <span class='op'>=</span> <span class='st'>"test-branch"</span>,
-    repo         <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span>,
-    path         <span class='op'>=</span> <span class='st'>"test-comments.txt"</span>,
-    position     <span class='op'>=</span> <span class='fl'>1</span>
-  <span class='op'>)</span>
-
-  <span class='co'># Create a comment on a commit</span>
-  <span class='fu'>create_comment</span><span class='op'>(</span>
-    body     <span class='op'>=</span> <span class='st'>"This is a comment created by create_comment()"</span>,
-    commit   <span class='op'>=</span> <span class='st'>"main"</span>,
-    repo     <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span>,
-    path     <span class='op'>=</span> <span class='st'>"README.md"</span>,
-    position <span class='op'>=</span> <span class='fl'>1</span>
-  <span class='op'>)</span>
-
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Create a comment on a gist</span></span>
+<span class='r-in'>  <span class='fu'>create_comment</span><span class='op'>(</span></span>
+<span class='r-in'>    body <span class='op'>=</span> <span class='st'>"This is a comment created by create_comment()"</span>,</span>
+<span class='r-in'>    gist <span class='op'>=</span> <span class='st'>"806dca6b09a39e7b6326a0c8137583e6"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Create a comment on an issue</span></span>
+<span class='r-in'>  <span class='fu'>create_comment</span><span class='op'>(</span></span>
+<span class='r-in'>    body  <span class='op'>=</span> <span class='st'>"This is a comment created by create_comment()"</span>,</span>
+<span class='r-in'>    issue <span class='op'>=</span> <span class='st'>"test issue"</span>,</span>
+<span class='r-in'>    repo  <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Create a comment on a pull request</span></span>
+<span class='r-in'>  <span class='fu'>create_comment</span><span class='op'>(</span></span>
+<span class='r-in'>    body         <span class='op'>=</span> <span class='st'>"This is a comment created by create_comment()"</span>,</span>
+<span class='r-in'>    pull_request <span class='op'>=</span> <span class='st'>"test pull request"</span>,</span>
+<span class='r-in'>    commit       <span class='op'>=</span> <span class='st'>"test-branch"</span>,</span>
+<span class='r-in'>    repo         <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span>,</span>
+<span class='r-in'>    path         <span class='op'>=</span> <span class='st'>"test-comments.txt"</span>,</span>
+<span class='r-in'>    position     <span class='op'>=</span> <span class='fl'>1</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Create a comment on a commit</span></span>
+<span class='r-in'>  <span class='fu'>create_comment</span><span class='op'>(</span></span>
+<span class='r-in'>    body     <span class='op'>=</span> <span class='st'>"This is a comment created by create_comment()"</span>,</span>
+<span class='r-in'>    commit   <span class='op'>=</span> <span class='st'>"main"</span>,</span>
+<span class='r-in'>    repo     <span class='op'>=</span> <span class='st'>"ChadGoymer/githapi"</span>,</span>
+<span class='r-in'>    path     <span class='op'>=</span> <span class='st'>"README.md"</span>,</span>
+<span class='r-in'>    position <span class='op'>=</span> <span class='fl'>1</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -266,11 +273,11 @@ or <code>commit</code> reference, <code>repo</code>, <code>path</code> and <code
 
       <footer>
       <div class="copyright">
-  <p>Developed by Chad Goymer.</p>
+  <p><p>Developed by Chad Goymer.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -278,6 +285,8 @@ or <code>commit</code> reference, <code>repo</code>, <code>path</code> and <code
 
   
 
+
+  
 
   </body>
 </html>

@@ -59,9 +59,16 @@ requests to the specified URL." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -75,7 +82,7 @@ requests to the specified URL." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
       </span>
     </div>
 
@@ -124,7 +131,7 @@ requests to the specified URL." />
 requests to the specified URL.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gh_request</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>gh_request</span><span class='op'>(</span>
   <span class='va'>url</span>,
   <span class='va'>type</span>,
   payload <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -133,7 +140,7 @@ requests to the specified URL.</p>
   token <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"github.token"</span><span class='op'>)</span>,
   proxy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"github.proxy"</span><span class='op'>)</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,40 +210,40 @@ if there is one.</p>
 <p>Finally, an authorisation token can be supplied if it is required.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='co'># Create a tag</span>
-  <span class='fu'>gh_request</span><span class='op'>(</span>
-    url     <span class='op'>=</span> <span class='st'>"https://api.github.com/repos/ChadGoymer/githapi/git/refs"</span>,
-    type    <span class='op'>=</span> <span class='st'>"POST"</span>,
-    payload <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-      ref <span class='op'>=</span> <span class='st'>"test-tag"</span>,
-      sha <span class='op'>=</span> <span class='st'>"a4b6545671455234757313a42738e44c10b0ef37"</span>
-    <span class='op'>)</span>
-  <span class='op'>)</span>
-
-  <span class='co'># View a tag</span>
-  <span class='fu'>gh_request</span><span class='op'>(</span>
-    url  <span class='op'>=</span> <span class='st'>"https://api.github.com/repos/ChadGoymer/githapi/git/test-tag"</span>,
-    type <span class='op'>=</span> <span class='st'>"GET"</span>
-  <span class='op'>)</span>
-
-  <span class='co'># Update a tag</span>
-  <span class='fu'>gh_request</span><span class='op'>(</span>
-    url     <span class='op'>=</span> <span class='st'>"https://api.github.com/repos/ChadGoymer/githapi/git/test-tag"</span>,
-    type    <span class='op'>=</span> <span class='st'>"PATCH"</span>,
-    payload <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>sha <span class='op'>=</span> <span class='st'>"a4b6545671455234757313a42738e44c10b0ef37"</span><span class='op'>)</span>
-  <span class='op'>)</span>
-
-  <span class='co'># Delete a tag</span>
-  <span class='fu'>gh_request</span><span class='op'>(</span>
-    url  <span class='op'>=</span> <span class='st'>"https://api.github.com/repos/ChadGoymer/githapi/git/test-tag"</span>,
-    type <span class='op'>=</span> <span class='st'>"DELETE"</span>
-  <span class='op'>)</span>
-
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Create a tag</span></span>
+<span class='r-in'>  <span class='fu'>gh_request</span><span class='op'>(</span></span>
+<span class='r-in'>    url     <span class='op'>=</span> <span class='st'>"https://api.github.com/repos/ChadGoymer/githapi/git/refs"</span>,</span>
+<span class='r-in'>    type    <span class='op'>=</span> <span class='st'>"POST"</span>,</span>
+<span class='r-in'>    payload <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>      ref <span class='op'>=</span> <span class='st'>"test-tag"</span>,</span>
+<span class='r-in'>      sha <span class='op'>=</span> <span class='st'>"a4b6545671455234757313a42738e44c10b0ef37"</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># View a tag</span></span>
+<span class='r-in'>  <span class='fu'>gh_request</span><span class='op'>(</span></span>
+<span class='r-in'>    url  <span class='op'>=</span> <span class='st'>"https://api.github.com/repos/ChadGoymer/githapi/git/test-tag"</span>,</span>
+<span class='r-in'>    type <span class='op'>=</span> <span class='st'>"GET"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Update a tag</span></span>
+<span class='r-in'>  <span class='fu'>gh_request</span><span class='op'>(</span></span>
+<span class='r-in'>    url     <span class='op'>=</span> <span class='st'>"https://api.github.com/repos/ChadGoymer/githapi/git/test-tag"</span>,</span>
+<span class='r-in'>    type    <span class='op'>=</span> <span class='st'>"PATCH"</span>,</span>
+<span class='r-in'>    payload <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>sha <span class='op'>=</span> <span class='st'>"a4b6545671455234757313a42738e44c10b0ef37"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># Delete a tag</span></span>
+<span class='r-in'>  <span class='fu'>gh_request</span><span class='op'>(</span></span>
+<span class='r-in'>    url  <span class='op'>=</span> <span class='st'>"https://api.github.com/repos/ChadGoymer/githapi/git/test-tag"</span>,</span>
+<span class='r-in'>    type <span class='op'>=</span> <span class='st'>"DELETE"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -248,11 +255,11 @@ if there is one.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Chad Goymer.</p>
+  <p><p>Developed by Chad Goymer.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -260,6 +267,8 @@ if there is one.</p>
 
   
 
+
+  
 
   </body>
 </html>

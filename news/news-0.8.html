@@ -57,9 +57,16 @@
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-news">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -73,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
       </span>
     </div>
 
@@ -118,75 +125,55 @@
 
     <div id="githapi-082" class="section level1">
 <h1 class="page-header" data-toc-text="0.8.2">
-<a href="#githapi-082" class="anchor"></a>githapi 0.8.2</h1>
-<ul>
-<li>Refactored the new Git and Repository functions changing the order of the parameters</li>
+<a href="#githapi-082" class="anchor" aria-hidden="true"></a>githapi 0.8.2</h1>
+<ul><li>Refactored the new Git and Repository functions changing the order of the parameters</li>
 <li>Deprecated all the old Git and Repository functions that have been replaced</li>
 <li>added:
-<ul>
-<li><code>shas_exist()</code></li>
+<ul><li><code>shas_exist()</code></li>
 <li><code>source_files()</code></li>
-</ul>
-</li>
+</ul></li>
 <li>removed
-<ul>
-<li><code>view_readme()</code></li>
-</ul>
-</li>
-</ul>
-</div>
+<ul><li><code>view_readme()</code></li>
+</ul></li>
+</ul></div>
     <div id="githapi-085" class="section level1">
 <h1 class="page-header" data-toc-text="0.8.5">
-<a href="#githapi-085" class="anchor"></a>githapi 0.8.5</h1>
-<ul>
-<li>Replaced all the logr functions with the msgr package</li>
+<a href="#githapi-085" class="anchor" aria-hidden="true"></a>githapi 0.8.5</h1>
+<ul><li>Replaced all the logr functions with the msgr package</li>
 <li>Added test coverage reporting</li>
 <li>Added:
-<ul>
-<li><code>files_exist()</code></li>
+<ul><li><code>files_exist()</code></li>
 <li><code>releases_exist()</code></li>
-</ul>
-</li>
-</ul>
-</div>
+</ul></li>
+</ul></div>
     <div id="githapi-086" class="section level1">
 <h1 class="page-header" data-toc-text="0.8.6">
-<a href="#githapi-086" class="anchor"></a>githapi 0.8.6</h1>
-<ul>
-<li>Fixed bug in <code>read_files()</code> and <code>download_files()</code> which prevented them from accessing files in folders</li>
-</ul>
-</div>
+<a href="#githapi-086" class="anchor" aria-hidden="true"></a>githapi 0.8.6</h1>
+<ul><li>Fixed bug in <code>read_files()</code> and <code>download_files()</code> which prevented them from accessing files in folders</li>
+</ul></div>
     <div id="githapi-087" class="section level1">
 <h1 class="page-header" data-toc-text="0.8.7">
-<a href="#githapi-087" class="anchor"></a>githapi 0.8.7</h1>
-<ul>
-<li>Fixed bug introduced into <code>read_files()</code> which looked for SHA in the wrong repo</li>
-</ul>
-</div>
+<a href="#githapi-087" class="anchor" aria-hidden="true"></a>githapi 0.8.7</h1>
+<ul><li>Fixed bug introduced into <code>read_files()</code> which looked for SHA in the wrong repo</li>
+</ul></div>
     <div id="githapi-088" class="section level1">
 <h1 class="page-header" data-toc-text="0.8.8">
-<a href="#githapi-088" class="anchor"></a>githapi 0.8.8</h1>
-<ul>
-<li>Added a NEWS.md file</li>
-</ul>
-</div>
+<a href="#githapi-088" class="anchor" aria-hidden="true"></a>githapi 0.8.8</h1>
+<ul><li>Added a NEWS.md file</li>
+</ul></div>
     <div id="githapi-089" class="section level1">
 <h1 class="page-header" data-toc-text="0.8.9">
-<a href="#githapi-089" class="anchor"></a>githapi 0.8.9</h1>
-<ul>
-<li>Replaced <code>skip()</code> with <code>skip_on_travis()</code> in tests</li>
+<a href="#githapi-089" class="anchor" aria-hidden="true"></a>githapi 0.8.9</h1>
+<ul><li>Replaced <code>skip()</code> with <code>skip_on_travis()</code> in tests</li>
 <li>Fixed tests after project name changes</li>
 <li>Ensured package passes <code>devtools::check()</code>
 </li>
-</ul>
-</div>
+</ul></div>
     <div id="githapi-0810" class="section level1">
 <h1 class="page-header" data-toc-text="0.8.10">
-<a href="#githapi-0810" class="anchor"></a>githapi 0.8.10</h1>
-<ul>
-<li>Fixed <code>upload_tree()</code> so mode is set correctly when uploading an executable.</li>
-</ul>
-</div>
+<a href="#githapi-0810" class="anchor" aria-hidden="true"></a>githapi 0.8.10</h1>
+<ul><li>Fixed <code>upload_tree()</code> so mode is set correctly when uploading an executable.</li>
+</ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -200,11 +187,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Chad Goymer.</p>
+  <p><p>Developed by Chad Goymer.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -212,6 +199,8 @@
 
   
 
+
+  
 
   </body>
 </html>
