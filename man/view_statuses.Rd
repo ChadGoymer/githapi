@@ -24,7 +24,7 @@ view_status(ref, repo, ...)
 
 \strong{Status Properties:}
 \itemize{
-\item \strong{id}: The id of the release.
+\item \strong{id}: The id of the status.
 \item \strong{state}: The state of the status.
 \item \strong{description}: The description of the status.
 \item \strong{target_url}: The URL linked to the status.

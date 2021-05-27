@@ -217,6 +217,42 @@ test_that("upload_tree uploads a directory structure to github", {
   expect_null(ignore_tree$commit_sha)
   expect_true(is_sha(ignore_tree$tree_sha))
 
+
+  empty_path <- file.path(temp_path, "empty")
+  empty_file_paths <- file.path(empty_path, c(
+    "dir-1/file-1.txt"
+  ))
+  file.path(empty_path, c(
+    "dir-1/dir-1-1"
+  )) %>%
+    walk(dir.create, recursive = TRUE)
+
+  walk(empty_file_paths, function(f) {
+    map_chr(
+      1:10,
+      ~ sample(LETTERS, 10, replace = TRUE) %>% str_c(collapse = "")
+    ) %>%
+      writeLines(f)
+  })
+
+
+  empty_tree <- upload_tree(
+    path = empty_path,
+    repo = str_c("ChadGoymer/test-files-", suffix)
+  )
+
+  expect_is(empty_tree, "list")
+  expect_identical(
+    map_chr(empty_tree, ~ class(.)[[1]]),
+    c(
+      commit_sha = "NULL",
+      tree_sha   = "character"
+    )
+  )
+
+  expect_null(empty_tree$commit_sha)
+  expect_true(is_sha(empty_tree$tree_sha))
+
 })
 
 

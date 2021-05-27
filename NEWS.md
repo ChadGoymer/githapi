@@ -1,3 +1,7 @@
+# githapi 0.10.23
+
+- Ignore empty directories when uploading a commit (or tree)
+
 # githapi 0.10.22
 
 - Only set githapi options on-load if they are not already set
