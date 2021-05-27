@@ -23,7 +23,7 @@ appropriate permissions. Care should be taken as it will not be recoverable.
 \details{
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://docs.github.com/en/free-pro-team@latest/rest/reference/git#delete-a-reference}
+\item \url{https://docs.github.com/en/rest/reference/git#delete-a-reference}
 }
 }
 \examples{

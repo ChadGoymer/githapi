@@ -21,8 +21,10 @@ create_tag(name, ref, repo, ...)
 \strong{Tag Properties:}
 \itemize{
 \item \strong{name}: The name of the tag.
-\item \strong{ref}: The full Git reference of the tag.
 \item \strong{sha}: The commit SHA the tag is pointing at.
+\item \strong{html_url}: The address of the tag's web page in GitHub.
+\item \strong{zip_url}: The address to download a zip file of the commit.
+\item \strong{tar_url}: The address to download a tar file of the commit.
 }
 }
 \description{
@@ -33,7 +35,7 @@ a SHA, branch or tag. For a branch, the head commit is used.
 \details{
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://docs.github.com/en/free-pro-team@latest/rest/reference/git#create-a-reference}
+\item \url{https://docs.github.com/en/rest/reference/git#create-a-reference}
 }
 }
 \examples{

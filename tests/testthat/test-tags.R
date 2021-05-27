@@ -53,9 +53,11 @@ test_that("create_tag creates a tag and returns a list of the properties", {
   expect_identical(
     map_chr(branch_tag, ~ class(.)[[1]]),
     c(
-      name = "character",
-      ref  = "character",
-      sha  = "character"
+      name     = "character",
+      sha      = "character",
+      html_url = "character",
+      zip_url  = "character",
+      tar_url  = "character"
     )
   )
 
@@ -79,9 +81,11 @@ test_that("create_tag creates a tag and returns a list of the properties", {
   expect_identical(
     map_chr(main_tag, ~ class(.)[[1]]),
     c(
-      name = "character",
-      ref  = "character",
-      sha  = "character"
+      name     = "character",
+      sha      = "character",
+      html_url = "character",
+      zip_url  = "character",
+      tar_url  = "character"
     )
   )
 
@@ -112,9 +116,11 @@ test_that("update_tag updates a tag and returns a list of the properties", {
   expect_identical(
     map_chr(updated_tag, ~ class(.)[[1]]),
     c(
-      name = "character",
-      ref  = "character",
-      sha  = "character"
+      name     = "character",
+      sha      = "character",
+      html_url = "character",
+      zip_url  = "character",
+      tar_url  = "character"
     )
   )
 
@@ -135,9 +141,11 @@ test_that("view_tags returns a tibble of tag properties", {
   expect_identical(
     map_chr(all_tags, ~ class(.)[[1]]),
     c(
-      name = "character",
-      ref  = "character",
-      sha  = "character"
+      name     = "character",
+      sha      = "character",
+      html_url = "character",
+      zip_url  = "character",
+      tar_url  = "character"
     )
   )
 
@@ -160,9 +168,11 @@ test_that("view_tag returns a list of tag properties", {
   expect_identical(
     map_chr(tag, ~ class(.)[[1]]),
     c(
-      name = "character",
-      ref  = "character",
-      sha  = "character"
+      name     = "character",
+      sha      = "character",
+      html_url = "character",
+      zip_url  = "character",
+      tar_url  = "character"
     )
   )
 

@@ -21,8 +21,9 @@ create_branch(name, ref, repo, ...)
 \strong{Branch Properties:}
 \itemize{
 \item \strong{name}: The name of the branch.
-\item \strong{ref}: The full Git reference of the branch.
 \item \strong{sha}: The commit SHA the branch is pointing at.
+\item \strong{protected}: Whether the branch is protected.
+\item \strong{html_url}: The address of the branch's web page in GitHub.
 }
 }
 \description{
@@ -33,7 +34,7 @@ a SHA, branch or tag. For a branch, the head commit is used.
 \details{
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://docs.github.com/en/free-pro-team@latest/rest/reference/git#create-a-reference}
+\item \url{https://docs.github.com/en/rest/reference/git#create-a-reference}
 }
 }
 \examples{

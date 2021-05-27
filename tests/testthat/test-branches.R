@@ -54,7 +54,12 @@ test_that("create_branch creates a branch and returns a list of properties", {
   expect_identical(attr(new_branch, "status"), 201L)
   expect_identical(
     map_chr(new_branch, ~ class(.)[[1]]),
-    c(name = "character", ref = "character", sha = "character")
+    c(
+      name      = "character",
+      sha       = "character",
+      protected = "logical",
+      html_url  = "character"
+    )
   )
 
   expect_identical(new_branch$name, str_c("test-branches-2-", suffix))
@@ -85,7 +90,12 @@ test_that("update_branch updates a branch and returns a list of properties", {
   expect_identical(attr(updated_branch, "status"), 200L)
   expect_identical(
     map_chr(updated_branch, ~ class(.)[[1]]),
-    c(name = "character", ref = "character", sha = "character")
+    c(
+      name      = "character",
+      sha       = "character",
+      protected = "logical",
+      html_url  = "character"
+    )
   )
 
   expect_identical(updated_branch$name, str_c("test-branches-2-", suffix))
@@ -107,7 +117,12 @@ test_that("view_branches returns a tibble of branch properties", {
   expect_identical(attr(all_branches, "status"), 200L)
   expect_identical(
     map_chr(all_branches, ~ class(.)[[1]]),
-    c(name = "character", ref  = "character", sha  = "character")
+    c(
+      name      = "character",
+      sha       = "character",
+      protected = "logical",
+      html_url  = "character"
+    )
   )
 
   expect_true(
@@ -130,7 +145,12 @@ test_that("view_branch returns a list of branch properties", {
   expect_identical(attr(branch, "status"), 200L)
   expect_identical(
     map_chr(branch, ~ class(.)[[1]]),
-    c(name = "character", ref  = "character", sha  = "character")
+    c(
+      name      = "character",
+      sha       = "character",
+      protected = "logical",
+      html_url  = "character"
+    )
   )
 
   expect_identical(branch$name, str_c("test-branches-1-", suffix))
