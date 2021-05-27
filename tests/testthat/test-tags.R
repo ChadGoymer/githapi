@@ -116,9 +116,11 @@ test_that("update_tag updates a tag and returns a list of the properties", {
   expect_identical(
     map_chr(updated_tag, ~ class(.)[[1]]),
     c(
-      name = "character",
-      ref  = "character",
-      sha  = "character"
+      name     = "character",
+      sha      = "character",
+      html_url = "character",
+      zip_url  = "character",
+      tar_url  = "character"
     )
   )
 
