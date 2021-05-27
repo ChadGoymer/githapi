@@ -230,7 +230,7 @@ view_tags <- function(
     gh_page(n_max = n_max, ...)
 
   info("Transforming results", level = 4)
-  tags_gh <- bind_properties(tags_lst, properties$tags)
+  tags_gh <- bind_properties(tags_lst, properties$tag)
 
   info("Done", level = 7)
   tags_gh
