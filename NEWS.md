@@ -1,3 +1,8 @@
+# githapi 0.10.24
+
+- Updated branch functions to use repository branches endpoint
+- Updated tag functions to use repository tags endpoint
+
 # githapi 0.10.23
 
 - Ignore empty directories when uploading a commit (or tree)
