@@ -275,14 +275,7 @@ view_branch <- function(
 #'
 #' For more details see the GitHub API documentation:
 #'
-#' ```{r echo=FALSE, results='asis'}
-#' docs_url <- "https://docs.github.com/en/free-pro-team@latest/rest/reference/"
-#' cat(paste0(
-#'   "- <", docs_url,
-#'   "git#delete-a-reference",
-#'   ">"
-#' ))
-#' ```
+#' - <https://docs.github.com/en/rest/reference/git#delete-a-reference>
 #'
 #' @param branch (string) The name of the branch.
 #' @param repo (string) The repository specified in the format: `owner/repo`.
