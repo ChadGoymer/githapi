@@ -132,6 +132,54 @@ test_that("upload_commit uploads files in a directory and creates a commit", {
   expect_identical(recursive_commit$message, "Commit to test upload_commit()")
 
 
+  empty_path <- file.path(temp_path, "empty")
+  empty_file_paths <- file.path(empty_path, c(
+    "dir-1/file-1.txt"
+  ))
+  file.path(empty_path, c(
+    "dir-1/dir-1-1"
+  )) %>%
+    walk(dir.create, recursive = TRUE)
+
+  walk(empty_file_paths, function(f) {
+    map_chr(
+      1:10,
+      ~sample(LETTERS, 10, replace = TRUE) %>% str_c(collapse = "")
+    ) %>%
+      writeLines(f)
+  })
+
+  empty_commit <- upload_commit(
+    path    = empty_path,
+    branch  = "main",
+    message = "Commit to test upload_commit()",
+    repo    = str_c("ChadGoymer/test-commits-", suffix)
+  )
+
+  expect_is(empty_commit, "list")
+  expect_identical(attr(empty_commit, "status"), 200L)
+  expect_identical(
+    map_chr(empty_commit, ~ class(.)[[1]]),
+    c(
+      sha             = "character",
+      message         = "character",
+      author_login    = "character",
+      author_name     = "character",
+      author_email    = "character",
+      author_date     = "POSIXct",
+      committer_login = "character",
+      committer_name  = "character",
+      committer_email = "character",
+      committer_date  = "POSIXct",
+      tree_sha        = "character",
+      parents         = "character",
+      html_url        = "character"
+    )
+  )
+
+  expect_identical(empty_commit$message, "Commit to test upload_commit()")
+
+
   author_commit <- upload_commit(
     path      = flat_path,
     branch    = "main",
@@ -395,54 +443,6 @@ test_that("upload_commit uploads files in a directory and creates a commit", {
     merge_branch_commit$parents,
     c(merge_main_commit$sha, new_branch_commit$sha)
   )
-
-
-  empty_path <- file.path(temp_path, "empty")
-  empty_file_paths <- file.path(empty_path, c(
-    "dir-1/file-1.txt"
-  ))
-  file.path(empty_path, c(
-    "dir-1/dir-1-1"
-  )) %>%
-    walk(dir.create, recursive = TRUE)
-
-  walk(empty_file_paths, function(f) {
-    map_chr(
-      1:10,
-      ~sample(LETTERS, 10, replace = TRUE) %>% str_c(collapse = "")
-    ) %>%
-      writeLines(f)
-  })
-
-  empty_commit <- upload_commit(
-    path    = empty_path,
-    branch  = "main",
-    message = "Commit to test upload_commit()",
-    repo    = str_c("ChadGoymer/test-commits-", suffix)
-  )
-
-  expect_is(empty_commit, "list")
-  expect_identical(attr(empty_commit, "status"), 200L)
-  expect_identical(
-    map_chr(empty_commit, ~ class(.)[[1]]),
-    c(
-      sha             = "character",
-      message         = "character",
-      author_login    = "character",
-      author_name     = "character",
-      author_email    = "character",
-      author_date     = "POSIXct",
-      committer_login = "character",
-      committer_name  = "character",
-      committer_email = "character",
-      committer_date  = "POSIXct",
-      tree_sha        = "character",
-      parents         = "character",
-      html_url        = "character"
-    )
-  )
-
-  expect_identical(empty_commit$message, "Commit to test upload_commit()")
 
 })
 
