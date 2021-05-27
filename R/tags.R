@@ -257,12 +257,11 @@ view_tag <- function(
   )
 
   info("Viewing tag '", tag, "' in repository '", repo, "'")
-  tag_lst <- gh_url("repos", repo, "git/ref/tags", tag) %>%
-    gh_request("GET", ...)
+  tag_lst <- gh_url("repos", repo, "tags") %>%
+    gh_find(property = "name", value = tag, ...)
 
   info("Transforming results", level = 4)
-  tag_gh <- select_properties(tag_lst, properties$reference) %>%
-    modify_list(name = basename(tag_lst$ref), .before = "ref")
+  tag_gh <- select_properties(tag_lst, properties$tag)
 
   info("Done", level = 7)
   tag_gh
