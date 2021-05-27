@@ -8,14 +8,7 @@
 #'
 #' For more details see the GitHub API documentation:
 #'
-#' ```{r echo=FALSE, results='asis'}
-#' docs_url <- "https://docs.github.com/en/free-pro-team@latest/rest/reference/"
-#' cat(paste0(
-#'   "- <", docs_url,
-#'   "git#create-a-reference",
-#'   ">"
-#' ))
-#' ```
+#' - <https://docs.github.com/en/rest/reference/git#create-a-reference>
 #'
 #' @param name (string) The name of the tag.
 #' @param ref (string) Either a SHA, branch or tag used to identify the commit.
@@ -27,8 +20,10 @@
 #' **Tag Properties:**
 #'
 #' - **name**: The name of the tag.
-#' - **ref**: The full Git reference of the tag.
 #' - **sha**: The commit SHA the tag is pointing at.
+#' - **html_url**: The address of the tag's web page in GitHub.
+#' - **zip_url**: The address to download a zip file of the commit.
+#' - **tar_url**: The address to download a tar file of the commit.
 #'
 #' @examples
 #' \dontrun{
@@ -73,11 +68,18 @@ create_tag <- function(
     gh_request("POST", payload = payload, ...)
 
   info("Transforming results", level = 4)
-  tag_gh <- select_properties(tag_lst, properties$reference) %>%
-    modify_list(name = basename(tag_lst$ref), .before = "ref")
+  tag_gh <- gh_url("repos", repo, "tags") %>%
+    gh_find(property = "name", value = name, ...) %>%
+    select_properties(properties$tag)
 
   info("Done", level = 7)
-  tag_gh
+  structure(
+    tag_gh,
+    url     = attr(tag_lst, "url"),
+    request = attr(tag_lst, "request"),
+    status  = attr(tag_lst, "status"),
+    header  = attr(tag_lst, "header")
+  )
 }
 
 

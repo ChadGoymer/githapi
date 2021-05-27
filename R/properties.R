@@ -238,6 +238,13 @@ properties <- list(
     protected                       = c("protected",                       as = "logical"),
     html_url                        = c("commit", "url",                   as = "character")),
 
+  tag = list(
+    name                            = c("name",                            as = "character"),
+    sha                             = c("commit", "sha",                   as = "character"),
+    html_url                        = c("commit", "url",                   as = "character"),
+    zip_url                         = c("zipball_url",                     as = "character"),
+    tar_url                         = c("tarball_url",                     as = "character")),
+
   commit = list(
     sha                             = c("sha",                             as = "character"),
     message                         = c("commit", "message",               as = "character"),
