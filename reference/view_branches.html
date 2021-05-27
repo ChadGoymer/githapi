@@ -83,7 +83,7 @@ a list of all properties for a single branch." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.23</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.24</span>
       </span>
     </div>
 
@@ -164,15 +164,16 @@ a list of all properties for a single branch.</p>
 <code>view_branch()</code> returns a list of properties for a single branch.</p>
 <p><strong>Branch Properties:</strong></p><ul>
 <li><p><strong>name</strong>: The name of the branch.</p></li>
-<li><p><strong>ref</strong>: The full Git reference of the branch.</p></li>
 <li><p><strong>sha</strong>: The commit SHA the branch is pointing at.</p></li>
+<li><p><strong>protected</strong>: Whether the branch is protected.</p></li>
+<li><p><strong>html_url</strong>: The address of the branch's web page in GitHub.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For more details see the GitHub API documentation:</p><ul>
-<li><p><a href='https://docs.github.com/en/free-pro-team@latest/rest/reference/git#list-matching-references'>https://docs.github.com/en/free-pro-team@latest/rest/reference/git#list-matching-references</a></p></li>
-<li><p><a href='https://docs.github.com/en/free-pro-team@latest/rest/reference/git#get-a-reference'>https://docs.github.com/en/free-pro-team@latest/rest/reference/git#get-a-reference</a></p></li>
+<li><p><a href='https://docs.github.com/en/rest/reference/repos#list-branches'>https://docs.github.com/en/rest/reference/repos#list-branches</a></p></li>
+<li><p><a href='https://docs.github.com/en/rest/reference/repos#get-a-branch'>https://docs.github.com/en/rest/reference/repos#get-a-branch</a></p></li>
 </ul>
 
 
