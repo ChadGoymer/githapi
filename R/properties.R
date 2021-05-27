@@ -232,9 +232,11 @@ properties <- list(
     html_url                        = c("html_url",                        as = "character"),
     submitted_at                    = c("submitted_at",                    as = "datetime")),
 
-  reference = list(
-    ref                             = c("ref",                             as = "character"),
-    sha                             = c("object", "sha",                   as = "character")),
+  branch = list(
+    name                            = c("name",                            as = "character"),
+    sha                             = c("commit", "sha",                   as = "character"),
+    protected                       = c("protected",                       as = "logical"),
+    html_url                        = c("commit", "url",                   as = "character")),
 
   commit = list(
     sha                             = c("sha",                             as = "character"),
