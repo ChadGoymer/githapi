@@ -145,7 +145,12 @@ test_that("view_branch returns a list of branch properties", {
   expect_identical(attr(branch, "status"), 200L)
   expect_identical(
     map_chr(branch, ~ class(.)[[1]]),
-    c(name = "character", ref  = "character", sha  = "character")
+    c(
+      name      = "character",
+      sha       = "character",
+      protected = "logical",
+      html_url  = "character"
+    )
   )
 
   expect_identical(branch$name, str_c("test-branches-1-", suffix))

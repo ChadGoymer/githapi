@@ -255,12 +255,11 @@ view_branch <- function(
   )
 
   info("Viewing branch '", branch, "' in repository '", repo, "'")
-  branch_lst <- gh_url("repos", repo, "git/ref/heads", branch) %>%
+  branch_lst <- gh_url("repos", repo, "branches", branch) %>%
     gh_request("GET", ...)
 
   info("Transforming results", level = 4)
-  branch_gh <- select_properties(branch_lst, properties$reference) %>%
-    modify_list(name = basename(branch_lst$ref), .before = "ref")
+  branch_gh <- select_properties(branch_lst, properties$branch)
 
   info("Done", level = 7)
   branch_gh
