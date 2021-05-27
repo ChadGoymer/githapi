@@ -90,7 +90,12 @@ test_that("update_branch updates a branch and returns a list of properties", {
   expect_identical(attr(updated_branch, "status"), 200L)
   expect_identical(
     map_chr(updated_branch, ~ class(.)[[1]]),
-    c(name = "character", ref = "character", sha = "character")
+    c(
+      name      = "character",
+      sha       = "character",
+      protected = "logical",
+      html_url  = "character"
+    )
   )
 
   expect_identical(updated_branch$name, str_c("test-branches-2-", suffix))

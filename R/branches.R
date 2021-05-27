@@ -92,14 +92,7 @@ create_branch <- function(
 #'
 #' For more details see the GitHub API documentation:
 #'
-#' ```{r echo=FALSE, results='asis'}
-#' docs_url <- "https://docs.github.com/en/free-pro-team@latest/rest/reference/"
-#' cat(paste0(
-#'   "- <", docs_url,
-#'   "git#update-a-reference",
-#'   ">"
-#' ))
-#' ```
+#' - <https://docs.github.com/en/rest/reference/git#update-a-reference>
 #'
 #' @param branch (string) The name of the branch.
 #' @param ref (string) Either a SHA, branch or tag used to identify the new
@@ -114,8 +107,9 @@ create_branch <- function(
 #' **Branch Properties:**
 #'
 #' - **name**: The name of the branch.
-#' - **ref**: The full Git reference of the branch.
 #' - **sha**: The commit SHA the branch is pointing at.
+#' - **protected**: Whether the branch is protected.
+#' - **html_url**: The address of the branch's web page in GitHub.
 #'
 #' @examples
 #' \dontrun{
@@ -163,11 +157,18 @@ update_branch <- function(
     gh_request("PATCH", payload = list(sha = ref, force = force), ...)
 
   info("Transforming results", level = 4)
-  branch_gh <- select_properties(branch_lst, properties$reference) %>%
-    modify_list(name = basename(branch_lst$ref), .before = "ref")
+  branch_gh <- gh_url("repos", repo, "branches", branch) %>%
+    gh_request("GET", ...) %>%
+    select_properties(properties$branch)
 
   info("Done", level = 7)
-  branch_gh
+  structure(
+    branch_gh,
+    url     = attr(branch_lst, "url"),
+    request = attr(branch_lst, "request"),
+    status  = attr(branch_lst, "status"),
+    header  = attr(branch_lst, "header")
+  )
 }
 
 
