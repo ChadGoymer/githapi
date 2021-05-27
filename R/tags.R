@@ -184,21 +184,7 @@ update_tag <- function(
 #'
 #' For more details see the GitHub API documentation:
 #'
-#' ```{r echo=FALSE, results='asis'}
-#' docs_url <- "https://docs.github.com/en/free-pro-team@latest/rest/reference/"
-#' cat(paste0(
-#'   "- <", docs_url,
-#'   "git#list-matching-references",
-#'   ">"
-#' ))
-#' ```
-#' ```{r echo=FALSE, results='asis'}
-#' cat(paste0(
-#'   "- <", docs_url,
-#'   "git#get-a-reference",
-#'   ">"
-#' ))
-#' ```
+#' - <https://docs.github.com/en/rest/reference/repos#list-repository-tags>
 #'
 #' @param tag (string) The name of the tag.
 #' @param repo (string) The repository specified in the format: `owner/repo`.
@@ -211,8 +197,10 @@ update_tag <- function(
 #' **Tag Properties:**
 #'
 #' - **name**: The name of the tag.
-#' - **ref**: The full Git reference of the tag.
 #' - **sha**: The commit SHA the tag is pointing at.
+#' - **html_url**: The address of the tag's web page in GitHub.
+#' - **zip_url**: The address to download a zip file of the commit.
+#' - **tar_url**: The address to download a tar file of the commit.
 #'
 #' @examples
 #' \dontrun{
@@ -238,12 +226,11 @@ view_tags <- function(
   )
 
   info("Viewing tags for repository '", repo, "'")
-  tags_lst <- gh_url("repos", repo, "git/refs/tags") %>%
+  tags_lst <- gh_url("repos", repo, "tags") %>%
     gh_page(n_max = n_max, ...)
 
   info("Transforming results", level = 4)
-  tags_gh <- bind_properties(tags_lst, properties$reference) %>%
-    add_column(name = basename(.$ref), .before = "ref")
+  tags_gh <- bind_properties(tags_lst, properties$tags)
 
   info("Done", level = 7)
   tags_gh

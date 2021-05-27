@@ -25,8 +25,10 @@ returns a list of properties for a single tag.
 \strong{Tag Properties:}
 \itemize{
 \item \strong{name}: The name of the tag.
-\item \strong{ref}: The full Git reference of the tag.
 \item \strong{sha}: The commit SHA the tag is pointing at.
+\item \strong{html_url}: The address of the tag's web page in GitHub.
+\item \strong{zip_url}: The address to download a zip file of the commit.
+\item \strong{tar_url}: The address to download a tar file of the commit.
 }
 }
 \description{
@@ -37,8 +39,7 @@ properties for a single tag.
 \details{
 For more details see the GitHub API documentation:
 \itemize{
-\item \url{https://docs.github.com/en/free-pro-team@latest/rest/reference/git#list-matching-references}
-\item \url{https://docs.github.com/en/free-pro-team@latest/rest/reference/git#get-a-reference}
+\item \url{https://docs.github.com/en/rest/reference/repos#list-repository-tags}
 }
 }
 \examples{

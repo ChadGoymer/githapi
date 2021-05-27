@@ -141,9 +141,11 @@ test_that("view_tags returns a tibble of tag properties", {
   expect_identical(
     map_chr(all_tags, ~ class(.)[[1]]),
     c(
-      name = "character",
-      ref  = "character",
-      sha  = "character"
+      name     = "character",
+      sha      = "character",
+      html_url = "character",
+      zip_url  = "character",
+      tar_url  = "character"
     )
   )
 
