@@ -1,13 +1,12 @@
-context("comments")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_repository(
+  user <- view_user()
+
+  repo <- create_repository(
     name        = str_c("test-comments-", suffix),
     description = "This is a repository to test comments",
     auto_init   = TRUE
@@ -17,7 +16,7 @@ setup(suppressMessages({
 
   create_issue(
     title = str_c("issue to test comments ", suffix),
-    repo  = str_c("ChadGoymer/test-comments-", suffix),
+    repo  = repo$full_name,
     body  = "This is an issue to test comments"
   )
 
@@ -26,19 +25,19 @@ setup(suppressMessages({
     path    = "test-comments.txt",
     branch  = str_c("test-comments-", suffix),
     message = "A file to test comments",
-    repo    = str_c("ChadGoymer/test-comments-", suffix),
-    parent  = "main"
+    repo    = repo$full_name,
+    parent  = repo$default_branch
   )
 
   create_pull_request(
     title = str_c("pull to test comments ", suffix),
-    repo  = str_c("ChadGoymer/test-comments-", suffix),
+    repo  = repo$full_name,
     head  = str_c("test-comments-", suffix),
-    base  = "main",
+    base  = repo$default_branch,
     body  = "This is an pull request to test comments"
   )
 
-}))
+})
 
 suppressMessages({
 
@@ -48,22 +47,25 @@ suppressMessages({
     pluck("id")
 
   main_sha <- view_sha(
-    ref  = "main",
-    repo = str_c("ChadGoymer/test-comments-", suffix)
+    ref  = repo$default_branch,
+    repo = repo$full_name
   )
 
   branch_sha <- view_sha(
     ref  = str_c("test-comments-", suffix),
-    repo = str_c("ChadGoymer/test-comments-", suffix)
+    repo = repo$full_name
   )
 
 })
 
 teardown(suppressMessages({
 
-  delete_repository(str_c("ChadGoymer/test-comments-", suffix))
+  try(
+    delete_repository(repo$full_name),
+    silent = TRUE
+  )
 
-  delete_gist(gist)
+  try(delete_gist(gist), silent = TRUE)
 
 }))
 
@@ -95,13 +97,13 @@ test_that("create_comment creates a comment and returns the properties", {
     gist_comment$body,
     "This is a comment created by create_comment()"
   )
-  expect_identical(gist_comment$user, "ChadGoymer")
+  expect_identical(gist_comment$user, user$login)
 
 
   issue_comment <- create_comment(
     body  = "This is a comment created by create_comment()",
     issue = str_c("issue to test comments ", suffix),
-    repo  = str_c("ChadGoymer/test-comments-", suffix)
+    repo  = repo$full_name
   )
 
   expect_is(issue_comment, "list")
@@ -122,14 +124,14 @@ test_that("create_comment creates a comment and returns the properties", {
     issue_comment$body,
     "This is a comment created by create_comment()"
   )
-  expect_identical(issue_comment$user, "ChadGoymer")
+  expect_identical(issue_comment$user, user$login)
 
 
   pull_comment <- create_comment(
     body         = "This is a comment created by create_comment()",
     pull_request = str_c("pull to test comments ", suffix),
     commit       = str_c("test-comments-", suffix),
-    repo         = str_c("ChadGoymer/test-comments-", suffix),
+    repo         = repo$full_name,
     path         = "test-comments.txt",
     position     = 1
   )
@@ -158,13 +160,13 @@ test_that("create_comment creates a comment and returns the properties", {
   expect_identical(pull_comment$commit, as.character(branch_sha))
   expect_identical(pull_comment$path, "test-comments.txt")
   expect_identical(pull_comment$position, 1L)
-  expect_identical(pull_comment$user, "ChadGoymer")
+  expect_identical(pull_comment$user, user$login)
 
 
   commit_comment <- create_comment(
     body     = "This is a comment created by create_comment()",
     commit   = main_sha,
-    repo     = str_c("ChadGoymer/test-comments-", suffix),
+    repo     = repo$full_name,
     path     = "README.md",
     position = 1
   )
@@ -193,7 +195,7 @@ test_that("create_comment creates a comment and returns the properties", {
   expect_identical(commit_comment$commit, as.character(main_sha))
   expect_identical(commit_comment$path, "README.md")
   expect_identical(commit_comment$position, 1L)
-  expect_identical(commit_comment$user, "ChadGoymer")
+  expect_identical(commit_comment$user, user$login)
 
 })
 
@@ -202,7 +204,7 @@ test_that("create_comment throws as error if invalid arguments are supplied", {
   expect_error(
     create_comment(
       body = "This is a comment created by create_comment()",
-      repo = str_c("ChadGoymer/test-comments-", suffix)
+      repo = repo$full_name
     ),
     "An 'issue', 'pull_request', 'commit' or 'gist' must be specified"
   )
@@ -222,7 +224,7 @@ suppressMessages({
 
   issue_comments <- view_comments(
     issue = str_c("issue to test comments ", suffix),
-    repo  = str_c("ChadGoymer/test-comments-", suffix),
+    repo  = repo$full_name,
     n_max = 10
   )
   issue_comment_id <- issue_comments %>%
@@ -232,7 +234,7 @@ suppressMessages({
 
   pull_comments <- view_comments(
     pull_request = str_c("pull to test comments ", suffix),
-    repo         = str_c("ChadGoymer/test-comments-", suffix),
+    repo         = repo$full_name,
     n_max        = 10
   )
   pull_comment_id <- pull_comments %>%
@@ -241,8 +243,8 @@ suppressMessages({
     first()
 
   commit_comments <- view_comments(
-    commit = "main",
-    repo   = str_c("ChadGoymer/test-comments-", suffix),
+    commit = repo$default_branch,
+    repo   = repo$full_name,
     n_max  = 10
   )
   commit_comment_id <- commit_comments %>%
@@ -278,14 +280,14 @@ test_that("update_comment updates a comment and returns the properties", {
     gist_comment$body,
     "This comment has been updated by update_comment()"
   )
-  expect_identical(gist_comment$user, "ChadGoymer")
+  expect_identical(gist_comment$user, user$login)
 
 
   issue_comment <- update_comment(
     comment = issue_comment_id,
     body    = "This comment has been updated by update_comment()",
     type    = "issue",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(issue_comment, "list")
@@ -306,14 +308,14 @@ test_that("update_comment updates a comment and returns the properties", {
     issue_comment$body,
     "This comment has been updated by update_comment()"
   )
-  expect_identical(issue_comment$user, "ChadGoymer")
+  expect_identical(issue_comment$user, user$login)
 
 
   pull_comment <- update_comment(
     comment = pull_comment_id,
     body    = "This comment has been updated by update_comment()",
     type    = "pull_request",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(pull_comment, "list")
@@ -340,14 +342,14 @@ test_that("update_comment updates a comment and returns the properties", {
   expect_identical(pull_comment$commit, as.character(branch_sha))
   expect_identical(pull_comment$path, "test-comments.txt")
   expect_identical(pull_comment$position, 1L)
-  expect_identical(pull_comment$user, "ChadGoymer")
+  expect_identical(pull_comment$user, user$login)
 
 
   commit_comment <- update_comment(
     comment = commit_comment_id,
     body    = "This comment has been updated by update_comment()",
     type    = "commit",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(commit_comment, "list")
@@ -374,7 +376,7 @@ test_that("update_comment updates a comment and returns the properties", {
   expect_identical(commit_comment$commit, as.character(main_sha))
   expect_identical(commit_comment$path, "README.md")
   expect_identical(commit_comment$position, 1L)
-  expect_identical(commit_comment$user, "ChadGoymer")
+  expect_identical(commit_comment$user, user$login)
 
 })
 
@@ -469,7 +471,7 @@ test_that("view_comments returns a tibble of comment properties", {
 test_that("view_comments throws as error if invalid arguments are supplied", {
 
   expect_error(
-    view_comments(repo = str_c("ChadGoymer/test-comments-", suffix)),
+    view_comments(repo = repo$full_name),
     "An 'issue', 'pull_request', 'commit' or 'gist' must be specified"
   )
 
@@ -503,13 +505,13 @@ test_that("view_comment returns a list of the properties", {
     gist_comment$body,
     "This comment has been updated by update_comment()"
   )
-  expect_identical(gist_comment$user, "ChadGoymer")
+  expect_identical(gist_comment$user, user$login)
 
 
   issue_comment <- view_comment(
     comment = issue_comment_id,
     type    = "issue",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(issue_comment, "list")
@@ -530,13 +532,13 @@ test_that("view_comment returns a list of the properties", {
     issue_comment$body,
     "This comment has been updated by update_comment()"
   )
-  expect_identical(issue_comment$user, "ChadGoymer")
+  expect_identical(issue_comment$user, user$login)
 
 
   pull_comment <- view_comment(
     comment = pull_comment_id,
     type    = "pull_request",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(pull_comment, "list")
@@ -563,13 +565,13 @@ test_that("view_comment returns a list of the properties", {
   expect_identical(pull_comment$commit, as.character(branch_sha))
   expect_identical(pull_comment$path, "test-comments.txt")
   expect_identical(pull_comment$position, 1L)
-  expect_identical(pull_comment$user, "ChadGoymer")
+  expect_identical(pull_comment$user, user$login)
 
 
   commit_comment <- view_comment(
     comment = commit_comment_id,
     type    = "commit",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(commit_comment, "list")
@@ -596,7 +598,7 @@ test_that("view_comment returns a list of the properties", {
   expect_identical(commit_comment$commit, as.character(main_sha))
   expect_identical(commit_comment$path, "README.md")
   expect_identical(commit_comment$position, 1L)
-  expect_identical(commit_comment$user, "ChadGoymer")
+  expect_identical(commit_comment$user, user$login)
 
 })
 
@@ -610,40 +612,45 @@ test_that("browse_comment opens the comment's page in the browser", {
   issue_comment <- browse_comment(
     comment = issue_comment_id,
     type    = "issue",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(issue_comment, "character")
   expect_identical(attr(issue_comment, "status"), 200L)
+
+  base_url <- getOption("github.oauth") %>%
+    str_remove("login/oauth") %>%
+    str_c(user$login)
+
   expect_identical(
     dirname(issue_comment),
-    str_c("https://github.com/ChadGoymer/test-comments-", suffix, "/issues")
+    str_c(base_url, "/test-comments-", suffix, "/issues")
   )
 
   pull_comment <- browse_comment(
     comment = pull_comment_id,
     type    = "pull_request",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(pull_comment, "character")
   expect_identical(attr(pull_comment, "status"), 200L)
   expect_identical(
     dirname(pull_comment),
-    str_c("https://github.com/ChadGoymer/test-comments-", suffix, "/pull")
+    str_c(base_url, "/test-comments-", suffix, "/pull")
   )
 
   commit_comment <- browse_comment(
     comment = commit_comment_id,
     type    = "commit",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(commit_comment, "character")
   expect_identical(attr(commit_comment, "status"), 200L)
   expect_identical(
     dirname(commit_comment),
-    str_c("https://github.com/ChadGoymer/test-comments-", suffix, "/commit")
+    str_c(base_url, "/test-comments-", suffix, "/commit")
   )
 
 })
@@ -666,7 +673,7 @@ test_that("delete_comment deletes a comment", {
   issue_comment <- delete_comment(
     comment = issue_comment_id,
     type    = "issue",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(issue_comment, "logical")
@@ -677,7 +684,7 @@ test_that("delete_comment deletes a comment", {
   pull_comment <- delete_comment(
     comment = pull_comment_id,
     type    = "pull_request",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(pull_comment, "logical")
@@ -688,7 +695,7 @@ test_that("delete_comment deletes a comment", {
   commit_comment <- delete_comment(
     comment = commit_comment_id,
     type    = "commit",
-    repo    = str_c("ChadGoymer/test-comments-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(commit_comment, "logical")
