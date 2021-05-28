@@ -1,13 +1,10 @@
-context("branches")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_repository(
+  repo <- create_repository(
     name        = str_c("test-branches-", suffix),
     description = "This is a repository to test branches",
     auto_init   = TRUE
@@ -20,15 +17,15 @@ setup(suppressMessages({
     path    = str_c("test-branches-", suffix, ".txt"),
     branch  = str_c("test-branches-1-", suffix),
     message = "Commit to test branches",
-    repo    = str_c("ChadGoymer/test-branches-", suffix),
-    parent  = "main"
+    repo    = repo$full_name,
+    parent  = repo$default_branch
   )
 
-}))
+})
 
 teardown(suppressMessages({
 
-  delete_repository(str_c("ChadGoymer/test-branches-", suffix))
+  try(delete_repository(repo$full_name), silent = TRUE)
 
 }))
 
@@ -37,17 +34,12 @@ teardown(suppressMessages({
 
 test_that("create_branch creates a branch and returns a list of properties", {
 
-  main_sha <- gh_url(
-    "repos",
-    str_c("ChadGoymer/test-branches-", suffix),
-    "commits/heads/main"
-  ) %>%
-    gh_request("GET", accept = "application/vnd.github.VERSION.sha")
+  main_sha <- view_sha(ref = repo$default_branch, repo = repo$full_name)
 
   new_branch <- create_branch(
     name = str_c("test-branches-2-", suffix),
-    ref  = "main",
-    repo = str_c("ChadGoymer/test-branches-", suffix)
+    ref  = repo$default_branch,
+    repo = repo$full_name
   )
 
   expect_is(new_branch, "list")
@@ -72,18 +64,15 @@ test_that("create_branch creates a branch and returns a list of properties", {
 
 test_that("update_branch updates a branch and returns a list of properties", {
 
-  update_sha <- gh_url(
-    "repos",
-    str_c("ChadGoymer/test-branches-", suffix),
-    "commits/heads",
-    str_c("test-branches-1-", suffix)
-  ) %>%
-    gh_request("GET", accept = "application/vnd.github.VERSION.sha")
+  update_sha <- view_sha(
+    ref = str_c("test-branches-1-", suffix),
+    repo = repo$full_name
+  )
 
   updated_branch <- update_branch(
     branch = str_c("test-branches-2-", suffix),
     ref    = str_c("test-branches-1-", suffix),
-    repo   = str_c("ChadGoymer/test-branches-", suffix)
+    repo   = repo$full_name
   )
 
   expect_is(updated_branch, "list")
@@ -109,7 +98,7 @@ test_that("update_branch updates a branch and returns a list of properties", {
 test_that("view_branches returns a tibble of branch properties", {
 
   all_branches <- view_branches(
-    repo  = str_c("ChadGoymer/test-branches-", suffix),
+    repo  = repo$full_name,
     n_max = 10
   )
 
@@ -138,7 +127,7 @@ test_that("view_branch returns a list of branch properties", {
 
   branch <- view_branch(
     branch = str_c("test-branches-1-", suffix),
-    repo   = str_c("ChadGoymer/test-branches-", suffix)
+    repo   = repo$full_name
   )
 
   expect_is(branch, "list")
@@ -164,7 +153,7 @@ test_that("delete_branch deletes a branch", {
 
   deleted_branch <- delete_branch(
     branch = str_c("test-branches-1-", suffix),
-    repo   = str_c("ChadGoymer/test-branches-", suffix)
+    repo   = repo$full_name
   )
 
   expect_is(deleted_branch, "logical")
