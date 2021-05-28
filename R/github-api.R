@@ -830,19 +830,15 @@ gh_download <- function(
 #
 #' @export
 #'
-print.github <- function(x, n_urls = 2, ...) {
+print.github <- function(x, ...) {
   urls <- attr(x, "url")
 
   if (!is_null(urls)) {
-    if (length(urls) > n_urls) {
-      urls <- c(urls[1:n_urls], "...")
-    }
-
     cat(
       "\033[34m",
       str_c(
         "# ", attr(x, "request"), " \033[4m",
-        str_replace_all(urls, "%20", " "), "\033[24m\n"
+        str_replace_all(urls[[1]], "%20", " "), "\033[24m\n"
       ),
       "\033[39m",
       sep = ""
