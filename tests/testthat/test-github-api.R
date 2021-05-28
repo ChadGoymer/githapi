@@ -1,13 +1,10 @@
-context("github api")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_repository(
+  repo <- create_repository(
     name        = str_c("test-github-api-", suffix),
     description = "This is a repository to test github api",
     auto_init   = TRUE
@@ -17,15 +14,15 @@ setup(suppressMessages({
 
   create_branch(
     name = "test-api",
-    ref  = "main",
-    repo = str_c("ChadGoymer/test-github-api-", suffix)
+    ref  = repo$default_branch,
+    repo = repo$full_name
   )
 
-}))
+})
 
 teardown(suppressMessages({
 
-  delete_repository(str_c("ChadGoymer/test-github-api-", suffix))
+  try(delete_repository(repo$full_name), silent = TRUE)
 
 }))
 
@@ -213,19 +210,8 @@ test_that("gh_url returns a valid URL for the GitHub API", {
 
 test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
 
-  main_sha <- str_c(
-    "repos/ChadGoymer/test-github-api-", suffix,
-    "/commits/heads/main"
-  ) %>%
-    gh_url() %>%
-    gh_request("GET", accept = "application/vnd.github.VERSION.sha")
-
-  test_sha <- str_c(
-    "repos/ChadGoymer/test-github-api-", suffix,
-    "/commits/heads/test-api"
-  ) %>%
-    gh_url() %>%
-    gh_request("GET", accept = "application/vnd.github.VERSION.sha")
+  main_sha <- view_sha(ref = repo$default_branch, repo = repo$full_name)
+  test_sha <- view_sha(ref = "test-api", repo = repo$full_name)
 
   test_tag <- str_c(
     "refs/tags/test-gh-request-", format(Sys.time(), "%Y-%m-%d-%H-%M-%S")
@@ -233,8 +219,7 @@ test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
 
   created_tag <- gh_request(
     url     = str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/refs"
+      getOption("github.api"), "/repos/", repo$full_name, "/git/refs"
     ),
     type    = "POST",
     payload = list(ref = test_tag, sha = main_sha)
@@ -247,8 +232,7 @@ test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
   expect_identical(
     attr(created_tag, "url"),
     str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/refs"
+      getOption("github.api"), "/repos/", repo$full_name, "/git/refs"
     )
   )
   expect_identical(attr(created_tag, "request"), "POST")
@@ -257,8 +241,7 @@ test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
 
   viewed_tag <- gh_request(
     url  = str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/", test_tag
+      getOption("github.api"), "/repos/", repo$full_name, "/git/", test_tag
     ),
     type = "GET"
   )
@@ -270,8 +253,7 @@ test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
   expect_identical(
     attr(viewed_tag, "url"),
     str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/", test_tag
+      getOption("github.api"), "/repos/", repo$full_name, "/git/", test_tag
     )
   )
   expect_identical(attr(viewed_tag, "request"), "GET")
@@ -280,8 +262,7 @@ test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
 
   updated_tag <- gh_request(
     url     = str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/", test_tag
+      getOption("github.api"), "/repos/", repo$full_name, "/git/", test_tag
     ),
     type    = "PATCH",
     payload = list(sha = test_sha)
@@ -294,8 +275,7 @@ test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
   expect_identical(
     attr(updated_tag, "url"),
     str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/", test_tag
+      getOption("github.api"), "/repos/", repo$full_name, "/git/", test_tag
     )
   )
   expect_identical(attr(updated_tag, "request"), "PATCH")
@@ -304,8 +284,7 @@ test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
 
   deleted_tag <- gh_request(
     url  = str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/", test_tag
+      getOption("github.api"), "/repos/", repo$full_name, "/git/", test_tag
     ),
     type = "DELETE"
   )
@@ -315,8 +294,7 @@ test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
   expect_identical(
     attr(deleted_tag, "url"),
     str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/", test_tag
+      getOption("github.api"), "/repos/", repo$full_name, "/git/", test_tag
     )
   )
   expect_identical(attr(deleted_tag, "request"), "DELETE")
@@ -326,8 +304,7 @@ test_that("gh_request can GET, POST, PATCH and DELETE a tag", {
   expect_error(
     gh_request(
       url  = str_c(
-        "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-        "/git/", test_tag
+        getOption("github.api"), "/repos/", repo$full_name, "/git/", test_tag
       ),
       type = "GET"
     )
@@ -350,19 +327,19 @@ test_that("gh_request can make a request using an OAuth token", {
   })
 
   main <- str_c(
-    "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-    "/git/refs/heads/main"
+    getOption("github.api"), "/repos/", repo$full_name,
+    "/git/refs/heads/", repo$default_branch
   ) %>%
     gh_request("GET", token = NULL)
 
   expect_is(main, "list")
-  expect_identical(main$ref, "refs/heads/main")
+  expect_identical(main$ref, str_c("refs/heads/", repo$default_branch))
 
   expect_identical(
     attr(main, "url"),
     str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/refs/heads/main"
+      getOption("github.api"), "/repos/", repo$full_name,
+      "/git/refs/heads/", repo$default_branch
     )
   )
   expect_identical(attr(main, "request"), "GET")
@@ -377,7 +354,7 @@ test_that("gh_request can make a request using an OAuth token", {
 test_that("gh_page returns a list of specified length", {
 
   users_20 <- gh_page(
-    url   = file.path(getOption("github.api"), "users"),
+    url   = str_c(getOption("github.api"), "/users"),
     n_max = 20
   )
 
@@ -386,14 +363,14 @@ test_that("gh_page returns a list of specified length", {
 
   expect_identical(
     attr(users_20, "url"),
-    "https://api.github.com/users?per_page=20"
+    str_c(getOption("github.api"), "/users?per_page=20")
   )
   expect_identical(attr(users_20, "request"), "GET")
   expect_identical(attr(users_20, "status"), 200L)
   expect_true(length(attr(users_20, "header")) > 1)
 
   users_150 <- gh_page(
-    url   = file.path(getOption("github.api"), "users"),
+    url   = str_c(getOption("github.api"), "/users"),
     n_max = 150
   )
 
@@ -402,9 +379,9 @@ test_that("gh_page returns a list of specified length", {
 
   expect_identical(
     attr(users_150, "url"),
-    c(
-      "https://api.github.com/users?per_page=100",
-      "https://api.github.com/users?per_page=50&since=135"
+    str_c(
+      getOption("github.api"),
+      c("/users?per_page=100", "/users?per_page=50&since=135")
     )
   )
   expect_identical(attr(users_150, "request"), "GET")
@@ -416,8 +393,8 @@ test_that("gh_page returns a list of specified length", {
 test_that("gh_page still works when the endpoint returns a singular response", {
 
   main <- str_c(
-    "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-    "/git/refs/heads/main"
+    getOption("github.api"), "/repos/", repo$full_name,
+    "/git/refs/heads/", repo$default_branch
   ) %>%
     gh_page()
 
@@ -427,8 +404,8 @@ test_that("gh_page still works when the endpoint returns a singular response", {
   expect_identical(
     attr(main, "url"),
     str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-      "/git/refs/heads/main?per_page=100"
+      getOption("github.api"), "/repos/", repo$full_name,
+      "/git/refs/heads/", repo$default_branch, "?per_page=100"
     )
   )
   expect_identical(attr(main, "request"), "GET")
@@ -443,12 +420,12 @@ test_that("gh_page still works when the endpoint returns a singular response", {
 test_that("gh_find locate an entity with the specified property value", {
 
   users_150 <- gh_page(
-    url   = file.path(getOption("github.api"), "users"),
+    url   = str_c(getOption("github.api"), "/users"),
     n_max = 150
   )
 
   user_25 <- gh_find(
-    url      = file.path(getOption("github.api"), "users"),
+    url      = str_c(getOption("github.api"), "/users"),
     property = "login",
     value    = users_150[[25]]$login
   )
@@ -458,14 +435,14 @@ test_that("gh_find locate an entity with the specified property value", {
 
   expect_identical(
     attr(user_25, "url"),
-    "https://api.github.com/users?per_page=100"
+    str_c(getOption("github.api"), "/users?per_page=100")
   )
   expect_identical(attr(user_25, "request"), "GET")
   expect_identical(attr(user_25, "status"), 200L)
   expect_true(length(attr(user_25, "header")) > 1)
 
   user_125 <- gh_find(
-    url      = file.path(getOption("github.api"), "users"),
+    url      = str_c(getOption("github.api"), "/users"),
     property = "login",
     value    = users_150[[125]]$login
   )
@@ -475,7 +452,7 @@ test_that("gh_find locate an entity with the specified property value", {
 
   expect_identical(
     attr(user_125, "url"),
-    "https://api.github.com/users?per_page=100&since=135"
+    str_c(getOption("github.api"), "/users?per_page=100&since=135")
   )
   expect_identical(attr(user_125, "request"), "GET")
   expect_identical(attr(user_125, "status"), 200L)
@@ -488,8 +465,7 @@ test_that("gh_find throws an error if it cannot find the property value", {
   expect_error(
     gh_find(
       url      = str_c(
-        "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
-        "/git/refs/heads"
+        getOption("github.api"), "/repos/", repo$full_name, "/git/refs/heads/"
       ),
       property = "ref",
       value    = "refs/heads/bob"
@@ -510,7 +486,7 @@ test_that("gh_download downloads a file to a location and returns the path", {
   on.exit(unlink(temp_path))
 
   file_path <- str_c(
-    "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
+    getOption("github.api"), "/repos/", repo$full_name,
     "/contents/README.md"
   ) %>%
     gh_download(
@@ -528,7 +504,7 @@ test_that("gh_download downloads a file to a location and returns the path", {
 
   expect_error(
     str_c(
-      "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
+      getOption("github.api"), "/repos/", repo$full_name,
       "/contents/Bob.txt"
     ) %>%
       gh_download(path = file.path(temp_path, "Bob.txt")),
@@ -557,7 +533,7 @@ test_that("gh_download can make a request using an OAuth token", {
   on.exit(unlink(temp_path))
 
   file_path <- str_c(
-    "https://api.github.com/repos/ChadGoymer/test-github-api-", suffix,
+    getOption("github.api"), "/repos/", repo$full_name,
     "/contents/README.md"
   ) %>%
     gh_download(
@@ -674,8 +650,6 @@ test_that("print.github correctly prints multiple URLs", {
     urls_output,
     c(
       "\033[34m# GET \033[4mhttps://somwhere/Bob1\033[24m",
-      "# GET \033[4mhttps://somwhere/Bob2\033[24m",
-      "# GET \033[4m...\033[24m",
       "\033[39m[1] \"Bob\""
     )
   )
