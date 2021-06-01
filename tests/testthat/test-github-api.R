@@ -420,44 +420,45 @@ test_that("gh_page still works when the endpoint returns a singular response", {
 
 test_that("gh_find locate an entity with the specified property value", {
 
-  users_150 <- gh_page(
+  users_15 <- gh_page(
     url   = str_c(getOption("github.api"), "/users"),
-    n_max = 150
+    n_max = 15
   )
 
-  user_25 <- gh_find(
+  user_5 <- gh_find(
     url      = str_c(getOption("github.api"), "/users"),
     property = "login",
-    value    = users_150[[25]]$login
+    value    = users_15[[5]]$login
   )
 
-  expect_is(user_25, "list")
-  expect_identical(user_25$login, users_150[[25]]$login)
+  expect_is(user_5, "list")
+  expect_identical(user_5$login, users_15[[5]]$login)
 
   expect_identical(
-    attr(user_25, "url"),
+    attr(user_5, "url"),
     str_c(getOption("github.api"), "/users?per_page=100")
   )
-  expect_identical(attr(user_25, "request"), "GET")
-  expect_identical(attr(user_25, "status"), 200L)
-  expect_true(length(attr(user_25, "header")) > 1)
+  expect_identical(attr(user_5, "request"), "GET")
+  expect_identical(attr(user_5, "status"), 200L)
+  expect_true(length(attr(user_5, "header")) > 1)
 
-  user_125 <- gh_find(
-    url      = str_c(getOption("github.api"), "/users"),
-    property = "login",
-    value    = users_150[[125]]$login
+  user_15 <- gh_find(
+    url       = str_c(getOption("github.api"), "/users"),
+    property  = "login",
+    value     = users_15[[15]]$login,
+    page_size = 10
   )
 
-  expect_is(user_125, "list")
-  expect_identical(user_125$login, users_150[[125]]$login)
+  expect_is(user_15, "list")
+  expect_identical(user_15$login, users_15[[15]]$login)
 
   expect_identical(
-    attr(user_125, "url"),
-    str_c(getOption("github.api"), "/users?per_page=100&since=135")
+    str_split(attr(user_15, "url"), "&")[[1]][[1]],
+    str_c(getOption("github.api"), "/users?per_page=10")
   )
-  expect_identical(attr(user_125, "request"), "GET")
-  expect_identical(attr(user_125, "status"), 200L)
-  expect_true(length(attr(user_125, "header")) > 1)
+  expect_identical(attr(user_15, "request"), "GET")
+  expect_identical(attr(user_15, "status"), 200L)
+  expect_true(length(attr(user_15, "header")) > 1)
 
 })
 

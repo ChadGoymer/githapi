@@ -570,6 +570,7 @@ gh_page <- function(
 #' @param value (scalar) The property value to search for.
 #' @param max_pages (integer, optional) The maximum number of pages to search
 #'   through. Default: 100.
+#' @param page_size (integer, optional) The size of each page. Default: 100.
 #' @param headers (character, optional) Headers to add to the request. Default:
 #'   `NULL`.
 #' @param accept (string, optional) The mime format to accept when making the
@@ -608,6 +609,7 @@ gh_find <- function(
   property,
   value,
   max_pages = 100,
+  page_size = 100,
   headers   = NULL,
   accept    = "application/vnd.github.v3+json",
   token     = gh_token(),
@@ -631,6 +633,10 @@ gh_find <- function(
     "'max_pages' must be a positive integer:\n  ", max_pages
   )
   assert(
+    is_scalar_integerish(page_size) && isTRUE(page_size > 0),
+    "'page_size' must be a positive integer:\n  ", page_size
+  )
+  assert(
     is_null(headers) || is_character(headers),
     "'headers' must be a character vector:\n  ", headers
   )
@@ -648,7 +654,7 @@ gh_find <- function(
   )
 
   parsed_url <- httr::parse_url(url)
-  parsed_url$query$per_page <- "100"
+  parsed_url$query$per_page <- as.character(page_size)
   page_url <- httr::build_url(parsed_url)
 
   for (p in 1:max_pages) {

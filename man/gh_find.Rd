@@ -9,6 +9,7 @@ gh_find(
   property,
   value,
   max_pages = 100,
+  page_size = 100,
   headers = NULL,
   accept = "application/vnd.github.v3+json",
   token = gh_token(),
@@ -25,6 +26,8 @@ gh_find(
 
 \item{max_pages}{(integer, optional) The maximum number of pages to search
 through. Default: 100.}
+
+\item{page_size}{(integer, optional) The size of each page. Default: 100.}
 
 \item{headers}{(character, optional) Headers to add to the request. Default:
 \code{NULL}.}
