@@ -208,7 +208,7 @@ test_that("view_teams returns a tibble summarising the teams", {
     "Authenticated user is not a member of an organization"
   )
 
-  org_teams <- view_teams(org$login, n_max = 10)
+  org_teams <- view_teams(org$login)
 
   expect_is(org_teams, "tbl")
   expect_identical(attr(org_teams, "status"), 200L)
@@ -230,8 +230,7 @@ test_that("view_teams returns a tibble summarising the teams", {
 
   team_teams <- view_teams(
     org         = org$login,
-    parent_team = str_c("Test team 3 ", suffix),
-    n_max       = 10
+    parent_team = str_c("Test team 3 ", suffix)
   )
 
   expect_is(team_teams, "tbl")
@@ -252,7 +251,7 @@ test_that("view_teams returns a tibble summarising the teams", {
 
   expect_true(str_c("First test team ", suffix) %in% team_teams$name)
 
-  user_teams <- view_teams(n_max = 10)
+  user_teams <- view_teams()
 
   expect_is(user_teams, "tbl")
   expect_identical(attr(user_teams, "status"), 200L)
