@@ -114,7 +114,7 @@ test_that("gh_token throws an error if an invalid token is specified", {
 
 test_that("gh_url returns a valid URL for the GitHub API", {
 
-  expect_identical(gh_url(), str_c(getOption("github.api"), "/"))
+  expect_identical(str_remove(gh_url(), "/$"), getOption("github.api"))
 
   expect_identical(
     gh_url("repos"),
@@ -353,40 +353,41 @@ test_that("gh_request can make a request using an OAuth token", {
 
 test_that("gh_page returns a list of specified length", {
 
-  users_20 <- gh_page(
+  users_10 <- gh_page(
     url   = str_c(getOption("github.api"), "/users"),
-    n_max = 20
+    n_max = 10
   )
 
-  expect_is(users_20, "list")
-  expect_identical(length(users_20), 20L)
+  expect_is(users_10, "list")
+  expect_identical(length(users_10), 10L)
 
   expect_identical(
-    attr(users_20, "url"),
-    str_c(getOption("github.api"), "/users?per_page=20")
+    attr(users_10, "url"),
+    str_c(getOption("github.api"), "/users?per_page=10")
   )
-  expect_identical(attr(users_20, "request"), "GET")
-  expect_identical(attr(users_20, "status"), 200L)
-  expect_true(length(attr(users_20, "header")) > 1)
+  expect_identical(attr(users_10, "request"), "GET")
+  expect_identical(attr(users_10, "status"), 200L)
+  expect_true(length(attr(users_10, "header")) > 1)
 
-  users_150 <- gh_page(
-    url   = str_c(getOption("github.api"), "/users"),
-    n_max = 150
+  users_15 <- gh_page(
+    url       = str_c(getOption("github.api"), "/users"),
+    n_max     = 15,
+    page_size = 10
   )
 
-  expect_is(users_150, "list")
-  expect_identical(length(users_150), 150L)
+  expect_is(users_15, "list")
+  expect_identical(length(users_15), 15L)
 
   expect_identical(
-    attr(users_150, "url"),
+    str_split(attr(users_15, "url"), "&") %>% map_chr(first),
     str_c(
       getOption("github.api"),
-      c("/users?per_page=100", "/users?per_page=50&since=135")
+      c("/users?per_page=10", "/users?per_page=5")
     )
   )
-  expect_identical(attr(users_150, "request"), "GET")
-  expect_identical(attr(users_150, "status"), c(200L, 200L))
-  expect_true(length(attr(users_150, "header")) > 1)
+  expect_identical(attr(users_15, "request"), "GET")
+  expect_identical(attr(users_15, "status"), c(200L, 200L))
+  expect_true(length(attr(users_15, "header")) > 1)
 
 })
 
@@ -399,7 +400,7 @@ test_that("gh_page still works when the endpoint returns a singular response", {
     gh_page()
 
   expect_is(main, "list")
-  expect_identical(main$ref, "refs/heads/main")
+  expect_identical(main$ref, str_c("refs/heads/", repo$default_branch))
 
   expect_identical(
     attr(main, "url"),

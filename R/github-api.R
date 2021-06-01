@@ -424,6 +424,7 @@ gh_request <- function(
 #'
 #' @param url (string) The address of the API endpoint.
 #' @param n_max (integer, optional) Maximum number to return. Default: 1000.
+#' @param page_size (integer, optional) The size of each page. Default: 100.
 #' @param headers (character, optional) Headers to add to the request. Default:
 #'   `NULL`.
 #' @param accept (string, optional) The mime format to accept when making the
@@ -464,11 +465,12 @@ gh_request <- function(
 #'
 gh_page <- function(
   url,
-  n_max   = 1000,
-  headers = NULL,
-  accept  = "application/vnd.github.v3+json",
-  token   = gh_token(),
-  proxy   = getOption("github.proxy"),
+  n_max    = 1000,
+  page_size = 100,
+  headers   = NULL,
+  accept    = "application/vnd.github.v3+json",
+  token     = gh_token(),
+  proxy     = getOption("github.proxy"),
   ...
 ) {
   assert(
@@ -478,6 +480,10 @@ gh_page <- function(
   assert(
     is_scalar_integerish(n_max) && isTRUE(n_max > 0),
     "'n_max' must be a positive integer:\n  ", n_max
+  )
+  assert(
+    is_scalar_integerish(page_size) && isTRUE(page_size > 0),
+    "'page_size' must be a positive integer:\n  ", page_size
   )
   assert(
     is_null(headers) || is_character(headers),
@@ -497,7 +503,7 @@ gh_page <- function(
   )
 
   parsed_url <- httr::parse_url(url)
-  per_page   <- c(rep(100, n_max %/% 100), n_max %% 100)
+  per_page   <- c(rep(page_size, n_max %/% page_size), n_max %% page_size)
 
   response_list <- list()
   response_attr <- list()
