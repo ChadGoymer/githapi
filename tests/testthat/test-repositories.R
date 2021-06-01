@@ -1,47 +1,10 @@
-context("repositories")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_team(
-    name        = str_c("test-repositories-", suffix),
-    org         = "HairyCoos",
-    description = "This is a team to test repositories"
-  )
-
-}))
-
-teardown(suppressMessages({
-
-  try(silent = TRUE, {
-    delete_team(str_c("test-repositories-", suffix), org = "HairyCoos")
-  })
-
-  try(silent = TRUE, {
-    delete_repository(str_c("ChadGoymer/test-user-repository-", suffix))
-  })
-
-  try(silent = TRUE, {
-    delete_repository(str_c("HairyCoos/test-org-repository-", suffix))
-  })
-
-  try(silent = TRUE, {
-    delete_repository(str_c("ChadGoymer/test-updated-user-repository-", suffix))
-  })
-
-  try(silent = TRUE, {
-    delete_repository(str_c("HairyCoos/test-updated-org-repository-", suffix))
-  })
-
-}))
-
-# TEST: create_repository ------------------------------------------------------
-
-test_that("create_repository creates a repository and returns its properties", {
+  user <- view_user()
 
   user_repo <- create_repository(
     name        = str_c("test-user-repository-", suffix),
@@ -50,7 +13,56 @@ test_that("create_repository creates a repository and returns its properties", {
     auto_init   = TRUE
   )
 
-  Sys.sleep(1)
+  org <- view_organizations(user = NULL, n_max = 10) %>%
+    arrange(.data$login) %>%
+    slice(1)
+
+  if (nrow(org) == 1) {
+    create_team(
+      name        = str_c("test-repositories-", suffix),
+      org         = org$login,
+      description = "This is a team to test repositories"
+    )
+  }
+
+})
+
+teardown(suppressMessages({
+
+  try(
+    delete_team(str_c("test-repositories-", suffix), org = org$login),
+    silent = TRUE
+  )
+
+  try(
+    delete_repository(str_c(user$login, "/test-user-repository-", suffix)),
+    silent = TRUE
+  )
+
+  try(
+    delete_repository(str_c(org$login, "/test-org-repository-", suffix)),
+    silent = TRUE
+  )
+
+  try(
+    delete_repository(
+      str_c(user$login, "/test-updated-user-repository-", suffix)
+    ),
+    silent = TRUE
+  )
+
+  try(
+    delete_repository(
+      str_c(org$login, "/test-updated-org-repository-", suffix)
+    ),
+    silent = TRUE
+  )
+
+}))
+
+# TEST: create_repository ------------------------------------------------------
+
+test_that("create_repository creates a repository and returns its properties", {
 
   expect_is(user_repo, "list")
   expect_identical(attr(user_repo, "status"), 201L)
@@ -91,15 +103,20 @@ test_that("create_repository creates a repository and returns its properties", {
 
   expect_identical(
     user_repo$full_name,
-    str_c("ChadGoymer/test-user-repository-", suffix)
+    str_c(user$login, "/test-user-repository-", suffix)
   )
   expect_identical(user_repo$description, "This is a user repository")
   expect_identical(user_repo$homepage, "https://user-repository.com")
 
 
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
+  )
+
   org_repo <- create_repository(
     name        = str_c("test-org-repository-", suffix),
-    org         = "HairyCoos",
+    org         = org$login,
     description = "This is an organization respository",
     homepage    = "https://org-repository.com"
   )
@@ -143,7 +160,7 @@ test_that("create_repository creates a repository and returns its properties", {
 
   expect_identical(
     org_repo$full_name,
-    str_c("HairyCoos/test-org-repository-", suffix)
+    str_c(org$login, "/test-org-repository-", suffix)
   )
   expect_identical(org_repo$description, "This is an organization respository")
   expect_identical(org_repo$homepage, "https://org-repository.com")
@@ -156,14 +173,14 @@ test_that("create_repository creates a repository and returns its properties", {
 test_that("update_repository changes a repository's properties", {
 
   user_repo <- update_repository(
-    repo           = str_c("ChadGoymer/test-user-repository-", suffix),
+    repo           = str_c(user$login, "/test-user-repository-", suffix),
     name           = str_c("test-updated-user-repository-", suffix),
     description    = "This is an updated user respository",
     homepage       = "https://updated-user-repository.com",
     has_issues     = FALSE,
     has_projects   = FALSE,
     has_wiki       = FALSE,
-    default_branch = "main"
+    default_branch = user_repo$default_branch
   )
 
   expect_is(user_repo, "list")
@@ -205,18 +222,67 @@ test_that("update_repository changes a repository's properties", {
 
   expect_identical(
     user_repo$full_name,
-    str_c("ChadGoymer/test-updated-user-repository-", suffix)
+    str_c(user$login, "/test-updated-user-repository-", suffix)
   )
   expect_identical(user_repo$description, "This is an updated user respository")
   expect_identical(user_repo$homepage, "https://updated-user-repository.com")
   expect_false(user_repo$has_issues)
   expect_false(user_repo$has_projects)
   expect_false(user_repo$has_wiki)
-  expect_identical(user_repo$default_branch, "main")
 
+
+  archived_repo <- update_repository(
+    repo     = str_c(user$login, "/test-updated-user-repository-", suffix),
+    archived = TRUE
+  )
+
+  expect_is(archived_repo, "list")
+  expect_identical(attr(archived_repo, "status"), 200L)
+  expect_identical(
+    map_chr(archived_repo, ~ class(.)[[1]]),
+    c(
+      id                 = "integer",
+      name               = "character",
+      full_name          = "character",
+      description        = "character",
+      owner              = "character",
+      homepage           = "character",
+      language           = "character",
+      size               = "numeric",
+      default_branch     = "character",
+      permission         = "character",
+      private            = "logical",
+      has_issues         = "logical",
+      has_projects       = "logical",
+      has_wiki           = "logical",
+      has_pages          = "logical",
+      has_downloads      = "logical",
+      allow_squash_merge = "logical",
+      allow_merge_commit = "logical",
+      allow_rebase_merge = "logical",
+      fork               = "logical",
+      archived           = "logical",
+      disabled           = "logical",
+      watchers_count     = "integer",
+      stargazers_count   = "integer",
+      forks_count        = "integer",
+      html_url           = "character",
+      pushed_at          = "POSIXct",
+      created_at         = "POSIXct",
+      updated_at         = "POSIXct"
+    )
+  )
+
+  expect_true(archived_repo$archived)
+
+
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
+  )
 
   org_repo <- update_repository(
-    repo                   = str_c("HairyCoos/test-org-repository-", suffix),
+    repo                   = str_c(org$login, "/test-org-repository-", suffix),
     name                   = str_c("test-updated-org-repository-", suffix),
     description            = "This is an updated organization respository",
     homepage               = "https://updated-org-repository.com",
@@ -266,7 +332,7 @@ test_that("update_repository changes a repository's properties", {
 
   expect_identical(
     org_repo$full_name,
-    str_c("HairyCoos/test-updated-org-repository-", suffix)
+    str_c(org$login, "/test-updated-org-repository-", suffix)
   )
   expect_identical(
     org_repo$description,
@@ -279,53 +345,8 @@ test_that("update_repository changes a repository's properties", {
   expect_true(org_repo$allow_rebase_merge)
 
 
-  archived_repo <- update_repository(
-    repo     = str_c("ChadGoymer/test-updated-user-repository-", suffix),
-    archived = TRUE
-  )
-
-  expect_is(archived_repo, "list")
-  expect_identical(attr(archived_repo, "status"), 200L)
-  expect_identical(
-    map_chr(archived_repo, ~ class(.)[[1]]),
-    c(
-      id                 = "integer",
-      name               = "character",
-      full_name          = "character",
-      description        = "character",
-      owner              = "character",
-      homepage           = "character",
-      language           = "character",
-      size               = "numeric",
-      default_branch     = "character",
-      permission         = "character",
-      private            = "logical",
-      has_issues         = "logical",
-      has_projects       = "logical",
-      has_wiki           = "logical",
-      has_pages          = "logical",
-      has_downloads      = "logical",
-      allow_squash_merge = "logical",
-      allow_merge_commit = "logical",
-      allow_rebase_merge = "logical",
-      fork               = "logical",
-      archived           = "logical",
-      disabled           = "logical",
-      watchers_count     = "integer",
-      stargazers_count   = "integer",
-      forks_count        = "integer",
-      html_url           = "character",
-      pushed_at          = "POSIXct",
-      created_at         = "POSIXct",
-      updated_at         = "POSIXct"
-    )
-  )
-
-  expect_true(archived_repo$archived)
-
-
   added_team_repo <- update_repository(
-    repo       = str_c("HairyCoos/test-updated-org-repository-", suffix),
+    repo       = str_c(org$login, "/test-updated-org-repository-", suffix),
     team       = str_c("test-repositories-", suffix),
     permission = "pull"
   )
@@ -368,16 +389,16 @@ test_that("update_repository changes a repository's properties", {
   )
 
   read_repo <- view_repository(
-    repo = str_c("HairyCoos/test-updated-org-repository-", suffix),
+    repo = str_c(org$login, "/test-updated-org-repository-", suffix),
     team = str_c("test-repositories-", suffix),
-    org  = "HairyCoos"
+    org  = org$login
   )
 
   expect_identical(read_repo$permission, "pull")
 
 
   updated_team_repo <- update_repository(
-    repo       = str_c("HairyCoos/test-updated-org-repository-", suffix),
+    repo       = str_c(org$login, "/test-updated-org-repository-", suffix),
     team       = str_c("test-repositories-", suffix),
     permission = "maintain"
   )
@@ -420,9 +441,9 @@ test_that("update_repository changes a repository's properties", {
   )
 
   maintain_repo <- view_repository(
-    repo = str_c("HairyCoos/test-updated-org-repository-", suffix),
+    repo = str_c(org$login, "/test-updated-org-repository-", suffix),
     team = str_c("test-repositories-", suffix),
-    org  = "HairyCoos"
+    org  = org$login
   )
 
   expect_identical(maintain_repo$permission, "maintain")
@@ -434,7 +455,51 @@ test_that("update_repository changes a repository's properties", {
 
 test_that("view_repositories returns a tibble summarising the repositories", {
 
-  user_repos <- view_repositories(user = "ChadGoymer", n_max = 10)
+  auth_repos <- view_repositories(n_max = 10)
+
+  expect_is(auth_repos, "tbl")
+  expect_identical(attr(auth_repos, "status"), 200L)
+  expect_identical(
+    map_chr(auth_repos, ~ class(.)[[1]]),
+    c(
+      id                 = "integer",
+      name               = "character",
+      full_name          = "character",
+      description        = "character",
+      owner              = "character",
+      homepage           = "character",
+      language           = "character",
+      size               = "numeric",
+      default_branch     = "character",
+      permission         = "character",
+      private            = "logical",
+      has_issues         = "logical",
+      has_projects       = "logical",
+      has_wiki           = "logical",
+      has_pages          = "logical",
+      has_downloads      = "logical",
+      allow_squash_merge = "logical",
+      allow_merge_commit = "logical",
+      allow_rebase_merge = "logical",
+      fork               = "logical",
+      archived           = "logical",
+      disabled           = "logical",
+      watchers_count     = "integer",
+      stargazers_count   = "integer",
+      forks_count        = "integer",
+      html_url           = "character",
+      pushed_at          = "POSIXct",
+      created_at         = "POSIXct",
+      updated_at         = "POSIXct"
+    )
+  )
+
+  expect_true(
+    str_c("test-updated-user-repository-", suffix) %in% auth_repos$name
+  )
+
+
+  user_repos <- view_repositories(user = user$login, n_max = 10)
 
   expect_is(user_repos, "tbl")
   expect_identical(attr(user_repos, "status"), 200L)
@@ -483,7 +548,7 @@ test_that("view_repositories returns a tibble summarising the repositories", {
 
 
   ordered_repos <- view_repositories(
-    user      = "ChadGoymer",
+    user      = user$login,
     sort      = "full_name",
     direction = "asc",
     n_max     = 10
@@ -529,7 +594,12 @@ test_that("view_repositories returns a tibble summarising the repositories", {
   expect_identical(sort(ordered_repos$full_name), ordered_repos$full_name)
 
 
-  org_repos <- view_repositories(org = "HairyCoos", n_max = 10)
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
+  )
+
+  org_repos <- view_repositories(org = org$login, n_max = 10)
 
   expect_is(org_repos, "tbl")
   expect_identical(attr(org_repos, "status"), 200L)
@@ -579,7 +649,7 @@ test_that("view_repositories returns a tibble summarising the repositories", {
 
   team_repos <- view_repositories(
     team  = str_c("test-repositories-", suffix),
-    org   = "HairyCoos",
+    org   = org$login,
     n_max = 10
   )
 
@@ -630,50 +700,6 @@ test_that("view_repositories returns a tibble summarising the repositories", {
     "maintain"
   )
 
-
-  auth_repos <- view_repositories(n_max = 10)
-
-  expect_is(auth_repos, "tbl")
-  expect_identical(attr(auth_repos, "status"), 200L)
-  expect_identical(
-    map_chr(auth_repos, ~ class(.)[[1]]),
-    c(
-      id                 = "integer",
-      name               = "character",
-      full_name          = "character",
-      description        = "character",
-      owner              = "character",
-      homepage           = "character",
-      language           = "character",
-      size               = "numeric",
-      default_branch     = "character",
-      permission         = "character",
-      private            = "logical",
-      has_issues         = "logical",
-      has_projects       = "logical",
-      has_wiki           = "logical",
-      has_pages          = "logical",
-      has_downloads      = "logical",
-      allow_squash_merge = "logical",
-      allow_merge_commit = "logical",
-      allow_rebase_merge = "logical",
-      fork               = "logical",
-      archived           = "logical",
-      disabled           = "logical",
-      watchers_count     = "integer",
-      stargazers_count   = "integer",
-      forks_count        = "integer",
-      html_url           = "character",
-      pushed_at          = "POSIXct",
-      created_at         = "POSIXct",
-      updated_at         = "POSIXct"
-    )
-  )
-
-  expect_true(
-    str_c("test-updated-user-repository-", suffix) %in% auth_repos$name
-  )
-
 })
 
 
@@ -682,7 +708,7 @@ test_that("view_repositories returns a tibble summarising the repositories", {
 test_that("view_repository returns a list of repository properties", {
 
   test_repo <- view_repository(
-    repo = str_c("ChadGoymer/test-updated-user-repository-", suffix)
+    repo = str_c(user$login, "/test-updated-user-repository-", suffix)
   )
 
   expect_is(test_repo, "list")
@@ -737,14 +763,18 @@ test_that("browse_repository opens the repository's page in the browser", {
   skip_if(!interactive(), "browse_repository must be tested manually")
 
   repo <- browse_repository(
-    repo = str_c("ChadGoymer/test-updated-user-repository-", suffix)
+    repo = str_c(user$login, "/test-updated-user-repository-", suffix)
   )
+
+  base_url <- getOption("github.oauth") %>%
+    str_remove("login/oauth") %>%
+    str_c(user$login)
 
   expect_is(repo, "character")
   expect_identical(attr(repo, "status"), 200L)
   expect_identical(
     as.character(repo),
-    str_c("https://github.com/ChadGoymer/test-updated-user-repository-", suffix)
+    str_c(base_url, "/test-updated-user-repository-", suffix)
   )
 
 })
@@ -755,15 +785,20 @@ test_that("browse_repository opens the repository's page in the browser", {
 test_that("delete_repository removes a repository and returns TRUE", {
 
   user_repo <- delete_repository(
-    repo = str_c("ChadGoymer/test-updated-user-repository-", suffix)
+    repo = str_c(user$login, "/test-updated-user-repository-", suffix)
   )
 
   expect_is(user_repo, "logical")
   expect_identical(attr(user_repo, "status"), 204L)
   expect_identical(as.logical(user_repo), TRUE)
 
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
+  )
+
   org_repo <- delete_repository(
-    repo = str_c("HairyCoos/test-updated-org-repository-", suffix)
+    repo = str_c(org$login, "/test-updated-org-repository-", suffix)
   )
 
   expect_is(org_repo, "logical")

@@ -16,7 +16,7 @@ suppressMessages({
     slice(1)
 
   if (nrow(org) == 1) {
-    team <- create_team(
+    create_team(
       name        = str_c("Test projects ", suffix),
       description = "This was created to test team projects",
       org         = org$login
