@@ -139,16 +139,17 @@ create_team <- function(
   }
 
   if (!is_missing_or_null(parent_team)) {
+    parent_team_id <- parent_team
     if (is_scalar_character(parent_team)) {
-      parent_team <- gh_url("orgs", org, "teams") %>%
+      parent_team_id <- gh_url("orgs", org, "teams") %>%
         gh_find(property = "name", value = parent_team, ...) %>%
         pluck("id")
     }
     assert(
-      is_scalar_integerish(parent_team),
+      is_scalar_integerish(parent_team_id),
       "'parent_team' must be an integer or string:\n  ", parent_team
     )
-    payload$parent_team_id <- parent_team
+    payload$parent_team_id <- parent_team_id
   }
 
   team_lst <- gh_url("orgs", org, "teams") %>%
@@ -270,37 +271,39 @@ update_team <- function(
   }
 
   if (!is_missing_or_null(parent_team)) {
+    parent_team_id <- parent_team
     if (is_scalar_character(parent_team)) {
       assert(
         is_scalar_character(org),
         "'org' must be a string:\n  ", org
       )
-      parent_team <- gh_url("orgs", org, "teams") %>%
+      parent_team_id <- gh_url("orgs", org, "teams") %>%
         gh_find(property = "name", value = parent_team, ...) %>%
         pluck("id")
     }
     assert(
-      is_scalar_integerish(parent_team),
+      is_scalar_integerish(parent_team_id),
       "'parent_team' must be an integer or string:\n  ", parent_team
     )
-    payload$parent_team_id <- parent_team
+    payload$parent_team_id <- parent_team_id
   }
 
+  team_id <- team
   if (is_scalar_character(team)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
     )
-    team <- gh_url("orgs", org, "teams") %>%
+    team_id <- gh_url("orgs", org, "teams") %>%
       gh_find(property = "name", value = team, ...) %>%
       pluck("id")
   }
   assert(
-    is_scalar_integerish(team),
+    is_scalar_integerish(team_id),
     "'team' must be an integer or string:\n  ", team
   )
 
-  team_lst <- gh_url("teams", team) %>%
+  team_lst <- gh_url("teams", team_id) %>%
     gh_request("PATCH", payload = payload, ...)
 
   info("Transforming results", level = 4)
@@ -412,22 +415,23 @@ view_teams <- function(
   ...
 ) {
   if (!is_missing_or_null(parent_team)) {
+    parent_team_id <- parent_team
     if (is_scalar_character(parent_team)) {
       assert(
         is_scalar_character(org),
         "'org' must be a string:\n  ", org
       )
-      parent_team <- gh_url("orgs", org, "teams") %>%
+      parent_team_id <- gh_url("orgs", org, "teams") %>%
         gh_find(property = "name", value = parent_team, ...) %>%
         pluck("id")
     }
 
     assert(
-      is_scalar_integerish(parent_team),
+      is_scalar_integerish(parent_team_id),
       "'parent_team' must be an integer or string:\n  ", parent_team
     )
     info("Viewing child teams of the team '", parent_team, "'")
-    url <- gh_url("teams", parent_team, "teams")
+    url <- gh_url("teams", parent_team_id, "teams")
   }
   else if (!is_missing_or_null(org)) {
     assert(
@@ -462,22 +466,23 @@ view_team <- function(
   org,
   ...
 ) {
+  team_id <- team
   if (is_scalar_character(team)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
     )
-    team <- gh_url("orgs", org, "teams") %>%
+    team_id <- gh_url("orgs", org, "teams") %>%
       gh_find(property = "name", value = team, ...) %>%
       pluck("id")
   }
   assert(
-    is_scalar_integerish(team),
+    is_scalar_integerish(team_id),
     "'team' must be an integer or string:\n  ", team
   )
 
   info("Viewing team '", team, "'")
-  team_lst <- gh_url("teams", team) %>%
+  team_lst <- gh_url("teams", team_id) %>%
     gh_request("GET", ...)
 
   info("Transforming results", level = 4)
@@ -569,22 +574,23 @@ delete_team <- function(
   org,
   ...
 ) {
+  team_id <- team
   if (is_scalar_character(team)) {
     assert(
       is_scalar_character(org),
       "'org' must be a string:\n  ", org
     )
-    team <- gh_url("orgs", org, "teams") %>%
+    team_id <- gh_url("orgs", org, "teams") %>%
       gh_find(property = "name", value = team, ...) %>%
       pluck("id")
   }
   assert(
-    is_scalar_integerish(team),
+    is_scalar_integerish(team_id),
     "'team' must be an integer or string:\n  ", team
   )
 
   info("Deleting team '", team, "'")
-  response <- gh_url("teams", team) %>%
+  response <- gh_url("teams", team_id) %>%
     gh_request("DELETE", ...)
 
   info("Done", level = 7)

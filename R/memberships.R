@@ -114,6 +114,7 @@ update_membership <- function(
       payload <- list(role = role)
     }
 
+    team_id <- team
     if (is_scalar_character(team)) {
       team_id <- gh_url("orgs", org, "teams") %>%
         gh_find(property = "name", value = team, ...) %>%
@@ -277,6 +278,7 @@ view_membership <- function(
     membership_gh <- select_properties(membership_lst, properties$memberships)
   }
   else {
+    team_id <- team
     if (is_scalar_character(team)) {
       team_id <- gh_url("orgs", org, "teams") %>%
         gh_find(property = "name", value = team, ...) %>%
@@ -376,6 +378,7 @@ delete_membership <- function(
       gh_request("DELETE", ...)
   }
   else {
+    team_id <- team
     if (is_scalar_character(team)) {
       team_id <- gh_url("orgs", org, "teams") %>%
         gh_find(property = "name", value = team, ...) %>%
