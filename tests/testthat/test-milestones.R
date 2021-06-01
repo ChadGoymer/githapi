@@ -1,22 +1,21 @@
-context("milestones")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_repository(
+  user <- view_user()
+
+  repo <- create_repository(
     name        = str_c("test-milestones-", suffix),
     description = "This is a repository to test milestones"
   )
 
-}))
+})
 
 teardown(suppressMessages({
 
-  delete_repository(str_c("ChadGoymer/test-milestones-", suffix))
+  try(delete_repository(repo$full_name), silent = TRUE)
 
 }))
 
@@ -27,7 +26,7 @@ test_that("create_milestone creates a milestone and returns the properties", {
 
   simple_milestone <- create_milestone(
     title = str_c("test simple milestone ", suffix),
-    repo  = str_c("ChadGoymer/test-milestones-", suffix)
+    repo  = repo$full_name
   )
 
   expect_is(simple_milestone, "list")
@@ -58,7 +57,7 @@ test_that("create_milestone creates a milestone and returns the properties", {
 
   detailed_milestone <- create_milestone(
     title       = str_c("test detailed milestone ", suffix),
-    repo        = str_c("ChadGoymer/test-milestones-", suffix),
+    repo        = repo$full_name,
     description = "This is a test milestone",
     due_on      = format(Sys.Date() + 1)
   )
@@ -103,7 +102,7 @@ test_that("update_milestone changes a milestone and returns the properties", {
 
   updated_milestone <- update_milestone(
     milestone   = str_c("test simple milestone ", suffix),
-    repo        = str_c("ChadGoymer/test-milestones-", suffix),
+    repo        = repo$full_name,
     title       = str_c("test updated milestone ", suffix),
     description = "This is an updated test milestone",
     due_on      = format(Sys.Date() + 28)
@@ -144,7 +143,7 @@ test_that("update_milestone changes a milestone and returns the properties", {
 
   closed_milestone <- update_milestone(
     milestone = str_c("test updated milestone ", suffix),
-    repo      = str_c("ChadGoymer/test-milestones-", suffix),
+    repo      = repo$full_name,
     state     = "closed"
   )
 
@@ -178,7 +177,7 @@ test_that("update_milestone changes a milestone and returns the properties", {
 test_that("view_milestones returns a tibble of milestone properties", {
 
   milestones <- view_milestones(
-    repo = str_c("ChadGoymer/test-milestones-", suffix),
+    repo = repo$full_name,
     n_max = 10
   )
 
@@ -205,7 +204,7 @@ test_that("view_milestones returns a tibble of milestone properties", {
   expect_true(str_c("test detailed milestone ", suffix) %in% milestones$title)
 
   closed_milestones <- view_milestones(
-    repo  = str_c("ChadGoymer/test-milestones-", suffix),
+    repo  = repo$full_name,
     state = "closed",
     n_max = 10
   )
@@ -243,7 +242,7 @@ test_that("view_milestone returns a list of repository properties", {
 
   first_milestone <- view_milestone(
     milestone = 1,
-    repo      = str_c("ChadGoymer/test-milestones-", suffix)
+    repo      = repo$full_name
   )
 
   expect_is(first_milestone, "list")
@@ -270,7 +269,7 @@ test_that("view_milestone returns a list of repository properties", {
 
   named_milestone <- view_milestone(
     milestone = str_c("test detailed milestone ", suffix),
-    repo      = str_c("ChadGoymer/test-milestones-", suffix)
+    repo      = repo$full_name
   )
 
   expect_is(named_milestone, "list")
@@ -303,7 +302,7 @@ test_that("view_milestone returns a list of repository properties", {
 test_that("view_milestone throws an error if invalid arguments are supplied", {
 
   expect_error(
-    view_milestone(TRUE, repo = str_c("ChadGoymer/test-milestones-", suffix)),
+    view_milestone(TRUE, repo = repo$full_name),
     "'milestone' must be either an integer or a string"
   )
 
@@ -318,16 +317,18 @@ test_that("browse_milestone opens the milestone's page in the browser", {
 
   milestone_url <- browse_milestone(
     milestone = 1,
-    repo      = str_c("ChadGoymer/test-milestones-", suffix)
+    repo      = repo$full_name
   )
+
+  base_url <- getOption("github.oauth") %>%
+    str_remove("login/oauth") %>%
+    str_c(user$login)
 
   expect_is(milestone_url, "character")
   expect_identical(attr(milestone_url, "status"), 200L)
   expect_identical(
     as.character(milestone_url),
-    str_c(
-      "https://github.com/ChadGoymer/test-milestones-", suffix, "/milestone/1"
-    )
+    str_c(base_url,  "/test-milestones-", suffix, "/milestone/1")
   )
 
 })
@@ -339,7 +340,7 @@ test_that("delete_milestone removes a milestone and returns TRUE", {
 
   first_milestone <- delete_milestone(
     milestone = 1,
-    repo      = str_c("ChadGoymer/test-milestones-", suffix)
+    repo      = repo$full_name
   )
 
   expect_is(first_milestone, "logical")
@@ -348,7 +349,7 @@ test_that("delete_milestone removes a milestone and returns TRUE", {
 
   named_milestone <- delete_milestone(
     milestone = str_c("test detailed milestone ", suffix),
-    repo      = str_c("ChadGoymer/test-milestones-", suffix)
+    repo      = repo$full_name
   )
 
   expect_is(named_milestone, "logical")

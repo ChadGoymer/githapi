@@ -39,14 +39,8 @@ suppressMessages({
 
 teardown(suppressMessages({
 
-  try(
-    delete_repository(user_repo$full_name),
-    silent = TRUE
-  )
-  try(
-    delete_repository(org_repo$full_name),
-    silent = TRUE
-  )
+  try(delete_repository(user_repo$full_name), silent = TRUE)
+  try(delete_repository(org_repo$full_name), silent = TRUE)
 
 }))
 
