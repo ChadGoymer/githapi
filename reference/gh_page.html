@@ -84,7 +84,7 @@ contents." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">githapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.24</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.25</span>
       </span>
     </div>
 
@@ -138,6 +138,7 @@ contents.</p>
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>gh_page</span><span class='op'>(</span>
   <span class='va'>url</span>,
   n_max <span class='op'>=</span> <span class='fl'>1000</span>,
+  page_size <span class='op'>=</span> <span class='fl'>100</span>,
   headers <span class='op'>=</span> <span class='cn'>NULL</span>,
   accept <span class='op'>=</span> <span class='st'>"application/vnd.github.v3+json"</span>,
   token <span class='op'>=</span> <span class='fu'><a href='gh_token.html'>gh_token</a></span><span class='op'>(</span><span class='op'>)</span>,
@@ -155,6 +156,10 @@ contents.</p>
     <tr>
       <th>n_max</th>
       <td><p>(integer, optional) Maximum number to return. Default: 1000.</p></td>
+    </tr>
+    <tr>
+      <th>page_size</th>
+      <td><p>(integer, optional) The size of each page. Default: 100.</p></td>
     </tr>
     <tr>
       <th>headers</th>
