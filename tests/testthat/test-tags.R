@@ -10,7 +10,7 @@ suppressMessages({
     auto_init   = TRUE
   )
 
-  Sys.sleep(1)
+  Sys.sleep(2)
 
   create_file(
     content = "This is a commit to test tags",

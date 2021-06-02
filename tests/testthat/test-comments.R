@@ -12,7 +12,7 @@ suppressMessages({
     auto_init   = TRUE
   )
 
-  Sys.sleep(1)
+  Sys.sleep(2)
 
   create_issue(
     title = str_c("issue to test comments ", suffix),

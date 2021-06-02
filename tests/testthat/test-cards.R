@@ -10,7 +10,7 @@ suppressMessages({
     auto_init   = TRUE
   )
 
-  Sys.sleep(1)
+  Sys.sleep(2)
 
   create_project(
     name = str_c("Test cards ", suffix),
