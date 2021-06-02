@@ -1,6 +1,3 @@
-context("utilities")
-
-
 # TEST: is_sha -----------------------------------------------------------------
 
 test_that("is_sha returns TRUE with a valid SHA and FALSE otherwise", {

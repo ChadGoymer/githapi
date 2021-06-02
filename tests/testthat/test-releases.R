@@ -1,34 +1,33 @@
-context("releases")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_repository(
+  user <- view_user()
+
+  repo <- create_repository(
     name        = str_c("test-releases-", suffix),
     description = "This is a repository to test releases",
     auto_init   = TRUE
   )
 
-  Sys.sleep(1)
+  Sys.sleep(2)
 
   create_file(
     content = "This is a commit to test releases",
     path    = str_c("test-releases-", suffix, ".txt"),
     branch  = str_c("test-releases-", suffix),
     message = "Commit to test releases",
-    repo    = str_c("ChadGoymer/test-releases-", suffix),
-    parent  = "main"
+    repo    = repo$full_name,
+    parent  = repo$default_branch
   )
 
-}))
+})
 
 teardown(suppressMessages({
 
-  delete_repository(str_c("ChadGoymer/test-releases-", suffix))
+  try(delete_repository(repo$full_name), silent = TRUE)
 
 }))
 
@@ -39,7 +38,7 @@ test_that("create_release creates a release and returns the properties", {
 
   main_release <- create_release(
     tag  = str_c("main-release-", suffix),
-    repo = str_c("ChadGoymer/test-releases-", suffix),
+    repo = repo$full_name,
     name = str_c("main release ", suffix),
     body = "This is a release created by create_release()"
   )
@@ -70,15 +69,15 @@ test_that("create_release creates a release and returns the properties", {
     main_release$body,
     "This is a release created by create_release()"
   )
-  expect_identical(main_release$commit, "main")
+  expect_identical(main_release$commit, repo$default_branch)
   expect_false(main_release$draft)
   expect_false(main_release$prerelease)
-  expect_identical(main_release$author_login, "ChadGoymer")
+  expect_identical(main_release$author_login, user$login)
 
 
   branch_release <- create_release(
     tag  = str_c("branch-release-", suffix),
-    repo = str_c("ChadGoymer/test-releases-", suffix),
+    repo = repo$full_name,
     name = str_c("Branch release ", suffix),
     body = "This is a release created by create_release()",
     ref  = str_c("test-releases-", suffix)
@@ -113,12 +112,12 @@ test_that("create_release creates a release and returns the properties", {
   expect_identical(branch_release$commit, str_c("test-releases-", suffix))
   expect_false(branch_release$draft)
   expect_false(branch_release$prerelease)
-  expect_identical(branch_release$author_login, "ChadGoymer")
+  expect_identical(branch_release$author_login, user$login)
 
 
   draft_release <- create_release(
     tag        = str_c("draft-release-", suffix),
-    repo       = str_c("ChadGoymer/test-releases-", suffix),
+    repo       = repo$full_name,
     name       = str_c("Draft release ", suffix),
     body       = "This is a release created by create_release()",
     draft      = TRUE,
@@ -151,10 +150,10 @@ test_that("create_release creates a release and returns the properties", {
     draft_release$body,
     "This is a release created by create_release()"
   )
-  expect_identical(draft_release$commit, "main")
+  expect_identical(draft_release$commit, repo$default_branch)
   expect_true(draft_release$draft)
   expect_true(draft_release$prerelease)
-  expect_identical(draft_release$author_login, "ChadGoymer")
+  expect_identical(draft_release$author_login, user$login)
 
 })
 
@@ -162,7 +161,7 @@ test_that("create_release creates a release and returns the properties", {
 # TEST: update_release ---------------------------------------------------------
 
 draft_release_id <- suppressMessages({
-  view_releases(str_c("ChadGoymer/test-releases-", suffix)) %>%
+  view_releases(repo$full_name) %>%
     filter(.data$name == str_c("Draft release ", suffix)) %>%
     pull(id)
 })
@@ -171,7 +170,7 @@ test_that("update_release updates a release and returns the properties", {
 
   main_release <- update_release(
     release = str_c("main-release-", suffix),
-    repo    = str_c("ChadGoymer/test-releases-", suffix),
+    repo    = repo$full_name,
     tag     = str_c("updated-main-release-", suffix),
     name    = str_c("Updated main release ", suffix),
     body    = "This release has been updated by update_release()"
@@ -203,15 +202,15 @@ test_that("update_release updates a release and returns the properties", {
     main_release$body,
     "This release has been updated by update_release()"
   )
-  expect_identical(main_release$commit, "main")
+  expect_identical(main_release$commit, repo$default_branch)
   expect_false(main_release$draft)
   expect_false(main_release$prerelease)
-  expect_identical(main_release$author_login, "ChadGoymer")
+  expect_identical(main_release$author_login, user$login)
 
 
   branch_release <- update_release(
     release = str_c("branch-release-", suffix),
-    repo    = str_c("ChadGoymer/test-releases-", suffix),
+    repo    = repo$full_name,
     tag     = str_c("updated-branch-release-", suffix),
     name    = str_c("Updated branch release ", suffix),
     body    = "This release has been updated by update_release()",
@@ -250,13 +249,13 @@ test_that("update_release updates a release and returns the properties", {
   expect_identical(branch_release$commit, str_c("test-releases-", suffix))
   expect_false(branch_release$draft)
   expect_false(branch_release$prerelease)
-  expect_identical(branch_release$author_login, "ChadGoymer")
+  expect_identical(branch_release$author_login, user$login)
 
 
   draft_release <- update_release(
     release    = draft_release_id,
     tag        = str_c("updated-draft-release-", suffix),
-    repo       = str_c("ChadGoymer/test-releases-", suffix),
+    repo       = repo$full_name,
     name       = str_c("Updated draft release ", suffix),
     body       = "This release has been updated by update_release()",
     draft      = FALSE,
@@ -289,10 +288,10 @@ test_that("update_release updates a release and returns the properties", {
     draft_release$body,
     "This release has been updated by update_release()"
   )
-  expect_identical(draft_release$commit, "main")
+  expect_identical(draft_release$commit, repo$default_branch)
   expect_false(draft_release$draft)
   expect_false(draft_release$prerelease)
-  expect_identical(draft_release$author_login, "ChadGoymer")
+  expect_identical(draft_release$author_login, user$login)
 
 })
 
@@ -302,7 +301,7 @@ test_that("update_release updates a release and returns the properties", {
 test_that("view_releases returns a tibble of release properties", {
 
   all_releases <- view_releases(
-    repo  = str_c("ChadGoymer/test-releases-", suffix),
+    repo  = repo$full_name,
     n_max = 10
   )
 
@@ -339,7 +338,7 @@ test_that("view_release returns a list of release properties", {
 
   main_release <- view_release(
     release = str_c("updated-main-release-", suffix),
-    repo    = str_c("ChadGoymer/test-releases-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(main_release, "list")
@@ -368,15 +367,15 @@ test_that("view_release returns a list of release properties", {
     main_release$body,
     "This release has been updated by update_release()"
   )
-  expect_identical(main_release$commit, "main")
+  expect_identical(main_release$commit, repo$default_branch)
   expect_false(main_release$draft)
   expect_false(main_release$prerelease)
-  expect_identical(main_release$author_login, "ChadGoymer")
+  expect_identical(main_release$author_login, user$login)
 
 
   draft_release <- view_release(
     release = draft_release_id,
-    repo    = str_c("ChadGoymer/test-releases-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(draft_release, "list")
@@ -405,10 +404,10 @@ test_that("view_release returns a list of release properties", {
     draft_release$body,
     "This release has been updated by update_release()"
   )
-  expect_identical(draft_release$commit, "main")
+  expect_identical(draft_release$commit, repo$default_branch)
   expect_false(draft_release$draft)
   expect_false(draft_release$prerelease)
-  expect_identical(draft_release$author_login, "ChadGoymer")
+  expect_identical(draft_release$author_login, user$login)
 
 })
 
@@ -417,7 +416,7 @@ test_that("view_release throws as error if invalid arguments are supplied", {
   expect_error(
     view_release(
       release = list(1),
-      repo    = str_c("ChadGoymer/test-releases-", suffix)
+      repo    = repo$full_name
     ),
     "'release' must be either an integer or a valid git reference"
   )
@@ -433,31 +432,31 @@ test_that("browse_release opens the release's page in the browser", {
 
   main_release <- browse_release(
     release = str_c("updated-main-release-", suffix),
-    repo    = str_c("ChadGoymer/test-releases-", suffix)
+    repo    = repo$full_name
   )
+
+  base_url <- getOption("github.oauth") %>%
+    str_remove("login/oauth") %>%
+    str_c(user$login)
 
   expect_is(main_release, "character")
   expect_identical(attr(main_release, "status"), 200L)
   expect_identical(
     dirname(main_release),
-    str_c(
-      "https://github.com/ChadGoymer/test-releases-", suffix, "/releases/tag"
-    )
+    str_c(base_url, "/test-releases-", suffix, "/releases/tag")
   )
 
 
   draft_release <- browse_release(
     release = draft_release_id,
-    repo    = str_c("ChadGoymer/test-releases-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(draft_release, "character")
   expect_identical(attr(draft_release, "status"), 200L)
   expect_identical(
     dirname(draft_release),
-    str_c(
-      "https://github.com/ChadGoymer/test-releases-", suffix, "/releases/tag"
-    )
+    str_c(base_url, "/test-releases-", suffix, "/releases/tag")
   )
 
 })
@@ -467,7 +466,7 @@ test_that("browse_release throws as error if invalid arguments are supplied", {
   expect_error(
     browse_release(
       release = list(1),
-      repo    = str_c("ChadGoymer/test-releases-", suffix)
+      repo    = repo$full_name
     ),
     "'release' must be either an integer or a valid git reference"
   )
@@ -481,7 +480,7 @@ test_that("delete_release deletes a release", {
 
   deleted_release <- delete_release(
     release = str_c("updated-main-release-", suffix),
-    repo    = str_c("ChadGoymer/test-releases-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(deleted_release, "logical")

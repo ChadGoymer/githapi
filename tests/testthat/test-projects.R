@@ -1,30 +1,38 @@
-context("projects")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_repository(
+  repo <- create_repository(
     name        = str_c("test-projects-", suffix),
     description = "This is a repository to test projects"
   )
 
-  create_team(
-    name        = str_c("Test projects ", suffix),
-    description = "This was created to test team projects",
-    org         = "HairyCoos"
-  )
+  user <- view_user()
 
-}))
+  org <- view_organizations(user = NULL, n_max = 10) %>%
+    arrange(.data$login) %>%
+    slice(1)
+
+  if (nrow(org) == 1) {
+    create_team(
+      name        = str_c("Test projects ", suffix),
+      description = "This was created to test team projects",
+      org         = org$login
+    )
+  }
+
+})
 
 teardown(suppressMessages({
 
-  delete_team(str_c("Test projects ", suffix), org = "HairyCoos")
+  try(
+    delete_team(str_c("Test projects ", suffix), org = org$login),
+    silent = TRUE
+  )
 
-  delete_repository(str_c("ChadGoymer/test-projects-", suffix))
+  try(delete_repository(repo$full_name), silent = TRUE)
 
 }))
 
@@ -36,7 +44,7 @@ test_that("create_projects creates a project and returns its properties", {
   repo_project <- create_project(
     name = str_c("Repo project ", suffix),
     body = "This is a repo project",
-    repo = str_c("ChadGoymer/test-projects-", suffix)
+    repo = repo$full_name
   )
 
   expect_is(repo_project, "list")
@@ -82,10 +90,15 @@ test_that("create_projects creates a project and returns its properties", {
 
   expect_identical(user_project$name, str_c("User project ", suffix))
 
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
+  )
+
   org_project <- create_project(
     name = str_c("Organization project ", suffix),
     body = "This is an organization project",
-    org  = "HairyCoos"
+    org  = org$login
   )
 
   expect_is(org_project, "list")
@@ -152,7 +165,7 @@ test_that("update_project updates a project and returns the new properties", {
     project = str_c("Repo project ", suffix),
     name    = str_c("Updated repo project ", suffix),
     body    = "This is an updated repo project",
-    repo    = str_c("ChadGoymer/test-projects-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(repo_project, "list")
@@ -177,7 +190,7 @@ test_that("update_project updates a project and returns the new properties", {
   user_project <- update_project(
     project = str_c("User project ", suffix),
     state   = "closed",
-    user    = "ChadGoymer"
+    user    = user$login
   )
 
   expect_is(user_project, "list")
@@ -199,11 +212,16 @@ test_that("update_project updates a project and returns the new properties", {
 
   expect_identical(user_project$state, "closed")
 
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
+  )
+
   org_project <- update_project(
     project    = str_c("Organization project ", suffix),
     permission = "read",
     private    = FALSE,
-    org        = "HairyCoos"
+    org        = org$login
   )
 
   expect_is(org_project, "list")
@@ -231,7 +249,7 @@ test_that("update_project updates a project and returns the new properties", {
   team_project <- update_project(
     project = str_c("Organization project ", suffix),
     team    = str_c("Test projects ", suffix),
-    org     = "HairyCoos"
+    org     = org$login
   )
 
   expect_is(team_project, "list")
@@ -259,7 +277,7 @@ test_that("update_project updates a project and returns the new properties", {
   upd_team_project <- update_project(
     project    = str_c("Organization project ", suffix),
     team       = str_c("Test projects ", suffix),
-    org        = "HairyCoos",
+    org        = org$login,
     permission = "read"
   )
 
@@ -293,7 +311,7 @@ test_that("update_project updates a project and returns the new properties", {
 test_that("view_projects returns a tibble summarising the projects", {
 
   repo_projects <- view_projects(
-    repo  = str_c("ChadGoymer/test-projects-", suffix),
+    repo  = repo$full_name,
     n_max = 10
   )
 
@@ -317,7 +335,7 @@ test_that("view_projects returns a tibble summarising the projects", {
   expect_true(str_c("Updated repo project ", suffix) %in% repo_projects$name)
 
   user_projects <- view_projects(
-    user  = "ChadGoymer",
+    user  = user$login,
     state = "closed",
     n_max = 10
   )
@@ -341,7 +359,12 @@ test_that("view_projects returns a tibble summarising the projects", {
 
   expect_true(str_c("User project ", suffix) %in% user_projects$name)
 
-  org_projects <- view_projects(org = "HairyCoos", n_max = 10)
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
+  )
+
+  org_projects <- view_projects(org = org$login, n_max = 10)
 
   expect_is(org_projects, "tbl")
   expect_identical(attr(org_projects, "status"), 200L)
@@ -366,7 +389,7 @@ test_that("view_projects returns a tibble summarising the projects", {
 
   team_projects <- view_projects(
     team  = str_c("Test projects ", suffix),
-    org   = "HairyCoos",
+    org   = org$login,
     n_max = 10
   )
 
@@ -410,7 +433,7 @@ test_that("view_project returns a list of project properties", {
 
   repo_project <- view_project(
     project = str_c("Updated repo project ", suffix),
-    repo    = str_c("ChadGoymer/test-projects-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(repo_project, "list")
@@ -434,7 +457,7 @@ test_that("view_project returns a list of project properties", {
 
   user_project <- view_project(
     project = str_c("User project ", suffix),
-    user    = "ChadGoymer"
+    user    = user$login
   )
 
   expect_is(user_project, "list")
@@ -456,9 +479,14 @@ test_that("view_project returns a list of project properties", {
 
   expect_identical(user_project$state, "closed")
 
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
+  )
+
   org_project <- view_project(
     project = str_c("Organization project ", suffix),
-    org     = "HairyCoos"
+    org     = org$login
   )
 
   expect_is(org_project, "list")
@@ -486,7 +514,7 @@ test_that("view_project returns a list of project properties", {
   team_project <- view_project(
     project = str_c("Organization project ", suffix),
     team    = str_c("Test projects ", suffix),
-    org     = "HairyCoos"
+    org     = org$login
   )
 
   expect_is(team_project, "list")
@@ -515,11 +543,11 @@ test_that("view_project returns a list of project properties", {
 
 test_that("view_project can accept a project number", {
 
-  projects <- view_projects(str_c("ChadGoymer/test-projects-", suffix))
+  projects <- view_projects(repo$full_name)
 
   first_project <- view_project(
     project = projects$number[[1]],
-    repo    = str_c("ChadGoymer/test-projects-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(first_project, "list")
@@ -546,7 +574,7 @@ test_that("view_project can accept a project number", {
 test_that("view_project throws an error if invalid arguments are supplied", {
 
   expect_error(
-    view_project(TRUE, str_c("ChadGoymer/test-projects-", suffix)),
+    view_project(TRUE, repo$full_name),
     "'project' must be either an integer or a string"
   )
 
@@ -566,51 +594,59 @@ test_that("browse_project opens the project in the browser", {
 
   repo_project <- browse_project(
     project = str_c("Updated repo project ", suffix),
-    repo    = str_c("ChadGoymer/test-projects-", suffix)
+    repo    = repo$full_name
   )
+
+  base_url <- getOption("github.oauth") %>%
+    str_remove("login/oauth")
 
   expect_is(repo_project, "character")
   expect_identical(attr(repo_project, "status"), 200L)
   expect_identical(
     dirname(repo_project),
-    str_c("https://github.com/ChadGoymer/test-projects-", suffix, "/projects")
+    str_c(base_url, user$login, "/test-projects-", suffix, "/projects")
   )
 
   user_project <- browse_project(
     project = str_c("User project ", suffix),
-    user    = "ChadGoymer"
+    user    = user$login
   )
 
   expect_is(user_project, "character")
   expect_identical(attr(user_project, "status"), 200L)
   expect_identical(
     dirname(user_project),
-    "https://github.com/users/ChadGoymer/projects"
+    str_c(base_url, "users/", user$login, "/projects")
+  )
+
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
   )
 
   org_project <- browse_project(
     project = str_c("Organization project ", suffix),
-    org     = "HairyCoos"
+    org     = org$login
   )
 
   expect_is(org_project, "character")
   expect_identical(attr(org_project, "status"), 200L)
   expect_identical(
     dirname(org_project),
-    "https://github.com/orgs/HairyCoos/projects"
+    str_c(base_url, "orgs/", org$login, "/projects")
   )
 
   team_project <- browse_project(
     project = str_c("Organization project ", suffix),
     team    = str_c("Test projects ", suffix),
-    org     = "HairyCoos"
+    org     = org$login
   )
 
   expect_is(team_project, "character")
   expect_identical(attr(team_project, "status"), 200L)
   expect_identical(
     dirname(team_project),
-    "https://github.com/orgs/HairyCoos/projects"
+    str_c(base_url, "orgs/", org$login, "/projects")
   )
 
 })
@@ -622,7 +658,7 @@ test_that("delete_project deletes the projects and returns TRUE", {
 
   repo_project <- delete_project(
     project = str_c("Updated repo project ", suffix),
-    repo    = str_c("ChadGoymer/test-projects-", suffix)
+    repo    = repo$full_name
   )
 
   expect_is(repo_project, "logical")
@@ -631,17 +667,22 @@ test_that("delete_project deletes the projects and returns TRUE", {
 
   user_project <- delete_project(
     project = str_c("User project ", suffix),
-    user    = "ChadGoymer"
+    user    = user$login
   )
 
   expect_is(user_project, "logical")
   expect_identical(attr(user_project, "status"), 204L)
   expect_identical(as.logical(user_project), TRUE)
 
+  skip_if(
+    length(org$login) != 1,
+    "Authenticated user is not a member of an organization"
+  )
+
   team_project <- delete_project(
     project = str_c("Organization project ", suffix),
     team    = str_c("Test projects ", suffix),
-    org     = "HairyCoos"
+    org     = org$login
   )
 
   expect_is(team_project, "logical")
@@ -650,7 +691,7 @@ test_that("delete_project deletes the projects and returns TRUE", {
 
   org_project <- delete_project(
     project = str_c("Organization project ", suffix),
-    org     = "HairyCoos"
+    org     = org$login
   )
 
   expect_is(org_project, "logical")

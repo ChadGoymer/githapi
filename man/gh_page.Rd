@@ -7,6 +7,7 @@
 gh_page(
   url,
   n_max = 1000,
+  page_size = 100,
   headers = NULL,
   accept = "application/vnd.github.v3+json",
   token = gh_token(),
@@ -18,6 +19,8 @@ gh_page(
 \item{url}{(string) The address of the API endpoint.}
 
 \item{n_max}{(integer, optional) Maximum number to return. Default: 1000.}
+
+\item{page_size}{(integer, optional) The size of each page. Default: 100.}
 
 \item{headers}{(character, optional) Headers to add to the request. Default:
 \code{NULL}.}

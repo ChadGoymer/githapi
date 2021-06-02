@@ -78,28 +78,39 @@ teardown(suppressMessages({
 
 test_that("Options are  set correctly on load", {
 
-  expect_identical(
-    getOption("github.api"),
-    "https://api.github.com"
+  config <- system.file("config.json", package = "githapi") %>%
+    jsonlite::read_json()
+
+  if (Sys.getenv("ENVIRONMENT") %in% names(config)) {
+    config <- config[[Sys.getenv("ENVIRONMENT")]]
+  } else {
+    config <- config[[1]]
+  }
+
+  expect_true(
+    identical(getOption("github.api"), config$github$api) ||
+      identical(getOption("github.api"), Sys.getenv("GITHUB_API_URL"))
   )
-  expect_identical(
-    getOption("github.oauth"),
-    "https://github.com/login/oauth"
+  expect_true(
+    identical(getOption("github.oauth"), config$github$oauth) ||
+      identical(getOption("github.oauth"), Sys.getenv("GITHUB_OAUTH"))
+  )
+  expect_true(
+    identical(getOption("github.proxy"), config$github$proxy) ||
+      identical(getOption("github.proxy"), Sys.getenv("GITHUB_PROXY"))
   )
 
-  expect_null(getOption("github.proxy"))
-
-  expect_identical(
-    getOption("githapi.id"),
-    "07f9a4157365992e4db8"
+  expect_true(
+    identical(getOption("githapi.id"), config$githapi$id) ||
+      identical(getOption("githapi.id"), Sys.getenv("GITHAPI_ID"))
   )
-  expect_identical(
-    getOption("githapi.secret"),
-    "4d705eb68ac93e524ba71872a8b8f2bae802d870"
+  expect_true(
+    identical(getOption("githapi.secret"), config$githapi$secret) ||
+      identical(getOption("githapi.secret"), Sys.getenv("GITHAPI_SECRET"))
   )
-  expect_identical(
-    getOption("githapi.cache"),
-    "~/.githapi.oauth"
+  expect_true(
+    identical(getOption("githapi.cache"), config$githapi$cache) ||
+      identical(getOption("githapi.cache"), Sys.getenv("GITHAPI_CACHE"))
   )
 
 })

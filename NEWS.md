@@ -1,5 +1,13 @@
 # githapi 0.10.24
 
+- Removed usernames, organizations and team names from tests
+- Updated `print.github()` to only show one URL
+- Added `page_size` argument to `gh_page()` and `gh_find()`
+- Made `plan_private_repos` in organizations numeric to avoid integer overflow
+- Fixed bug in error message when team is not a string
+
+# githapi 0.10.24
+
 - Updated branch functions to use repository branches endpoint
 - Updated tag functions to use repository tags endpoint
 

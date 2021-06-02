@@ -80,7 +80,7 @@ properties <- list(
     billing_email                   = c("billing_email",                   as = "character"),
     plan_name                       = c("plan", "name",                    as = "character"),
     plan_space                      = c("plan", "space",                   as = "integer"),
-    plan_private_repos              = c("plan", "private_repos",           as = "integer"),
+    plan_private_repos              = c("plan", "private_repos",           as = "numeric"),
     default_repository_permission   = c("default_repository_permission",   as = "character"),
     two_factor_requirement_enabled  = c("two_factor_requirement_enabled",  as = "logical"),
     members_can_create_repositories = c("members_can_create_repositories", as = "logical"),

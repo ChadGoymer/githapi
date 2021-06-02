@@ -1,9 +1,12 @@
-context("gists")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
+
+suppressMessages({
+
+  user <- view_user()
+
+})
 
 teardown(suppressMessages({
 
@@ -54,7 +57,7 @@ test_that("create_gist creates a gist and returns its properties", {
   )
 
   expect_identical(basic_gist$description, NA_character_)
-  expect_identical(basic_gist$owner, "ChadGoymer")
+  expect_identical(basic_gist$owner, user$login)
   expect_false(basic_gist$public)
   expect_identical(
     basic_gist$files$filename,
@@ -105,7 +108,7 @@ test_that("create_gist creates a gist and returns its properties", {
   )
 
   expect_identical(multiple_gist$description, "A gist with multiple files")
-  expect_identical(multiple_gist$owner, "ChadGoymer")
+  expect_identical(multiple_gist$owner, user$login)
   expect_false(multiple_gist$public)
   expect_identical(
     sort(multiple_gist$files$filename),
@@ -151,7 +154,7 @@ test_that("create_gist creates a gist and returns its properties", {
   )
 
   expect_identical(public_gist$description, "A public gist")
-  expect_identical(public_gist$owner, "ChadGoymer")
+  expect_identical(public_gist$owner, user$login)
   expect_true(public_gist$public)
   expect_identical(
     public_gist$files$filename,
@@ -212,7 +215,7 @@ test_that("update_gist updates a gist and returns its properties", {
   )
 
   expect_identical(updated_desc$description, "An updated description")
-  expect_identical(updated_desc$owner, "ChadGoymer")
+  expect_identical(updated_desc$owner, user$login)
   expect_true(updated_desc$public)
   expect_identical(
     updated_desc$files$filename,
@@ -263,7 +266,7 @@ test_that("update_gist updates a gist and returns its properties", {
   )
 
   expect_identical(updated_files$description, "An updated description")
-  expect_identical(updated_files$owner, "ChadGoymer")
+  expect_identical(updated_files$owner, user$login)
   expect_true(updated_files$public)
   expect_identical(updated_files$files$filename, "hello-world.R")
   expect_identical(updated_files$files$content, "cat(\"Hello World!\")")
@@ -295,7 +298,7 @@ test_that("view_gists returns a tibble of gist properties", {
   expect_true("A gist with multiple files" %in% created_gists$description)
 
 
-  user_gists <- view_gists("ChadGoymer", n_max = 10)
+  user_gists <- view_gists(user$login, n_max = 10)
 
   expect_is(user_gists, "tbl")
   expect_identical(attr(user_gists, "status"), 200L)
@@ -369,7 +372,7 @@ test_that("view_gist returns a list of gist properties", {
   )
 
   expect_identical(gist$description, "An updated description")
-  expect_identical(gist$owner, "ChadGoymer")
+  expect_identical(gist$owner, user$login)
   expect_true(gist$public)
   expect_identical(gist$files$filename, "hello-world.R")
   expect_identical(gist$files$content, "cat(\"Hello World!\")")
@@ -385,9 +388,15 @@ test_that("browse_gist opens the gist's page in the browser", {
 
   gist_url <- browse_gist(created_gists$id[[1]])
 
+  enterprise_url <- getOption("github.oauth") %>%
+    str_replace("login/oauth", "gist")
+
   expect_is(gist_url, "character")
   expect_identical(attr(gist_url, "status"), 200L)
-  expect_identical(dirname(gist_url), "https://gist.github.com")
+  expect_true(
+    identical(dirname(gist_url), "https://gist.github.com") ||
+      identical(dirname(gist_url), enterprise_url)
+  )
 
 })
 

@@ -1,25 +1,24 @@
-context("statuses")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_repository(
+  user <- view_user()
+
+  repo <- create_repository(
     name        = str_c("test-statuses-", suffix),
     description = "This is a repository to test statuses",
     auto_init   = TRUE
   )
 
-  Sys.sleep(1)
+  Sys.sleep(2)
 
-}))
+})
 
 teardown(suppressMessages({
 
-  delete_repository(str_c("ChadGoymer/test-statuses-", suffix))
+  try(delete_repository(repo$full_name), silent = TRUE)
 
 }))
 
@@ -30,8 +29,8 @@ test_that("create_status creates a status and returns the properties", {
 
   pending_status <- create_status(
     state       = "pending",
-    ref         = "main",
-    repo        = str_c("ChadGoymer/test-statuses-", suffix),
+    ref         = repo$default_branch,
+    repo        = repo$full_name,
     description = "This is a pending status",
     target_url  = "https://goymer.me/githapi",
     context     = "test/pending"
@@ -57,13 +56,13 @@ test_that("create_status creates a status and returns the properties", {
   expect_identical(pending_status$description, "This is a pending status")
   expect_identical(pending_status$target_url, "https://goymer.me/githapi")
   expect_identical(pending_status$context, "test/pending")
-  expect_identical(pending_status$creator, "ChadGoymer")
+  expect_identical(pending_status$creator, user$login)
 
 
   success_status <- create_status(
     state       = "success",
-    ref         = "main",
-    repo        = str_c("ChadGoymer/test-statuses-", suffix),
+    ref         = repo$default_branch,
+    repo        = repo$full_name,
     description = "This is a success status",
     target_url  = "https://goymer.me/githapi",
     context     = "test/success"
@@ -89,7 +88,7 @@ test_that("create_status creates a status and returns the properties", {
   expect_identical(success_status$description, "This is a success status")
   expect_identical(success_status$target_url, "https://goymer.me/githapi")
   expect_identical(success_status$context, "test/success")
-  expect_identical(success_status$creator, "ChadGoymer")
+  expect_identical(success_status$creator, user$login)
 
 })
 
@@ -99,8 +98,8 @@ test_that("create_status creates a status and returns the properties", {
 test_that("view_statuses returns a tibble of status properties", {
 
   statuses <- view_statuses(
-    ref  = "main",
-    repo = str_c("ChadGoymer/test-statuses-", suffix)
+    ref  = repo$default_branch,
+    repo = repo$full_name
   )
 
   expect_is(statuses, "tbl")
@@ -126,7 +125,7 @@ test_that("view_statuses returns a tibble of status properties", {
   )
   expect_identical(statuses$target_url, rep("https://goymer.me/githapi", 2))
   expect_identical(statuses$context, c("test/success", "test/pending"))
-  expect_identical(statuses$creator, rep("ChadGoymer", 2))
+  expect_identical(statuses$creator, rep(user$login, 2))
 
 })
 
@@ -136,8 +135,8 @@ test_that("view_statuses returns a tibble of status properties", {
 test_that("view_status returns the combined status", {
 
   status <- view_status(
-    ref  = "main",
-    repo = str_c("ChadGoymer/test-statuses-", suffix)
+    ref  = repo$default_branch,
+    repo = repo$full_name
   )
 
   expect_is(status, "character")

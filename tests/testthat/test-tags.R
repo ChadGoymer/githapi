@@ -1,34 +1,31 @@
-context("tags")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_repository(
+  repo <- create_repository(
     name        = str_c("test-tags-", suffix),
     description = "This is a repository to test tags",
     auto_init   = TRUE
   )
 
-  Sys.sleep(1)
+  Sys.sleep(2)
 
   create_file(
     content = "This is a commit to test tags",
     path    = str_c("test-tags-", suffix, ".txt"),
     branch  = str_c("test-tags-1-", suffix),
     message = "Commit to test tags",
-    repo    = str_c("ChadGoymer/test-tags-", suffix),
-    parent  = "main"
+    repo    = repo$full_name,
+    parent  = repo$default_branch
   )
 
-}))
+})
 
 teardown(suppressMessages({
 
-  delete_repository(str_c("ChadGoymer/test-tags-", suffix))
+  try(delete_repository(repo$full_name), silent = TRUE)
 
 }))
 
@@ -39,13 +36,13 @@ test_that("create_tag creates a tag and returns a list of the properties", {
 
   branch_sha <- view_sha(
     ref  = str_c("test-tags-1-", suffix),
-    repo = str_c("ChadGoymer/test-tags-", suffix)
+    repo = repo$full_name
   )
 
   branch_tag <- create_tag(
     name = str_c("test-tags-1-", suffix),
     ref  = branch_sha,
-    repo = str_c("ChadGoymer/test-tags-", suffix)
+    repo = repo$full_name
   )
 
   expect_is(branch_tag, "list")
@@ -65,15 +62,15 @@ test_that("create_tag creates a tag and returns a list of the properties", {
   expect_identical(branch_tag$sha, as.character(branch_sha))
 
 
-  main_sha <- gh_url(
-    "repos", str_c("ChadGoymer/test-tags-", suffix), "commits/heads/main"
-  ) %>%
-    gh_request("GET", accept = "application/vnd.github.VERSION.sha")
+  main_sha <- view_sha(
+    ref  = repo$default_branch,
+    repo = repo$full_name
+  )
 
   main_tag <- create_tag(
     name = str_c("test-tags-2-", suffix),
-    ref  = "main",
-    repo = str_c("ChadGoymer/test-tags-", suffix)
+    ref  = repo$default_branch,
+    repo = repo$full_name
   )
 
   expect_is(main_tag, "list")
@@ -99,16 +96,15 @@ test_that("create_tag creates a tag and returns a list of the properties", {
 
 test_that("update_tag updates a tag and returns a list of the properties", {
 
-  update_sha <- gh_url(
-    "repos", str_c("ChadGoymer/test-tags-", suffix),
-    "commits/heads", str_c("test-tags-1-", suffix)
-  ) %>%
-    gh_request("GET", accept = "application/vnd.github.VERSION.sha")
+  update_sha <- view_sha(
+    ref  = str_c("test-tags-1-", suffix),
+    repo = repo$full_name
+  )
 
   updated_tag <- update_tag(
     tag  = str_c("test-tags-2-", suffix),
     ref  = str_c("test-tags-1-", suffix),
-    repo = str_c("ChadGoymer/test-tags-", suffix)
+    repo = repo$full_name
   )
 
   expect_is(updated_tag, "list")
@@ -134,7 +130,7 @@ test_that("update_tag updates a tag and returns a list of the properties", {
 
 test_that("view_tags returns a tibble of tag properties", {
 
-  all_tags <- view_tags(str_c("ChadGoymer/test-tags-", suffix), n_max = 10)
+  all_tags <- view_tags(repo$full_name, n_max = 10)
 
   expect_is(all_tags, "tbl")
   expect_identical(attr(all_tags, "status"), 200L)
@@ -160,7 +156,7 @@ test_that("view_tag returns a list of tag properties", {
 
   tag <- view_tag(
     tag  = str_c("test-tags-1-", suffix),
-    repo = str_c("ChadGoymer/test-tags-", suffix)
+    repo = repo$full_name
   )
 
   expect_is(tag, "list")
@@ -187,7 +183,7 @@ test_that("delete_tag deletes a tag", {
 
   deleted_tag <- delete_tag(
     tag  = str_c("test-tags-1-", suffix),
-    repo = str_c("ChadGoymer/test-tags-", suffix)
+    repo = repo$full_name
   )
 
   expect_is(deleted_tag, "logical")

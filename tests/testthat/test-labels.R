@@ -1,28 +1,25 @@
-context("labels")
-
-
 # SETUP ------------------------------------------------------------------------
 
 suffix <- sample(letters, 10, replace = TRUE) %>% str_c(collapse = "")
 
-setup(suppressMessages({
+suppressMessages({
 
-  create_repository(
+  repo <- create_repository(
     name        = str_c("test-labels-", suffix),
     description = "This is a repository to test labels"
   )
 
   create_issue(
     title     = str_c("test labels ", suffix),
-    repo      = str_c("ChadGoymer/test-labels-", suffix),
+    repo      = repo$full_name,
     body      = "This is an issue to test add_labels() and remove_labels()"
   )
 
-}))
+})
 
 teardown(suppressMessages({
 
-  delete_repository(str_c("ChadGoymer/test-labels-", suffix))
+  try(delete_repository(repo$full_name), silent = TRUE)
 
 }))
 
@@ -33,7 +30,7 @@ test_that("create_label creates a label and returns a list of the properties", {
 
   simple_label <- create_label(
     name  = "simple label",
-    repo  = str_c("ChadGoymer/test-labels-", suffix),
+    repo  = repo$full_name,
     color = "blue"
   )
 
@@ -53,7 +50,7 @@ test_that("create_label creates a label and returns a list of the properties", {
 
   detailed_label <- create_label(
     name        = "detailed-label",
-    repo        = str_c("ChadGoymer/test-labels-", suffix),
+    repo        = repo$full_name,
     color       = "green",
     description = "This is a detailed label"
   )
@@ -82,7 +79,7 @@ test_that("update_label changes a label and returns a list of the properties", {
 
   updated_label <- update_label(
     label       = "simple label",
-    repo        = str_c("ChadGoymer/test-labels-", suffix),
+    repo        = repo$full_name,
     name        = "updated label",
     color       = "pink",
     description = "This is an updated label"
@@ -113,7 +110,7 @@ test_that("add_labels adds labels to an issue and returns the properties", {
   added_labels <- add_labels(
     labels = c("updated label", "detailed-label"),
     issue  = str_c("test labels ", suffix),
-    repo   = str_c("ChadGoymer/test-labels-", suffix)
+    repo   = repo$full_name
   )
 
   expect_is(added_labels, "tbl")
@@ -137,7 +134,7 @@ test_that("add_labels adds labels to an issue and returns the properties", {
 test_that("view_labels returns a tibble of label properties", {
 
   repo_labels <- view_labels(
-    repo  = str_c("ChadGoymer/test-labels-", suffix),
+    repo  = repo$full_name,
     n_max = 10
   )
 
@@ -156,7 +153,7 @@ test_that("view_labels returns a tibble of label properties", {
 
   issue_labels <- view_labels(
     issue = str_c("test labels ", suffix),
-    repo  = str_c("ChadGoymer/test-labels-", suffix),
+    repo  = repo$full_name,
     n_max = 10
   )
 
@@ -182,7 +179,7 @@ test_that("view_label returns a list of repository properties", {
 
   detailed_label <- view_label(
     label = "detailed-label",
-    repo  = str_c("ChadGoymer/test-labels-", suffix)
+    repo  = repo$full_name
   )
 
   expect_is(detailed_label, "list")
@@ -208,7 +205,7 @@ test_that("add_labels adds labels to an issue and returns the properties", {
   removed_labels <- remove_labels(
     labels = c("updated label", "detailed-label"),
     issue  = str_c("test labels ", suffix),
-    repo   = str_c("ChadGoymer/test-labels-", suffix)
+    repo   = repo$full_name
   )
 
   expect_is(removed_labels, "tbl")
@@ -233,7 +230,7 @@ test_that("delete_label removes a label and returns TRUE", {
 
   updated_label <- delete_label(
     label = "updated label",
-    repo  = str_c("ChadGoymer/test-labels-", suffix)
+    repo  = repo$full_name
   )
 
   expect_is(updated_label, "logical")
@@ -242,7 +239,7 @@ test_that("delete_label removes a label and returns TRUE", {
 
   detailed_label <- delete_label(
     label = "detailed-label",
-    repo  = str_c("ChadGoymer/test-labels-", suffix)
+    repo  = repo$full_name
   )
 
   expect_is(detailed_label, "logical")
