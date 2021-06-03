@@ -1,0 +1,613 @@
+---
+title: "Repository Management"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Repository Management}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+The {githapi} package can be used to manage repositories within GitHub. It
+allows you to create repositories, add branches and upload commits without
+having to clone them locally in Git. In fact, the GitHub API provides a lot of
+the functionality of Git.
+
+Projects can be created for repositories, users or organizations. In this 
+article we create a dummy repository for the authenticated user. 
+
+
+## Repositories
+
+### Creating Repositories
+
+Creating a repository, for the authenticated user, is very straight forward
+using the `create_repository()` function:
+
+```r
+create_repository(
+  name        = "test-repository",
+  description = "This is a test repository",
+  auto_init   = TRUE
+)
+```
+```
+# POST https://api.github.com/user/repos
+List of 29
+  id                : int 373521349
+  name              : chr "test-repository"
+  full_name         : chr "ChadGoymer/test-repository"
+  description       : chr "This is a test repository"
+  owner             : chr "ChadGoymer"
+  homepage          : chr NA
+  language          : chr NA
+  size              : num 0
+  default_branch    : chr "main"
+  permission        : chr "admin"
+  private           : logi FALSE
+  has_issues        : logi TRUE
+  has_projects      : logi TRUE
+  has_wiki          : logi TRUE
+  has_pages         : logi FALSE
+  has_downloads     : logi TRUE
+  allow_squash_merge: logi TRUE
+  allow_merge_commit: logi TRUE
+  allow_rebase_merge: logi TRUE
+  fork              : logi FALSE
+  archived          : logi FALSE
+  disabled          : logi FALSE
+  watchers_count    : int 0
+  stargazers_count  : int 0
+  forks_count       : int 0
+  html_url          : chr "https://github.com/ChadGoymer/test-repository"
+  pushed_at         : POSIXct[1:1], format: "2021-06-03 14:42:15"
+  created_at        : POSIXct[1:1], format: "2021-06-03 14:42:14"
+  updated_at        : POSIXct[1:1], format: "2021-06-03 14:42:14"
+```
+
+The `auto_init` argument initialises the repository by committing a basic
+`README.md`. You can also create a repository for an organization, if you have
+permission, by setting the `org` argument. An existing repository can be updated
+using `update_repository()`.
+
+### Viewing Repositories
+
+To view all the repositories a user or organization has use
+`view_repositories()`:
+
+```r
+view_repositories()
+```
+```
+# GET https://api.github.com/user/repos?type=all&sort=created&direction=desc&per_page=100
+# A tibble: 14 x 29
+       id name  full_name description owner homepage language  size default_branch permission private
+    <int> <chr> <chr>     <chr>       <chr> <chr>    <chr>    <dbl> <chr>          <chr>      <lgl>  
+ 1 3.74e8 test~ ChadGoym~ This is a ~ Chad~ NA       NA           0 main           admin      FALSE  
+ 2 3.21e8 gh    ChadGoym~ Minimalist~ Chad~ https:/~ NA        1173 master         admin      FALSE  
+ 3 3.21e8 gert  ChadGoym~ Simple git~ Chad~ https:/~ NA         565 master         admin      FALSE  
+ 4 3.21e8 shar~ ChadGoym~ A R packag~ Chad~ NA       NA          45 master         admin      FALSE  
+ 5 3.04e8 earl~ ChadGoym~ NA          Chad~ NA       NA           1 main           admin      FALSE  
+ 6 2.24e8 .git~ ChadGoym~ Issue and ~ Chad~ NA       NA           1 master         admin      FALSE  
+ 7 1.68e8 msgr  ChadGoym~ An R packa~ Chad~ http://~ R          625 main           admin      FALSE  
+ 8 1.14e8 r-be~ ChadGoym~ A set of g~ Chad~ NA       CSS      41205 master         admin      FALSE  
+ 9 9.69e7 git-~ ChadGoym~ Simple gui~ Chad~ NA       NA           2 master         admin      FALSE  
+10 9.34e7 gith~ ChadGoym~ User-frien~ Chad~ http://~ R         6601 main           admin      FALSE  
+11 8.08e7 r-tr~ ChadGoym~ Training m~ Chad~ NA       R         1229 master         admin      FALSE  
+12 4.24e7 r-py~ ChadGoym~ NA          Chad~ NA       HTML      1172 master         admin      FALSE  
+13 4.24e7 shin~ ChadGoym~ NA          Chad~ NA       HTML     13408 master         admin      FALSE  
+14 3.93e7 chad~ ChadGoym~ My persona~ Chad~ NA       HTML         2 master         admin      FALSE  
+# ... with 18 more variables: has_issues <lgl>, has_projects <lgl>, has_wiki <lgl>, has_pages <lgl>,
+#   has_downloads <lgl>, allow_squash_merge <lgl>, allow_merge_commit <lgl>, allow_rebase_merge <lgl>,
+#   fork <lgl>, archived <lgl>, disabled <lgl>, watchers_count <int>, stargazers_count <int>,
+#   forks_count <int>, html_url <chr>, pushed_at <dttm>, created_at <dttm>, updated_at <dttm>
+```
+
+Note this returns a tibble of repository properties. You can also view the
+properties of a single repository using `view_repository()`:
+
+```r
+view_repository("ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository
+List of 29
+  id                : int 373521349
+  name              : chr "test-repository"
+  full_name         : chr "ChadGoymer/test-repository"
+  description       : chr "This is a test repository"
+  owner             : chr "ChadGoymer"
+  homepage          : chr NA
+  language          : chr NA
+  size              : num 0
+  default_branch    : chr "main"
+  permission        : chr "admin"
+  private           : logi FALSE
+  has_issues        : logi TRUE
+  has_projects      : logi TRUE
+  has_wiki          : logi TRUE
+  has_pages         : logi FALSE
+  has_downloads     : logi TRUE
+  allow_squash_merge: logi TRUE
+  allow_merge_commit: logi TRUE
+  allow_rebase_merge: logi TRUE
+  fork              : logi FALSE
+  archived          : logi FALSE
+  disabled          : logi FALSE
+  watchers_count    : int 0
+  stargazers_count  : int 0
+  forks_count       : int 0
+  html_url          : chr "https://github.com/ChadGoymer/test-repository"
+  pushed_at         : POSIXct[1:1], format: "2021-06-03 14:42:15"
+  created_at        : POSIXct[1:1], format: "2021-06-03 14:42:14"
+  updated_at        : POSIXct[1:1], format: "2021-06-03 14:42:18"
+```
+
+### Deleting Repositories
+
+Finally, you can also delete repositories, if you have permission, using
+`delete_repository()`:
+
+```r
+delete_repository("ChadGoymer/test-repository")
+```
+```
+# DELETE https://api.github.com/repos/ChadGoymer/test-repository
+[1] TRUE
+```
+
+## Branches
+
+### Creating Branches
+
+If the repository has been auto-initialised it will already have a main branch.
+To create a branch you must associate it with an existing commit. This can be
+done using [Git references](#git-references), which can be a commit SHA-1, a 
+branch or a tag. For example, to create a new branch from the current main 
+branch we can use:
+
+```r
+create_branch("test", ref = "main", repo = "ChadGoymer/test-repository")
+```
+```
+# POST https://api.github.com/repos/ChadGoymer/test-repository/git/refs
+List of 4
+  name     : chr "test"
+  sha      : chr "0f75a9e3a9b3fc5bb641088e71fa955d3ef02ffe"
+  protected: logi FALSE
+  html_url : chr "https://api.github.com/repos/ChadGoymer/test-repository/commits/0f75a9e3a9b3fc5bb641088e"..
+```
+
+You can also update existing branches using `update_branch()`, which allows you
+to point it at a new commit.
+
+### Viewing Branches
+
+To view all the branches in a repository use `view_branches()`:
+
+```r
+view_branches("ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/branches?per_page=100
+# A tibble: 2 x 4
+  name  sha                        protected html_url                                                         
+* <chr> <chr>                      <lgl>     <chr>                                                            
+1 main  0f75a9e3a9b3fc5bb641088e7~ FALSE     https://api.github.com/repos/ChadGoymer/test-repository/commits/~
+2 test  0f75a9e3a9b3fc5bb641088e7~ FALSE     https://api.github.com/repos/ChadGoymer/test-repository/commits/~
+```
+
+To view the properties of a single branch, use `view_branch()`:
+
+```r
+view_branch("test", "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/branches/test
+List of 4
+  name     : chr "test"
+  sha      : chr "0f75a9e3a9b3fc5bb641088e71fa955d3ef02ffe"
+  protected: logi FALSE
+  html_url : chr "https://api.github.com/repos/ChadGoymer/test-repository/commits/0f75a9e3a9b3fc5bb641088e"..
+```
+
+### Deleting Branches
+
+Finally, to delete a branch use `delete_branch()`:
+
+```
+delete_branch("test", "ChadGoymer/test-repository")
+```
+```
+# DELETE https://api.github.com/repos/ChadGoymer/test-repository/git/refs/heads/test
+[1] TRUE
+```
+
+## Commits
+
+### Downloading Commits
+
+Downloading commit is very straight forward using `download_commit()`:
+
+```r
+repo_path <- fs::path_temp("test-repository")
+fs::dir_create(repo_path)
+
+download_commit("main", repo = "ChadGoymer/test-repository", path = repo_path)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/zipball/main
+[1] "C:/Users/chadg/AppData/Local/Temp/RtmpgzA0Td/test-repository"
+```
+
+### Uploading commits
+
+Creating new commits is a rather complicated process through the GitHub API, but
+{githapi} provides several functions to simplify it. The most obvious approach 
+is to use `upload_commit()`. This uploads all the files and folders in a given 
+directory and create a new commit on the specified branch.
+
+Note: `upload_commit()` creates a commit with exactly the same content as the 
+specified directory. If you want to change individual files within a commit and 
+leave the other files unchanged then take a look at the [Files](#files) section 
+below.
+
+`upload_commit()` works well in conjunction with `download_commit()`. For 
+example, you can download a commit, make some changes locally then upload the
+new commit.
+
+```r
+fs::file_create(fs::path(repo_path, "test.R"))
+readr::write_lines("print('Hello World!')", fs::path(repo_path, "test.R"))
+
+upload_commit(
+  path    = repo_path,
+  branch  = "main",
+  message = "Added hello world script",
+  repo    = "ChadGoymer/test-repository"
+)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/commits/98d2308af91886f00958da7b484ac046cba9dd98
+List of 13
+  sha            : chr "98d2308af91886f00958da7b484ac046cba9dd98"
+  message        : chr "Added hello world script"
+  author_login   : chr "ChadGoymer"
+  author_name    : chr "Chad Goymer"
+  author_email   : chr "chad.goymer@gmail.com"
+  author_date    : POSIXct[1:1], format: "2021-06-03 14:45:44"
+  committer_login: chr "ChadGoymer"
+  committer_name : chr "Chad Goymer"
+  committer_email: chr "chad.goymer@gmail.com"
+  committer_date : POSIXct[1:1], format: "2021-06-03 14:45:44"
+  tree_sha       : chr "afef03907400fe7bd64585f8b55b89964d0b9cd3"
+  parents        : chr "0f75a9e3a9b3fc5bb641088e71fa955d3ef02ffe"
+  html_url       : chr "https://github.com/ChadGoymer/test-repository/commit/98d2308af91886f00958da7b484ac"..
+```
+
+If the specified `branch` does not exist, a new branch will be created. This 
+will be an orphan branch unless `parents` are specified. For example, to create 
+a new branch from the main branch then use:
+
+```r
+upload_commit(
+  path    = repo_path,
+  branch  = "test",
+  message = "Added hello world script",
+  repo    = "ChadGoymer/test-repository",
+  parents = "main"
+)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/commits/73452a7ef01f9678b258994d10ca04a18cbb8dc4
+List of 13
+  sha            : chr "73452a7ef01f9678b258994d10ca04a18cbb8dc4"
+  message        : chr "Added hello world script"
+  author_login   : chr "ChadGoymer"
+  author_name    : chr "Chad Goymer"
+  author_email   : chr "chad.goymer@gmail.com"
+  author_date    : POSIXct[1:1], format: "2021-06-03 14:46:09"
+  committer_login: chr "ChadGoymer"
+  committer_name : chr "Chad Goymer"
+  committer_email: chr "chad.goymer@gmail.com"
+  committer_date : POSIXct[1:1], format: "2021-06-03 14:46:09"
+  tree_sha       : chr "afef03907400fe7bd64585f8b55b89964d0b9cd3"
+  parents        : chr "98d2308af91886f00958da7b484ac046cba9dd98"
+  html_url       : chr "https://github.com/ChadGoymer/test-repository/commit/73452a7ef01f9678b258994d10ca0"..
+```
+
+You can also specify two parents, as a character vector, which will result in a
+merge commit.
+
+### Viewing Commits
+
+You can view the history of commits for any git reference using 
+`view_commits()`:
+
+```r
+view_commits("main", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/commits?sha=main&per_page=100
+# A tibble: 2 x 13
+  sha   message author_login author_name author_email author_date         committer_login committer_name
+  <chr> <chr>   <chr>        <chr>       <chr>        <dttm>              <chr>           <chr>         
+1 98d2~ Added ~ ChadGoymer   Chad Goymer chad.goymer~ 2021-06-03 14:45:44 ChadGoymer      Chad Goymer   
+2 0f75~ Initia~ ChadGoymer   Chad Goymer chad.goymer~ 2021-06-03 14:42:15 web-flow        GitHub        
+# ... with 5 more variables: committer_email <chr>, committer_date <dttm>, tree_sha <chr>, parents <list>,
+#   html_url <chr>
+```
+
+This list can also be filtered by providing:
+- `path`: Show commits where this file has been changed
+- `author`: Show commits by this author
+- `since`: Show commits from a specified date & time
+- `until`: Show commits up to a specified date & time
+
+```r
+view_commits(
+  ref  = "main", 
+  repo = "ChadGoymer/test-repository",
+  path = "test.R"
+)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/commits?sha=main&path=test.R&per_page=100
+# A tibble: 1 x 13
+  sha   message author_login author_name author_email author_date         committer_login committer_name
+  <chr> <chr>   <chr>        <chr>       <chr>        <dttm>              <chr>           <chr>         
+1 98d2~ Added ~ ChadGoymer   Chad Goymer chad.goymer~ 2021-06-03 14:45:44 ChadGoymer      Chad Goymer   
+# ... with 5 more variables: committer_email <chr>, committer_date <dttm>, tree_sha <chr>, parents <list>,
+#   html_url <chr>
+```
+
+Also, you can view the properties of an individual commit using `view_commit()`:
+
+```r
+view_commit("main", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/commits/main
+List of 13
+  sha            : chr "98d2308af91886f00958da7b484ac046cba9dd98"
+  message        : chr "Added hello world script"
+  author_login   : chr "ChadGoymer"
+  author_name    : chr "Chad Goymer"
+  author_email   : chr "chad.goymer@gmail.com"
+  author_date    : POSIXct[1:1], format: "2021-06-03 14:45:44"
+  committer_login: chr "ChadGoymer"
+  committer_name : chr "Chad Goymer"
+  committer_email: chr "chad.goymer@gmail.com"
+  committer_date : POSIXct[1:1], format: "2021-06-03 14:45:44"
+  tree_sha       : chr "afef03907400fe7bd64585f8b55b89964d0b9cd3"
+  parents        : chr "0f75a9e3a9b3fc5bb641088e71fa955d3ef02ffe"
+  html_url       : chr "https://github.com/ChadGoymer/test-repository/commit/98d2308af91886f00958da7b484ac"..
+```
+
+### Git References
+
+{githapi} uses the concept of Git References extensively to identify commits. In
+Git each commit has a unique ID, known as the SHA-1 (or just SHA). A reference
+is essentially a label pointing to a particular commit, and therefore an alias
+for a SHA. Tags provide a way to identify a commit with a more readable and 
+memorable name, but branches are also just labels which point at a head commit. 
+Therefore, you can use a SHA, branch or tag to identify a commit in {githapi} 
+functions.
+
+If you want to identify the SHA for a given branch or tag, you can use the 
+`view_sha()` function:
+
+```r
+view_sha("main", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/commits/main
+[1] "98d2308af91886f00958da7b484ac046cba9dd98"
+```
+
+## Files
+
+### Downloading Files
+
+{githapi} provides a number of functions for interacting with files in GitHub.
+You can download a file to a specified location, using `download_file()`:
+
+```r
+test_script <- fs::file_temp("test-", ext = "R")
+
+download_file(
+  from_path = "test.R",
+  to_path   = test_script,
+  ref       = "main",
+  repo      = "ChadGoymer/test-repository"
+)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/git/blobs/73fb7c3fbdbf4258a2d08f15fa7d4cd8556d0b67
+[1] "C:/Users/chadg/AppData/Local/Temp/RtmpgzA0Td/test-3a4c53112e9f.R"
+```
+
+### Uploading Files
+
+Similarly you can upload files with `upload_files()`. This function differs from
+`upload_commit()` in that it only creates or updates the files specifed. Any 
+files that existed in the parent commit and not uploaded will remain the same. 
+`upload_commit()` would effectively delete those files to make the commit 
+identical to the content of the specified directory.
+
+```r
+upload_files(
+  from_path = test_script,
+  to_path   = "test-2.R",
+  branch    = "main",
+  message   = "Added hello world script again",
+  repo      = "ChadGoymer/test-repository"
+)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/commits/456e0ba9eee4a8d33ab0aecc825a2278a6211ecc
+List of 13
+  sha            : chr "456e0ba9eee4a8d33ab0aecc825a2278a6211ecc"
+  message        : chr "Added hello world script again"
+  author_login   : chr "ChadGoymer"
+  author_name    : chr "Chad Goymer"
+  author_email   : chr "chad.goymer@gmail.com"
+  author_date    : POSIXct[1:1], format: "2021-06-03 14:48:16"
+  committer_login: chr "ChadGoymer"
+  committer_name : chr "Chad Goymer"
+  committer_email: chr "chad.goymer@gmail.com"
+  committer_date : POSIXct[1:1], format: "2021-06-03 14:48:16"
+  tree_sha       : chr "0561371151d34a0e42da3fa88b8de55743625a67"
+  parents        : chr "98d2308af91886f00958da7b484ac046cba9dd98"
+  html_url       : chr "https://github.com/ChadGoymer/test-repository/commit/456e0ba9eee4a8d33ab0aecc825a2"..
+```
+
+### Viewing Files
+
+To view the files within a commit use `view_files()`:
+
+```r
+view_files("main", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/git/trees/0561371151d34a0e42da3fa88b8de55743625a67?recursive=TRUE
+# A tibble: 3 x 4
+  path     sha                          size html_url                                                         
+* <chr>    <chr>                       <dbl> <chr>                                                            
+1 README.~ 6ef7aa157f3ca12af4757ca96f~    44 https://github.com/ChadGoymer/test-repository/blob/456e0ba9eee4a~
+2 test-2.R 73fb7c3fbdbf4258a2d08f15fa~    22 https://github.com/ChadGoymer/test-repository/blob/456e0ba9eee4a~
+3 test.R   73fb7c3fbdbf4258a2d08f15fa~    22 https://github.com/ChadGoymer/test-repository/blob/456e0ba9eee4a~
+```
+
+To view the properties of a single file use `view_file()`:
+
+```r
+view_file("test.R", ref = "main", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/contents/test.R?ref=main
+List of 4
+  path    : chr "test.R"
+  sha     : chr "73fb7c3fbdbf4258a2d08f15fa7d4cd8556d0b67"
+  size    : num 22
+  html_url: chr "https://github.com/ChadGoymer/test-repository/blob/main/test.R"
+```
+
+### Reading & Writing Files
+
+You can read files directly using `read_github_file()` or `read_github_lines()`.
+These functions use `readr::read_file()` and `readr::read_lines()` to parse the
+file:
+
+```r
+read_github_lines("test.R", ref = "main", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/git/blobs/73fb7c3fbdbf4258a2d08f15fa7d4cd8556d0b67
+[1] "print('Hello World!')"
+```
+
+Conversely, you can write files, creating a new commit using 
+`write_github_file()` or `write_github_lines()`:
+
+```r
+write_github_lines(
+  content = c(
+    'helloworld <- function() {',
+    '  print(\"Hello World\")',
+    '}'
+  ),
+  path    = "helloworld.R",
+  branch  = "main",
+  message = "Added helloworld function",
+  repo    = "ChadGoymer/test-repository"
+)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/commits/eead248abc41f73ec208f37f26d6b3dbf0a99540
+List of 13
+  sha            : chr "eead248abc41f73ec208f37f26d6b3dbf0a99540"
+  message        : chr "Added helloworld function"
+  author_login   : chr "ChadGoymer"
+  author_name    : chr "Chad Goymer"
+  author_email   : chr "chad.goymer@gmail.com"
+  author_date    : POSIXct[1:1], format: "2021-06-03 14:49:31"
+  committer_login: chr "ChadGoymer"
+  committer_name : chr "Chad Goymer"
+  committer_email: chr "chad.goymer@gmail.com"
+  committer_date : POSIXct[1:1], format: "2021-06-03 14:49:31"
+  tree_sha       : chr "e935f0656c190db9b8c16385d0f1fb67ac469d08"
+  parents        : chr "456e0ba9eee4a8d33ab0aecc825a2278a6211ecc"
+  html_url       : chr "https://github.com/ChadGoymer/test-repository/commit/eead248abc41f73ec208f37f26d6b"..
+```
+
+You can also source R scripts directly from GitHub using `github_source()`:
+
+```r
+github_source("helloworld.R", ref = "main", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/git/blobs/3ef2abea311f31851f1b4310f6582e4bc399c6fd
+List of 2
+  value  :function ()  
+  visible: logi FALSE
+```
+```r
+helloworld()
+```
+```
+[1] "Hello World"
+```
+
+{githapi} also include functions for reading and writing CSVs into a GitHub 
+repository, for example:
+
+```r
+write_github_csv(
+  content = mtcars,
+  path    = "mtcars.csv",
+  branch  = "main",
+  message = "Added mtcars data",
+  repo    = "ChadGoymer/test-repository"
+)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/commits/27b6d9ada6de1f39f25091a204affa582f003a43
+List of 13
+  sha            : chr "27b6d9ada6de1f39f25091a204affa582f003a43"
+  message        : chr "Added mtcars data"
+  author_login   : chr "ChadGoymer"
+  author_name    : chr "Chad Goymer"
+  author_email   : chr "chad.goymer@gmail.com"
+  author_date    : POSIXct[1:1], format: "2021-06-03 14:50:13"
+  committer_login: chr "ChadGoymer"
+  committer_name : chr "Chad Goymer"
+  committer_email: chr "chad.goymer@gmail.com"
+  committer_date : POSIXct[1:1], format: "2021-06-03 14:50:13"
+  tree_sha       : chr "27a6b1e5de05446e800890dc02034940cca2b361"
+  parents        : chr "eead248abc41f73ec208f37f26d6b3dbf0a99540"
+  html_url       : chr "https://github.com/ChadGoymer/test-repository/commit/27b6d9ada6de1f39f25091a204aff"..
+```
+```r
+read_github_csv(
+  path = "mtcars.csv",
+  ref  = "main",
+  repo = "ChadGoymer/test-repository"
+)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/git/blobs/d154466a828814fea6f9d1a1cefd8ca093517aaa
+# A tibble: 32 x 11
+     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+ * <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+ 1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
+ 2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
+ 3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
+ 4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
+ 5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
+ 6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
+ 7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
+ 8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
+ 9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
+10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
+# ... with 22 more rows
+```
