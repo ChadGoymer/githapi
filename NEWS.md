@@ -1,3 +1,17 @@
+# githapi 1.0.0
+
+Version 1.0.0 of {githapi} indicates that we are now happy with the set of 
+functions implemented and confident they are relatively bug free. The intention
+now is that we will be very careful about changing functions and will deprecate
+before removing any.
+
+All functions are documented and vignettes have been added for the common uses
+of the package. Please visit the website 
+[goymer.me/githapi](https://goymer.me/githapi/) for full documentation and if 
+you find any bugs, or want to request new functions, then raise an issue in 
+the repo [ChadGoymer/githapi](https://github.com/ChadGoymer/githapi/issues) in 
+GitHub.
+
 # githapi 0.10.24
 
 - Removed usernames, organizations and team names from tests

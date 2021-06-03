@@ -430,7 +430,7 @@ test_that("Setting the ENVIRONMENT sets the configuration correctly", {
 
 test_that("An invalid configuration file gives a warning", {
 
-  original_config = Sys.getenv("GITHAPI_CONFIG")
+  original_config <- Sys.getenv("GITHAPI_CONFIG")
 
   on.exit({
     Sys.setenv(GITHAPI_CONFIG = original_config)

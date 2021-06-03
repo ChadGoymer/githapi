@@ -1,0 +1,104 @@
+---
+title: "Configuration"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Configuration}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Options
+
+[{githapi}](http://goymer.me/githapi) uses a number of options to set default
+values. The list of options are:
+
+| Option         | Description                                  |
+| -------------- | -------------------------------------------- |
+| github.api     | The URL of the GitHub API (required)         |
+| github.proxy   | The proxy to use to access GitHub (optional) |
+| github.token   | A GitHub personal access token (optional)    |
+| github.oauth   | The URL for GitHub OAuth (optional)          |
+| githapi.id     | The GitHub application ID (optional)         |
+| githapi.secret | The GitHub application secret (optional)     |
+| githapi.cache  | Location for cached token (optional)         |
+
+Any of these settings can be set using `options()`, for example:
+
+```r
+options(
+  github.api   = "https://github.acme.com/api/v3",
+  github.proxy = "https://proxy.acme.com"
+)
+```
+
+If you want to ensure they are set permanently, for all new R sessions, you can 
+set them as environment variables. The simplest approach is to save them in a 
+file called `.Renviron` in you HOME directory. Then R will load them each time
+a session starts. For example, the file might contain:
+
+```
+GITHUB_API_URL=https://github.acme.com/api/v3
+GITHUB_PROXY=https://proxy.acme.com
+```
+
+The options, and their environment variables, are listed below:
+
+| Option         | Environment Variable                      |
+| -------------- | ----------------------------------------- |
+| github.api     | GITHUB_API_URL                            |
+| github.proxy   | GITHUB_PROXY                              |
+| github.token   | GITHAPI_TOKEN, GITHUB_PAT or GITHUB_TOKEN |
+| github.oauth   | GITHUB_OAUTH                              |
+| githapi.id     | GITHAPI_ID                                |
+| githapi.secret | GITHAPI_SECRET                            |
+| githapi.cache  | GITHAPI_CACHE                             |
+
+## URLs
+
+The `github.api` contains the base URL of the API, so is required for all calls
+to GitHub. However, it is set to access the API for github.com, so only requires
+changing if you have a GitHub Enterprise installation.
+
+`github.proxy` is only required if you have to use a proxy server to access 
+GitHub. Then it needs to be set to the address of the proxy server.
+
+## Authentication
+
+When it comes to authorisation there are two ways 
+[{githapi}](http://goymer.me/githapi) can authenticate the user:
+
+### Personal Access Token
+
+A personal access token allows {githapi} to access GitHub with the user's 
+permissions, but is more secure than using a password. You can register a token
+by following the process described on GitHub's 
+[Creating a Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) 
+help page.
+
+Once obtained, you can set the token in the `github.token` option. 
+Alternatively, you can set an environment variable so you do not need to set the 
+token every time you start an R session. {githapi} will check `GITHAPI_TOKEN`, 
+`GITHUB_PAT` and `GITHUB_TOKEN`, in that order.
+
+### OAuth
+
+OAuth is the preferred method of authentication. However, it requires an 
+application to be registered with GitHub which the user then authorises. This 
+allows you to set the level of access in a more granular way, depending on what 
+is required for a particular process. In order to use this approach the 
+following options are required.
+
+`github.oauth`: If using github.com this URL is already set. You only need to 
+change it if you have a GitHub Enterprise installation.
+
+Registering an OAuth app with GitHub is very straight forward and is described 
+in GitHub's [Creating an OAuth App](https://docs.github.com/en/developers/apps/creating-an-oauth-app) 
+help page. The **Application callback URL** should be set to 
+`http://localhost:1410`. Once created GitHub will assign a **Client ID** and 
+**Client Secret**, which will need to be saved as the options `githapi.id` and `githapi.secret` respectively, or set in the `GITHAPI_ID` and `GITHAPI_SECRET`
+environment variables.
+
+Finally, you can cache the token that is produced by the OAuth process so you do 
+not need to log on to GitHub every R session. By specifying a valid file path in 
+the `githapi.cache` option, or in the `GITHAPI_CACHE` environment variable the 
+token is saved there and is automatically regenerated when required.

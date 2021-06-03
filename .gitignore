@@ -8,3 +8,4 @@ githapi*.tgz
 ~/.githapi.oauth
 ~/.github.oauth
 docs
+inst/doc

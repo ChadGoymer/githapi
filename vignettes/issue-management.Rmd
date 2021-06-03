@@ -1,0 +1,636 @@
+---
+title: "Issue Management"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Issue Management}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+If you use GitHub issues for managing bugs and enhancements you can use
+{githapi} to interact with them. It allows you to create, update, view and 
+delete issues, pull requests, labels and milestones.
+
+
+## Issues
+
+### Creating Issues
+
+Creating an issue, in a repository, is very straight forward using the
+`create_issue()` function:
+
+```r
+create_issue(
+  title     = "Found a nasty bug", 
+  body      = "Found a bug in an important function and it must be fixed!", 
+  repo      = "ChadGoymer/test-repository", 
+  assignees = "ChadGoymer",
+  labels    = "bug"
+)
+```
+```
+# POST https://api.github.com/repos/ChadGoymer/test-repository/issues
+List of 14
+  number      : int 1
+  title       : chr "Found a nasty bug"
+  body        : chr "Found a bug in an important function and it must be fixed!"
+  assignees   : chr "ChadGoymer"
+  labels      : chr "bug"
+  milestone   : chr NA
+  state       : chr "open"
+  repository  : chr "ChadGoymer/test-repository"
+  pull_request: logi FALSE
+  creator     : chr "ChadGoymer"
+  html_url    : chr "https://github.com/ChadGoymer/test-repository/issues/1"
+  created_at  : POSIXct[1:1], format: "2021-06-02 15:17:33"
+  updated_at  : POSIXct[1:1], format: "2021-06-02 15:17:33"
+  closed_at   : POSIXct[1:1], format: NA
+```
+
+Note: The `body`, `assignees` and `labels` are optional. You can also assign a
+`milestone` if it already exists (see below).
+
+### Viewing Issues
+
+To view all the issues associated with a repository use `view_issues()`:
+
+```r
+view_issues("ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/issues?state=open&sort=created&direction=desc&per_page=100
+# A tibble: 1 x 14
+  number title body  assignees labels milestone state repository pull_request creator html_url
+   <int> <chr> <chr> <list>    <list> <chr>     <chr> <chr>      <lgl>        <chr>   <chr>   
+1      1 Foun~ Foun~ <chr [1]> <chr ~ NA        open  NA         FALSE        ChadGo~ https:/~
+# ... with 3 more variables: created_at <dttm>, updated_at <dttm>, closed_at <dttm>
+```
+
+There are also a few optional parameters for filtering the results:
+
+- `labels`: Filter by one or more labels
+- `milestone`: Filter by a milestone
+- `since`: Filter by earliest creation date
+- `state`: Filter by whether the issue is "open" or "closed". Note: this is 
+  "open" by default.
+
+`view_issues()` returns a tibble of issue properties, but you can also view
+the properties of a single issue using `view_issue()`:
+
+```r
+view_issue(1, repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/issues/1
+List of 14
+  number      : int 1
+  title       : chr "Found a nasty bug"
+  body        : chr "Found a bug in an important function and it must be fixed!"
+  assignees   : chr "ChadGoymer"
+  labels      : chr "bug"
+  milestone   : chr NA
+  state       : chr "open"
+  repository  : chr "ChadGoymer/test-repository"
+  pull_request: logi FALSE
+  creator     : chr "ChadGoymer"
+  html_url    : chr "https://github.com/ChadGoymer/test-repository/issues/1"
+  created_at  : POSIXct[1:1], format: "2021-06-02 15:17:33"
+  updated_at  : POSIXct[1:1], format: "2021-06-02 15:17:33"
+  closed_at   : POSIXct[1:1], format: NA
+```
+
+### Updating Issues
+
+Issues cannot be deleted but you can close them with `update_issue()`. You can
+also update any of the properties with this function:
+
+```r
+update_issue(
+  issue = 1,
+  title = "Found a bug in the update_issue() function",
+  body  = "The update_issue() function does not work",
+  repo  = "ChadGoymer/test-repository"
+)
+```
+```
+# PATCH https://api.github.com/repos/ChadGoymer/test-repository/issues/1
+List of 14
+  number      : int 1
+  title       : chr "Found a bug in the update_issue() function"
+  body        : chr "The update_issue() function does not work"
+  assignees   : chr "ChadGoymer"
+  labels      : chr "bug"
+  milestone   : chr NA
+  state       : chr "open"
+  repository  : chr "ChadGoymer/test-repository"
+  pull_request: logi FALSE
+  creator     : chr "ChadGoymer"
+  html_url    : chr "https://github.com/ChadGoymer/test-repository/issues/1"
+  created_at  : POSIXct[1:1], format: "2021-06-02 15:17:33"
+  updated_at  : POSIXct[1:1], format: "2021-06-02 15:20:03"
+  closed_at   : POSIXct[1:1], format: NA
+```
+
+## Pull Requests
+
+### Creating Pull Requests
+
+Pull requests are very similar to issues, so there are similar functions for
+them. To create a pull request, in a repository, use the
+`create_pull_request()` function:
+
+```r
+create_pull_request(
+  title     = "I fixed the update_issue() bug", 
+  head      = "1-fix-update-issues",
+  base      = "main",
+  body      = "Fixed the the bug in update_issue()!",
+  labels    = "bug",
+  repo      = "ChadGoymer/test-repository"
+)
+```
+```
+# POST https://api.github.com/repos/ChadGoymer/test-repository/pulls
+List of 25
+  number    : int 2
+  title     : chr "I fixed the update_issue() bug"
+  body      : chr "Fixed the the bug in update_issue()!"
+  head_sha  : chr "ecd725d0c70d37634de304094de233fac3ca5f2a"
+  head_ref  : chr "1-fix-update-issues"
+  head_repo : chr "ChadGoymer/test-repository"
+  base_sha  : chr "e7dbbad21adfebb6322282a9975970483712b37f"
+  base_ref  : chr "main"
+  merge_sha : chr NA
+  assignees : chr(0) 
+  reviewers : chr(0) 
+  labels    : chr "bug"
+  state     : chr "open"
+  repository: chr "ChadGoymer/test-repository"
+  diff_url  : chr "https://github.com/ChadGoymer/test-repository/pull/2.diff"
+  creator   : chr "ChadGoymer"
+  mergeable : logi NA
+  rebaseable: logi NA
+  merged    : logi FALSE
+  merged_by : chr NA
+  html_url  : chr "https://github.com/ChadGoymer/test-repository/pull/2"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:21:10"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:21:10"
+  merged_at : POSIXct[1:1], format: NA
+  closed_at : POSIXct[1:1], format: NA
+```
+Note: The `body` and `labels` are optional. You can also add `assignees`, 
+`reviewers` and a `milestone`, if it already exists (see below).
+
+### Viewing Pull Requests
+
+To view all the pull requests associated with a repository use
+`view_pull_requests()`:
+
+```r
+view_pull_requests("ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/pulls?state=open&sort=created&direction=desc&per_page=100
+# A tibble: 1 x 26
+  number title body  head_sha head_ref head_repo base_sha base_ref merge_sha assignees reviewers
+   <int> <chr> <chr> <chr>    <chr>    <chr>     <chr>    <chr>    <chr>     <list>    <list>   
+1      2 I fi~ Fixe~ ecd725d~ 1-fix-u~ ChadGoym~ e7dbbad~ main     46445d20~ <chr [0]> <chr [0]>
+# ... with 15 more variables: labels <list>, milestone <chr>, state <chr>, repository <chr>,
+#   diff_url <chr>, creator <chr>, mergeable <lgl>, rebaseable <lgl>, merged <lgl>, merged_by <chr>,
+#   html_url <chr>, created_at <dttm>, updated_at <dttm>, merged_at <dttm>, closed_at <dttm>
+```
+
+There are also a few optional parameters for filtering the results:
+
+- `head`: Filter by the name of the branch
+- `base`: Filter by the branch to be merged into
+- `state`: Filter by whether the pull request is "open" or "closed". Note:
+  this is "open" by default.
+
+It is worth noting at this point that in GitHub pull requests are issues with
+extra properties. Therefore, `view_issues()` returns pull requests as well.
+Issues have a `pull_request` boolean property so, for example, if you want to
+view pull requests with the "bug" label you can use:
+
+```r
+view_issues(
+  labels = "bug",
+  repo   = "ChadGoymer/test-repository"
+) %>% 
+  filter(pull_request)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/issues?labels=bug&state=open&sort=created&direction=desc&per_page=100
+# A tibble: 1 x 14
+  number title body  assignees labels milestone state repository pull_request creator html_url
+   <int> <chr> <chr> <list>    <list> <chr>     <chr> <chr>      <lgl>        <chr>   <chr>   
+1      2 I fi~ Fixe~ <chr [0]> <chr ~ NA        open  NA         TRUE         ChadGo~ https:/~
+# ... with 3 more variables: created_at <dttm>, updated_at <dttm>, closed_at <dttm>
+```
+
+`view_pull_requests()` returns a tibble of pull request properties, but you
+can also view the properties of a single pull request using 
+`view_pull_request()`:
+
+```r
+view_pull_request(2, repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/pulls/2
+List of 29
+  number    : int 2
+  title     : chr "I fixed the update_issue() bug"
+  body      : chr "Fixed the the bug in update_issue()!"
+  head_sha  : chr "ecd725d0c70d37634de304094de233fac3ca5f2a"
+  head_ref  : chr "1-fix-update-issues"
+  head_repo : chr "ChadGoymer/test-repository"
+  base_sha  : chr "e7dbbad21adfebb6322282a9975970483712b37f"
+  base_ref  : chr "main"
+  merge_sha : chr "46445d205dfcc0cdf7b047c2115459f65f374841"
+  assignees : chr(0) 
+  reviewers : chr(0) 
+  labels    : chr "bug"
+  milestone : chr NA
+  state     : chr "open"
+  repository: chr "ChadGoymer/test-repository"
+  diff_url  : chr "https://github.com/ChadGoymer/test-repository/pull/2.diff"
+  creator   : chr "ChadGoymer"
+  mergeable : logi TRUE
+  rebaseable: logi TRUE
+  merged    : logi FALSE
+  merged_by : chr NA
+  html_url  : chr "https://github.com/ChadGoymer/test-repository/pull/2"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:21:10"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:21:11"
+  merged_at : POSIXct[1:1], format: NA
+  closed_at : POSIXct[1:1], format: NA
+  commits   : tibble [1 x 9] (S3: github/tbl_df/tbl/data.frame)
+  files     : tibble [1 x 8] (S3: github/tbl_df/tbl/data.frame)
+  reviews   : tibble [0 x 5] (S3: github/tbl_df/tbl/data.frame)
+```
+
+### Updating Pull Request
+
+As with issues, pull requests cannot be deleted but you can close them with
+`update_pull_request()`. You can also update any of the properties with this function:
+
+```r
+update_pull_request(
+  pull_request = 2,
+  title        = "BugFix: update_issue()",
+  repo         = "ChadGoymer/test-repository"
+)
+```
+```
+# PATCH https://api.github.com/repos/ChadGoymer/test-repository/issues/2
+List of 26
+  number    : int 2
+  title     : chr "BugFix: update_issue()"
+  body      : chr "Fixed the the bug in update_issue()!"
+  head_sha  : chr NA
+  head_ref  : chr NA
+  head_repo : chr NA
+  base_sha  : chr NA
+  base_ref  : chr NA
+  merge_sha : chr NA
+  assignees : chr(0) 
+  reviewers : chr(0) 
+  labels    : chr(0) 
+  milestone : chr NA
+  state     : chr "open"
+  repository: chr "ChadGoymer/test-repository"
+  diff_url  : chr NA
+  creator   : chr "ChadGoymer"
+  mergeable : logi NA
+  rebaseable: logi NA
+  merged    : logi NA
+  merged_by : chr NA
+  html_url  : chr "https://github.com/ChadGoymer/test-repository/pull/2"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:21:10"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:23:31"
+  merged_at : POSIXct[1:1], format: NA
+  closed_at : POSIXct[1:1], format: NA
+```
+
+It is not currently possible to merge pull requests with {githapi}, but we 
+plan to add it in a future release, along with pull request reviews. Until
+then you will need to use the GUI, which is probably preferable anyway.
+
+## Labels
+
+### Creating Labels
+
+You can only add a label to an issue or pull request if it exists for the 
+repository. If it does not then you need to create it first using the 
+`create_label()` function:
+
+```r
+create_label(
+  name        = "feature",
+  description = "Request a new feature",
+  color       = "forestgreen",
+  repo        = "ChadGoymer/test-repository"
+)
+```
+```
+# POST https://api.github.com/repos/ChadGoymer/test-repository/labels
+List of 3
+  name       : chr "feature"
+  color      : chr "228B22"
+  description: chr "Request a new feature"
+```
+
+Note: when setting the color you can use all the names defined in
+`grDevices::colors()` or a hex code. If a color is not specified, one is 
+selected at random.
+
+You can also update label name, color or description using `update_label()`:
+
+```r
+update_label(
+  label = "enhancement", 
+  color = "slateblue",
+  repo  = "ChadGoymer/test-repository"
+)
+```
+```
+# PATCH https://api.github.com/repos/ChadGoymer/test-repository/labels/enhancement
+List of 3
+  name       : chr "enhancement"
+  color      : chr "6A5ACD"
+  description: chr "New feature or request"
+```
+
+### Viewing labels
+
+To view all the labels associated with a repository use `view_labels()`:
+
+```r
+view_labels("ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/labels?per_page=100
+# A tibble: 10 x 3
+   name             color  description                               
+ * <chr>            <chr>  <chr>                                     
+ 1 bug              d73a4a Something isn't working                   
+ 2 documentation    0075ca Improvements or additions to documentation
+ 3 duplicate        cfd3d7 This issue or pull request already exists 
+ 4 enhancement      6A5ACD New feature or request                    
+ 5 feature          228B22 Request a new feature                     
+ 6 good first issue 7057ff Good for newcomers                        
+ 7 help wanted      008672 Extra attention is needed                 
+ 8 invalid          e4e669 This doesn't seem right                   
+ 9 question         d876e3 Further information is requested          
+10 wontfix          ffffff This will not be worked on                
+```
+
+`view_labels()` returns a tibble of label properties, but you can also view
+the properties of a single label using `view_label()`:
+
+```r
+view_label("feature", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/labels/feature
+List of 3
+  name       : chr "feature"
+  color      : chr "228B22"
+  description: chr "Request a new feature"
+```
+
+### Adding a Removing Labels from an Issue or Pull Request
+
+The `update_issue()` and `update_pull_request()` functions allow you to 
+change the labels associated with the issue or pull request respectively. 
+However, they _replace_ all the currently assign labels. If you just want to 
+add or remove labels then use the `add_labels()` or `remove_labels()` 
+functions:
+
+```r
+add_labels(
+  labels = c("enhancement", "wontfix"),
+  issue  = 1,
+  repo   = "ChadGoymer/test-repository"
+)
+```
+```
+# POST https://api.github.com/repos/ChadGoymer/test-repository/issues/1/labels
+# A tibble: 3 x 3
+  name        color  description               
+* <chr>       <chr>  <chr>                     
+1 bug         d73a4a Something isn't working   
+2 enhancement 6A5ACD New feature or request    
+3 wontfix     ffffff This will not be worked on
+```
+
+```r
+remove_labels(
+  labels = "bug",
+  issue  = 1,
+  repo   = "ChadGoymer/test-repository"
+)
+```
+```
+# DELETE https://api.github.com/repos/ChadGoymer/test-repository/issues/1/labels/bug
+# A tibble: 2 x 3
+  name        color  description               
+* <chr>       <chr>  <chr>                     
+1 enhancement 6A5ACD New feature or request    
+2 wontfix     ffffff This will not be worked on
+```
+
+### Deleting Labels
+
+Labels can be deleted using `delete_label()`:
+
+```r
+delete_label("feature", repo = "ChadGoymer/test-repository")
+```
+```
+# DELETE https://api.github.com/repos/ChadGoymer/test-repository/labels/feature
+[1] TRUE
+```
+
+## Milestones
+
+### Creating Milestones
+
+Milestone are a great way to group issues. For example, you can collect 
+together all the changing required for a release. You can also add a 
+description and due date:
+
+```r
+create_milestone(
+  title       = "Release 1.0", 
+  description = "All things we need to fix for version 1.0",
+  due_on      = "2021-12-01",
+  repo        = "ChadGoymer/test-repository"
+)
+```
+```
+# POST https://api.github.com/repos/ChadGoymer/test-repository/milestones
+List of 12
+  number       : int 1
+  title        : chr "Release 1.0"
+  description  : chr "All things we need to fix for version 1.0"
+  state        : chr "open"
+  open_issues  : int 0
+  closed_issues: int 0
+  creator      : chr "ChadGoymer"
+  html_url     : chr "https://github.com/ChadGoymer/test-repository/milestone/1"
+  created_at   : POSIXct[1:1], format: "2021-06-02 15:26:51"
+  updated_at   : POSIXct[1:1], format: "2021-06-02 15:26:51"
+  due_on       : POSIXct[1:1], format: "2021-12-01 08:00:00"
+  closed_at    : POSIXct[1:1], format: NA
+```
+
+Note: the `description` and `due_on` properties are optional. The `title`,
+`description` and `due_on` properties can also be changed with 
+`update_milestone()`.
+
+```r
+update_milestone(
+  milestone = "Release 1.0",
+  due_on    = "2022-01-01",
+  repo      = "ChadGoymer/test-repository"
+)
+```
+```
+# PATCH https://api.github.com/repos/ChadGoymer/test-repository/milestones/1
+List of 12
+  number       : int 1
+  title        : chr "Release 1.0"
+  description  : chr "All things we need to fix for version 1.0"
+  state        : chr "open"
+  open_issues  : int 0
+  closed_issues: int 0
+  creator      : chr "ChadGoymer"
+  html_url     : chr "https://github.com/ChadGoymer/test-repository/milestone/1"
+  created_at   : POSIXct[1:1], format: "2021-06-02 15:26:51"
+  updated_at   : POSIXct[1:1], format: "2021-06-02 15:27:19"
+  due_on       : POSIXct[1:1], format: "2022-01-01 08:00:00"
+  closed_at    : POSIXct[1:1], format: NA
+```
+
+### Viewing Milestones
+
+To view all the milestones associated with a repository use 
+`view_milestones()`:
+
+```r
+view_milestones("ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/milestones?state=open&sort=due_on&direction=asc&per_page=100
+# A tibble: 1 x 12
+  number title description state open_issues closed_issues creator html_url created_at         
+*  <int> <chr> <chr>       <chr>       <int>         <int> <chr>   <chr>    <dttm>             
+1      1 Rele~ All things~ open            0             0 ChadGo~ https:/~ 2021-06-02 15:26:51
+# ... with 3 more variables: updated_at <dttm>, due_on <dttm>, closed_at <dttm>
+```
+
+`view_milestones()` returns a tibble of milestone properties, but you can
+also view the properties of a single milestone using `view_milestone()`:
+
+```r
+view_milestone("Release 1.0", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/milestones?per_page=100
+List of 12
+  number       : int 1
+  title        : chr "Release 1.0"
+  description  : chr "All things we need to fix for version 1.0"
+  state        : chr "open"
+  open_issues  : int 0
+  closed_issues: int 0
+  creator      : chr "ChadGoymer"
+  html_url     : chr "https://github.com/ChadGoymer/test-repository/milestone/1"
+  created_at   : POSIXct[1:1], format: "2021-06-02 15:26:51"
+  updated_at   : POSIXct[1:1], format: "2021-06-02 15:27:19"
+  due_on       : POSIXct[1:1], format: "2022-01-01 08:00:00"
+  closed_at    : POSIXct[1:1], format: NA
+```
+
+### Assigning a milestone to an issue or pull request
+
+An issue or pull request may only be assigned to a single milestone. To 
+assign or replace a milestone use `update_issue()` or 
+`update_pull_request()`:
+
+```r
+update_issue(
+  issue     = 1,
+  milestone = "Release 1.0",
+  repo      = "ChadGoymer/test-repository"
+)
+```
+```
+# PATCH https://api.github.com/repos/ChadGoymer/test-repository/issues/1
+List of 14
+  number      : int 1
+  title       : chr "Found a bug in the update_issue() function"
+  body        : chr "The update_issue() function does not work"
+  assignees   : chr "ChadGoymer"
+  labels      : chr [1:2] "enhancement" "wontfix"
+  milestone   : chr "Release 1.0"
+  state       : chr "open"
+  repository  : chr "ChadGoymer/test-repository"
+  pull_request: logi FALSE
+  creator     : chr "ChadGoymer"
+  html_url    : chr "https://github.com/ChadGoymer/test-repository/issues/1"
+  created_at  : POSIXct[1:1], format: "2021-06-02 15:17:33"
+  updated_at  : POSIXct[1:1], format: "2021-06-02 15:28:26"
+  closed_at   : POSIXct[1:1], format: NA
+```
+
+```r
+update_pull_request(
+  pull_request = 2,
+  milestone    = "Release 1.0",
+  repo         = "ChadGoymer/test-repository"
+)
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/pulls/2
+List of 26
+  number    : int 2
+  title     : chr "BugFix: update_issue()"
+  body      : chr "Fixed the the bug in update_issue()!"
+  head_sha  : chr "ecd725d0c70d37634de304094de233fac3ca5f2a"
+  head_ref  : chr "1-fix-update-issues"
+  head_repo : chr "ChadGoymer/test-repository"
+  base_sha  : chr "e7dbbad21adfebb6322282a9975970483712b37f"
+  base_ref  : chr "main"
+  merge_sha : chr "46445d205dfcc0cdf7b047c2115459f65f374841"
+  assignees : chr(0) 
+  reviewers : chr(0) 
+  labels    : chr "bug"
+  milestone : chr "Release 1.0"
+  state     : chr "open"
+  repository: chr "ChadGoymer/test-repository"
+  diff_url  : chr "https://github.com/ChadGoymer/test-repository/pull/2.diff"
+  creator   : chr "ChadGoymer"
+  mergeable : logi TRUE
+  rebaseable: logi TRUE
+  merged    : logi FALSE
+  merged_by : chr NA
+  html_url  : chr "https://github.com/ChadGoymer/test-repository/pull/2"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:21:10"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:23:31"
+  merged_at : POSIXct[1:1], format: NA
+  closed_at : POSIXct[1:1], format: NA
+```
+
+### Deleting Milestone
+
+Finally, milestones can be deleted using `delete_milestone()`:
+
+```r
+delete_milestone("Release 1.0", repo = "ChadGoymer/test-repository")
+```
+```
+# DELETE https://api.github.com/repos/ChadGoymer/test-repository/milestones/1
+[1] TRUE
+```

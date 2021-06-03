@@ -2,17 +2,6 @@
 #
 # Read a file and upload it to GitHub
 #
-# For more details see the GitHub API documentation:
-#
-# ```{r echo=FALSE, results='asis'}
-# docs_url <- "https://docs.github.com/en/free-pro-team@latest/rest/reference/"
-# cat(paste0(
-#   "- <", docs_url,
-#   "git#create-a-blob",
-#   ">"
-# ))
-# ```
-#
 # @param path (string) The path to the file to upload. It must be readable.
 # @param repo (string) The repository specified in the format: `owner/repo`.
 # @param ... Parameters passed to [gh_request()].
@@ -51,24 +40,6 @@ upload_blob <- function(
 # FUNCTION: upload_tree --------------------------------------------------------
 #
 # Upload a directory of files as a tree
-#
-# For more details see the GitHub API documentation:
-#
-# ```{r echo=FALSE, results='asis'}
-# docs_url <- "https://docs.github.com/en/free-pro-team@latest/rest/reference/"
-# cat(paste0(
-#   "- <", docs_url,
-#   "git#create-a-blob",
-#   ">"
-# ))
-# ```
-# ```{r echo=FALSE, results='asis'}
-# cat(paste0(
-#   "- <", docs_url,
-#   "git#create-a-tree",
-#   ">"
-# ))
-# ```
 #
 # @param path (string) The path to the directory to upload. It must be readable.
 # @param repo (string) The repository specified in the format: `owner/repo`.

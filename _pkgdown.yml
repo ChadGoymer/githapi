@@ -7,15 +7,37 @@ navbar:
     reference:
       text: Reference
       href: reference/index.html
+    articles:
+      text: Articles
+      menu:
+        - text: Configuration
+          href: articles/configuration.html
+        - text: Repository Management
+          href: articles/repository-management.html
+        - text: Release Management
+          href: articles/release-management.html
+        - text: Issue Management
+          href: articles/issue-management.html
+        - text: Project Management
+          href: articles/project-management.html
+        - text: User Management
+          href: articles/user-management.html
     news:
       text: Release Notes
-      href: news/index.html
+      menu:
+        - text: Release 1.0
+          href: news/news-1.0.html
+        - text: -------
+        - text: Development Versions
+          href: news/index.html
   right:
     - icon: fa-github fa-lg
       href: http://github.com/ChadGoymer/githapi
 reference:
 - title: Repositories, Commits and Files
-  desc: Functions for creating, updating, viewing and deleting repositories, commits and files.
+  desc: >
+    Functions for creating, updating, viewing and deleting repositories, commits
+    and files.
   contents:
     - '`create_repository`'
     - '`update_repository`'
@@ -37,7 +59,9 @@ reference:
     - '`read_github_file`'
     - '`github_source`'
 - title: Branches, Tags, Releases and statuses
-  desc: Functions for creating, updating, viewing and deleting branches, tags, releases and statuses.
+  desc: >
+    Functions for creating, updating, viewing and deleting branches, tags,
+    releases and statuses.
   contents:
     - '`create_branch`'
     - '`update_branch`'
@@ -54,7 +78,9 @@ reference:
     - '`create_status`'
     - '`view_statuses`'
 - title: Issues, Pull Requests, Labels and Milestones
-  desc: Functions for creating, updating, viewing and deleting issues and pull requests.
+  desc: >
+    Functions for creating, updating, viewing and deleting issues and pull
+    requests.
   contents:
     - '`create_issue`'
     - '`update_issue`'
@@ -72,7 +98,8 @@ reference:
     - '`view_milestones`'
     - '`delete_milestone`'
 - title: Gists and Comments
-  desc: Functions for creating, updating, viewing and deleting gists and comments.
+  desc: >
+    Functions for creating, updating, viewing and deleting gists and comments.
   contents:
     - '`create_gist`'
     - '`update_gist`'
@@ -85,7 +112,9 @@ reference:
     - '`view_comments`'
     - '`delete_comment`'
 - title: Projects, Columns and Cards
-  desc: Functions for creating, updating, viewing and deleting projects, columns and cards.
+  desc: >
+    Functions for creating, updating, viewing and deleting projects, columns and
+    cards.
   contents:
     - '`create_project`'
     - '`update_project`'
@@ -100,7 +129,9 @@ reference:
     - '`view_cards`'
     - '`delete_card`'
 - title: Users, Organizations and Teams
-  desc: Functions for creating, updating, viewing and deleting users, organizations and teams.
+  desc: >
+    Functions for creating, updating, viewing and deleting users, organizations
+    and teams.
   contents:
     - '`update_user`'
     - '`view_users`'

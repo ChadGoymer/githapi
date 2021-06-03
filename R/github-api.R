@@ -147,7 +147,7 @@ gh_token <- function(
 #' @param ... (strings, optional) unnamed strings are built up into a URL path
 #'   and named parameters are added as queries.
 #' @param api (string, optional) The URL of GitHub's API. Default: the value
-#'   stored in the environment variable `GITHUB_API` or
+#'   stored in the environment variable `GITHUB_API_URL` or
 #'   `https://api.github.com`.
 #'
 #' @return Valid URL (string)
