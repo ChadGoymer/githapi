@@ -1,0 +1,165 @@
+---
+title: "Release Management"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Release Management}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The {githapi} package can be used to manage tags and releases within a GitHub 
+repository. It allows you to create tags and releases, view existing ones and
+delete them.
+
+
+## Tags
+
+Tags are very similar to branches in Git. They are both labels pointing to a 
+commit. As a result, the functions are very similar.
+
+### Creating Tags
+
+Create a tag with the `create_tag()` function:
+
+```r
+create_tag("test-tag", ref = "main", repo = "ChadGoymer/test-repository")
+```
+```
+# POST https://api.github.com/repos/ChadGoymer/test-repository/git/refs
+List of 5
+  name    : chr "test-tag"
+  sha     : chr "fc286af5881a259f0ebb3ba37e0ec604a16d6cd4"
+  html_url: chr "https://api.github.com/repos/ChadGoymer/test-repository/commits/fc286af5881a259f0"..
+  zip_url : chr "https://api.github.com/repos/ChadGoymer/test-repository/zipball/refs/tags/test-tag"
+  tar_url : chr "https://api.github.com/repos/ChadGoymer/test-repository/tarball/refs/tags/test-tag"
+```
+
+You can also update existing tags using `update_tag()`, which allows you
+to point it at a new commit.
+
+### Viewing Tags
+
+To view all the tags in a repository use `view_tags()`:
+
+```r
+view_tags("ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/tags?per_page=100
+# A tibble: 1 x 5
+  name   sha           html_url                      zip_url                  tar_url                 
+* <chr>  <chr>         <chr>                         <chr>                    <chr>                   
+1 test-~ fc286af5881a~ https://api.github.com/repos~ https://api.github.com/~ https://api.github.com/~
+```
+
+To view the properties of a single tag, use `view_tag()`:
+
+```r
+view_tag("test-tag", "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/tags?per_page=100
+List of 5
+  name    : chr "test-tag"
+  sha     : chr "fc286af5881a259f0ebb3ba37e0ec604a16d6cd4"
+  html_url: chr "https://api.github.com/repos/ChadGoymer/test-repository/commits/fc286af5881a259f0"..
+  zip_url : chr "https://api.github.com/repos/ChadGoymer/test-repository/zipball/refs/tags/test-tag"
+  tar_url : chr "https://api.github.com/repos/ChadGoymer/test-repository/tarball/refs/tags/test-tag"
+```
+
+### Deleting Tags
+
+Finally, to delete a tag use `delete_tag()`:
+
+```r
+delete_tag("test-tag", "ChadGoymer/test-repository")
+```
+```
+# DELETE https://api.github.com/repos/ChadGoymer/test-repository/git/refs/tags/test-tag
+[1] TRUE
+```
+
+## Releases
+
+Releases expand the functionality of tags and are designed to highlight commits
+that have been released. They allow you to associate extra information with a 
+tagged commit.
+
+### Creating Releases
+
+Create a release with the `create_release()` function:
+
+```r
+create_release(
+  tag  = "1.0.0",
+  ref  = "main",
+  name = "First Stable Release",
+  body = "Here are the release notes...",
+  repo = "ChadGoymer/test-repository"
+)
+```
+```
+List of 12
+  id          : int 43982141
+  tag         : chr "1.0.0"
+  name        : chr "First Stable Release"
+  body        : chr "Here are the release notes..."
+  commit      : chr "main"
+  draft       : logi FALSE
+  prerelease  : logi FALSE
+  author_login: chr "ChadGoymer"
+  assets      : chr(0) 
+  html_url    : chr "https://github.com/ChadGoymer/test-repository/releases/tag/1.0.0"
+  created_at  : POSIXct[1:1], format: "2021-06-02 15:58:53"
+  published_at: POSIXct[1:1], format: "2021-06-02 16:02:46"
+```
+
+### Viewing Releases
+
+To view all the releases in a repository use `view_releases()`:
+
+```r
+view_releases("ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/releases?per_page=100
+# A tibble: 1 x 12
+      id tag   name  body  commit draft prerelease author_login assets html_url created_at         
+   <int> <chr> <chr> <chr> <chr>  <lgl> <lgl>      <chr>        <list> <chr>    <dttm>             
+1 4.40e7 1.0.0 Firs~ Here~ main   FALSE FALSE      ChadGoymer   <chr ~ https:/~ 2021-06-02 15:58:53
+# ... with 1 more variable: published_at <dttm>
+```
+
+To view the properties of a single release, use `view_release()`:
+
+```r
+view_release("1.0.0", "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/releases/tags/1.0.0
+List of 12
+  id          : int 43982141
+  tag         : chr "1.0.0"
+  name        : chr "First Stable Release"
+  body        : chr "Here are the release notes..."
+  commit      : chr "main"
+  draft       : logi FALSE
+  prerelease  : logi FALSE
+  author_login: chr "ChadGoymer"
+  assets      : chr(0) 
+  html_url    : chr "https://github.com/ChadGoymer/test-repository/releases/tag/1.0.0"
+  created_at  : POSIXct[1:1], format: "2021-06-02 15:58:53"
+  published_at: POSIXct[1:1], format: "2021-06-02 16:02:46"
+```
+
+### Deleting Releases
+
+Finally, to delete a release use `delete_release()`:
+
+```r
+delete_release("1.0.0", "ChadGoymer/test-repository")
+```
+```
+# DELETE https://api.github.com/repos/ChadGoymer/test-repository/releases/43982141
+[1] TRUE
+```
