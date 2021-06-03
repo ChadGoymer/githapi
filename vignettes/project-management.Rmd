@@ -1,0 +1,377 @@
+---
+title: "Project Management"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Project Management}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Projects in GitHub are divided into columns, with each column containing cards.
+Each card can contain a simple note, an issue or a pull request. As a project
+progresses cards are reordered within a column, to prioritize them, and moved
+between columns as they are worked on and completed.
+
+The {githapi} package can be used to manage projects on GitHub. It allows you to 
+create, update, view and delete projects, columns and cards.
+
+Projects can be created for repositories, users or organizations. In this 
+article we create a dummy repository for the authenticated user. 
+
+
+## Projects
+
+### Creating Projects
+
+Creating a project, in a repository, is very straight forward using the
+`create_project()` function:
+
+```r
+create_project(
+  name = "Test project",
+  body = "This is a repository's project",
+  repo = "ChadGoymer/test-repository"
+)
+```
+```
+# POST https://api.github.com/repos/ChadGoymer/test-repository/projects
+List of 9
+  id        : int 12593278
+  number    : int 1
+  name      : chr "Test project"
+  body      : chr "This is a repository's project"
+  state     : chr "open"
+  creator   : chr "ChadGoymer"
+  html_url  : chr "https://github.com/ChadGoymer/test-repository/projects/1"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:47:10"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:47:10"
+```
+
+Note: If you do not supply a user or organization the project is created for the
+authenticated user.
+
+### Viewing Projects
+
+To view all the projects associated with a repository use `view_projects()`:
+
+```r
+view_projects("ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/projects?state=open&per_page=100
+# A tibble: 1 x 9
+       id number name   body      state creator html_url       created_at          updated_at         
+*   <int>  <int> <chr>  <chr>     <chr> <chr>   <chr>          <dttm>              <dttm>             
+1  1.26e7      1 Test ~ This is ~ open  ChadGo~ https://githu~ 2021-06-02 15:47:10 2021-06-02 15:47:10
+```
+
+There are also a few optional parameters for filtering the results:
+
+- `user`: Return user's projects
+- `org`: Return organization's projects
+- `team`: Filter an organization's projects by team
+- `state`: Filter by whether the project is "open", "closed" or "all". Note: 
+  this is "open" by default.
+
+`view_projects()` returns a tibble of project properties, but you can also view
+the properties of a single project using `view_project()`:
+
+```r
+view_project("Test project", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/test-repository/projects?state=all&per_page=100
+List of 9
+  id        : int 12593278
+  number    : int 1
+  name      : chr "Test project"
+  body      : chr "This is a repository's project"
+  state     : chr "open"
+  creator   : chr "ChadGoymer"
+  html_url  : chr "https://github.com/ChadGoymer/test-repository/projects/1"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:47:10"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:47:10"
+```
+
+### Updating Projects
+
+Projects can be updated using the `update_project()` function. The basic 
+properties `name` and `body` can be changed this way, but it can also be used to
+close the project and change permissions for an organization's project.
+
+```r
+update_project(
+  project = "Test project", 
+  body    = "This is an updated project", 
+  repo    = "ChadGoymer/test-repository"
+)
+```
+```
+# PATCH https://api.github.com/projects/12593278
+List of 9
+  id        : int 12593278
+  number    : int 1
+  name      : chr "Test project"
+  body      : chr "This is an updated project"
+  state     : chr "open"
+  creator   : chr "ChadGoymer"
+  html_url  : chr "https://github.com/ChadGoymer/test-repository/projects/1"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:47:10"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:48:39"
+```
+
+### Deleting Projects
+
+Finally, you can also delete projects, if you have permission, using
+`delete_project()`:
+
+```r
+delete_project("Test project", repo = "ChadGoymer/test-repository")
+```
+```
+# DELETE https://api.github.com/projects/12593278
+[1] TRUE
+```
+
+## Columns
+
+Once you have created a project the next step is to create the columns within 
+it. Usually these define the workflow of tasks, for example a simple project the 
+columns might be "To Do", "In Progress" and "Done".
+
+### Creating Columns
+
+Creating columns is straight forward with `create_column()`:
+
+```r
+create_column("To Do", project = "Test project", repo = "ChadGoymer/test-repository")
+create_column("In Progress", project = "Test project", repo = "ChadGoymer/test-repository")
+create_column("Done", project = "Test project", repo = "ChadGoymer/test-repository")
+```
+```
+# POST https://api.github.com/projects/12593278/columns
+List of 4
+  id        : int 14576148
+  name      : chr "To Do"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:49:17"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:49:17"
+
+# POST https://api.github.com/projects/12593278/columns
+List of 4
+  id        : int 14576150
+  name      : chr "In Progress"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:49:17"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:49:17"
+
+# POST https://api.github.com/projects/12593278/columns
+List of 4
+  id        : int 14576151
+  name      : chr "Done"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:49:18"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:49:18"
+```
+
+### Viewing Columns
+
+To view all the columns within a project use `view_columns()`:
+
+```r
+view_columns("Test project", repo = "ChadGoymer/test-repository")
+```
+```
+# GET https://api.github.com/projects/12593278/columns?per_page=100
+# A tibble: 3 x 4
+        id name        created_at          updated_at         
+*    <int> <chr>       <dttm>              <dttm>             
+1 14576148 To Do       2021-06-02 15:49:17 2021-06-02 15:49:17
+2 14576150 In Progress 2021-06-02 15:49:17 2021-06-02 15:49:17
+3 14576151 Done        2021-06-02 15:49:18 2021-06-02 15:49:18
+```
+
+`view_columns()` returns a tibble of column properties, but you can also view
+the properties of a single column using `view_column()`:
+
+```r
+view_column(
+  column  = "To Do", 
+  project = "Test project", 
+  repo    = "ChadGoymer/test-repository"
+)
+```
+```
+# GET https://api.github.com/projects/12593278/columns?per_page=100
+List of 4
+  id        : int 14576148
+  name      : chr "To Do"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:49:17"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:49:17"
+```
+
+### Updating Columns
+
+Columns can be updated using the `update_column()` function, however only the 
+name can be changed.
+
+```r
+update_column(
+  column  = "Done",
+  name    = "Complete",
+  project = "Test project", 
+  body    = "This is an updated project", 
+  repo    = "ChadGoymer/test-repository"
+)
+```
+```
+# PATCH https://api.github.com/projects/columns/14576151
+List of 4
+  id        : int 14576151
+  name      : chr "Complete"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:49:18"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:51:13"
+```
+
+### Deleting Columns
+
+Finally, you can also delete columns, if you have permission, using
+`delete_column()`:
+
+```r
+delete_column(
+  column = "Complete", 
+  project = "Test project", 
+  repo = "ChadGoymer/test-repository"
+)
+```
+```
+# DELETE https://api.github.com/projects/columns/14576151
+[1] TRUE
+```
+
+## Cards
+
+Each column contains a set of cards, which represent tasks that need completing.
+A card may contain a note, issue or pull request
+
+### Creating Cards
+
+Creating a card, in a column, is very straight forward using the `create_card()`
+function:
+
+```r
+create_card(
+  note    = "This is a simple card",
+  column  = "To Do",
+  project = "Test project",
+  repo    = "ChadGoymer/test-repository"
+)
+```
+```
+# POST https://api.github.com/projects/columns/14576148/cards
+List of 7
+  id        : int 62333178
+  content_id: int NA
+  note      : chr "This is a simple card"
+  archived  : logi FALSE
+  creator   : chr "ChadGoymer"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:52:22"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:52:22"
+```
+
+If you want to assign an issue or a pull request you can set the `content_id`
+argument. In this case you also have to specify whether it is an "Issue" or
+"PullRequest" with the `content_type` argument.
+
+### Viewing Cards
+
+To view all the cards within a column use `view_cards()`:
+
+```r
+view_cards(
+  column  = "To Do",
+  project = "Test project",
+  repo    = "ChadGoymer/test-repository"
+)
+```
+```
+# GET https://api.github.com/projects/columns/14576148/cards?per_page=100
+# A tibble: 1 x 7
+        id content_id note                  archived creator   created_at          updated_at         
+*    <int>      <int> <chr>                 <lgl>    <chr>     <dttm>              <dttm>             
+1 62333178         NA This is a simple card FALSE    ChadGoym~ 2021-06-02 15:52:22 2021-06-02 15:52:22
+```
+
+`view_cards()` returns a tibble of card properties, but you can also view the
+properties of a single card using `view_card()`:
+
+```r
+view_card(62333178)
+```
+```
+# GET https://api.github.com/projects/columns/cards/62333178
+List of 7
+  id        : int 62333178
+  content_id: int NA
+  note      : chr "This is a simple card"
+  archived  : logi FALSE
+  creator   : chr "ChadGoymer"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:52:22"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:52:22"
+```
+
+### Updating Cards
+
+Cards can be updated using `update_card()`, which can change a note and also
+archive the card. You can also move the card using `move_card()`, which can 
+change the column or the position within a column:
+
+```r
+update_card(
+  card = 62333178,
+  note = "This is an updated note"
+)
+```
+```
+# PATCH https://api.github.com/projects/columns/cards/62333178
+List of 7
+  id        : int 62333178
+  content_id: int NA
+  note      : chr "This is an updated note"
+  archived  : logi FALSE
+  creator   : chr "ChadGoymer"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:52:22"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:54:08"
+```
+
+```r
+move_card(
+  card     = 62333178,
+  position = "top",
+  column   = "In Progress",
+  project  = "Test project",
+  repo     = "ChadGoymer/test-repository"
+)
+```
+```
+# POST https://api.github.com/projects/columns/cards/62333178/moves
+List of 7
+  id        : int 62333178
+  content_id: int NA
+  note      : chr "This is an updated note"
+  archived  : logi FALSE
+  creator   : chr "ChadGoymer"
+  created_at: POSIXct[1:1], format: "2021-06-02 15:52:22"
+  updated_at: POSIXct[1:1], format: "2021-06-02 15:54:34"
+```
+
+### Deleting Cards
+
+Finally, you can also delete cards, if you have permission, using 
+`delete_card()`:
+
+```r
+delete_card(62333178)
+```
+```
+# DELETE https://api.github.com/projects/columns/cards/62333178
+[1] TRUE
+```
