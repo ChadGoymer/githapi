@@ -10,6 +10,27 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
+    <loc>/articles/configuration.html</loc>
+  </url>
+  <url>
+    <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/issue-management.html</loc>
+  </url>
+  <url>
+    <loc>/articles/project-management.html</loc>
+  </url>
+  <url>
+    <loc>/articles/release-management.html</loc>
+  </url>
+  <url>
+    <loc>/articles/repository-management.html</loc>
+  </url>
+  <url>
+    <loc>/articles/user-management.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -44,6 +65,9 @@
   </url>
   <url>
     <loc>/news/news-0.9.html</loc>
+  </url>
+  <url>
+    <loc>/news/news-1.0.html</loc>
   </url>
   <url>
     <loc>/pull_request_template.html</loc>

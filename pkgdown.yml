@@ -1,6 +1,12 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: b7b462438bc6252d40e9e5f223b0c56bf938f6d7
-articles: {}
-last_built: 2021-06-02T11:55Z
+pkgdown_sha: 4ea1c8f676fc026a33ae01cdf8753b3c6a473ef8
+articles:
+  configuration: configuration.html
+  issue-management: issue-management.html
+  project-management: project-management.html
+  release-management: release-management.html
+  repository-management: repository-management.html
+  user-management: user-management.html
+last_built: 2021-06-03T15:02Z
 
