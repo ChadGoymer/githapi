@@ -24,10 +24,12 @@ browse_pull_request(pull_request, repo, ...)
 \arguments{
 \item{repo}{(string) The repository specified in the format: \code{owner/repo}.}
 
-\item{head}{(string) The branch to merge in. If it is not in the specified
-\code{repo} then the owner must prefix the branch name, e.g. \code{"owner:branch"}.}
+\item{head}{(string, optional) Filter pull requests by the branch name. If it
+is not in the specified \code{repo} then the owner must prefix the branch name,
+e.g. \code{"owner:branch"}.}
 
-\item{base}{(string) The branch to merge into.}
+\item{base}{(string, optional) Filter pull requests by the branch to be
+merged into.}
 
 \item{state}{(string, optional) The state of the pull requests to return. Can
 be either \code{"open"}, \code{"closed"}, or \code{"all"}. Default: \code{"open"}.}

@@ -516,9 +516,11 @@ update_pull_request <- function(
 #' @param pull_request (string or character) The number or title of the pull
 #'   request.
 #' @param repo (string) The repository specified in the format: `owner/repo`.
-#' @param head (string) The branch to merge in. If it is not in the specified
-#'   `repo` then the owner must prefix the branch name, e.g. `"owner:branch"`.
-#' @param base (string) The branch to merge into.
+#' @param head (string, optional) Filter pull requests by the branch name. If it
+#'   is not in the specified `repo` then the owner must prefix the branch name,
+#'   e.g. `"owner:branch"`.
+#' @param base (string, optional) Filter pull requests by the branch to be
+#'   merged into.
 #' @param state (string, optional) The state of the pull requests to return. Can
 #'   be either `"open"`, `"closed"`, or `"all"`. Default: `"open"`.
 #' @param sort (string, optional) The property to order the returned pull
