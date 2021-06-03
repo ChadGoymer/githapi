@@ -1,0 +1,465 @@
+---
+title: "User Management"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{User Management}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+With {githapi} you can view users and update your properties. You can also 
+control access to your repository by adding collaborators. If you are an 
+owner of an organization, you can manage teams and their membership.
+
+## Users
+
+### Viewing Users
+
+To view your user properties use `view_user()`:
+
+```r
+view_user()
+```
+```
+# GET https://api.github.com/user
+List of 11
+  id        : int 2853390
+  login     : chr "ChadGoymer"
+  name      : chr "Chad Goymer"
+  email     : chr "chad.goymer@gmail.com"
+  blog      : chr "http://goymer.me"
+  company   : chr "Lloyd's"
+  location  : chr "London, UK"
+  hireable  : logi NA
+  bio       : chr "Manager, Actuarial Systems"
+  site_admin: logi FALSE
+  html_url  : chr "https://github.com/ChadGoymer"
+```
+
+This function can also be used to view the properties of other users:
+
+```r
+view_users()
+```
+```
+# GET https://api.github.com/users?per_page=100
+# GET https://api.github.com/users?per_page=100&since=135
+# GET ...
+# A tibble: 1,000 x 4
+      id login        site_admin html_url                       
+ * <int> <chr>        <lgl>      <chr>                          
+ 1     1 mojombo      FALSE      https://github.com/mojombo     
+ 2     2 defunkt      FALSE      https://github.com/defunkt     
+ 3     3 pjhyett      FALSE      https://github.com/pjhyett     
+ 4     4 wycats       FALSE      https://github.com/wycats      
+ 5     5 ezmobius     FALSE      https://github.com/ezmobius    
+ 6     6 ivey         FALSE      https://github.com/ivey        
+ 7     7 evanphx      FALSE      https://github.com/evanphx     
+ 8    17 vanpelt      FALSE      https://github.com/vanpelt     
+ 9    18 wayneeseguin FALSE      https://github.com/wayneeseguin
+10    19 brynary      FALSE      https://github.com/brynary     
+# ... with 990 more rows
+```
+
+### Updating Users
+
+You can also update your user properties using `update_user()`:
+
+```r
+update_user(location = "Colchester, UK")
+```
+```
+# PATCH https://api.github.com/user
+List of 11
+  id        : int 2853390
+  login     : chr "ChadGoymer"
+  name      : chr "Chad Goymer"
+  email     : chr "chad.goymer@gmail.com"
+  blog      : chr "http://goymer.me"
+  company   : chr "Lloyd's"
+  location  : chr "Colchester, UK"
+  hireable  : logi NA
+  bio       : chr "Manager, Actuarial Systems"
+  site_admin: logi FALSE
+  html_url  : chr "https://github.com/ChadGoymer"
+```
+
+## Collaborators
+
+### Viewing Collaborators
+
+To view all the collaborators associated with a repository use 
+`view_collaborators()`:
+
+```r
+view_collaborators("ChadGoymer/githapi")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/githapi/collaborators?affiliation=all&per_page=100
+# A tibble: 1 x 4
+       id login      site_admin html_url                     
+*   <int> <chr>      <lgl>      <chr>                        
+1 2853390 ChadGoymer FALSE      https://github.com/ChadGoymer
+```
+
+Note: Collaborators can also be viewed for projects and organizations.
+
+To view the permissions for an individual collaborator use 
+`view_collaborator()`:
+
+```r
+view_collaborator("ChadGoymer", repo = "ChadGoymer/githapi")
+```
+```
+# GET https://api.github.com/repos/ChadGoymer/githapi/collaborators/ChadGoymer/permission
+List of 5
+  id        : int 2853390
+  login     : chr "ChadGoymer"
+  site_admin: logi FALSE
+  html_url  : chr "https://github.com/ChadGoymer"
+  permission: chr "admin"
+```
+
+### Updating Collaborators
+
+If you wish to give other users permissions to access your repository you can 
+add them as a collaborator with the `update_collaborator()` function:
+
+```r
+update_collaborator(
+  user       = "ChrisWalkerUK",
+  repo       = "ChadGoymer/githapi",
+  permission = "push"
+)
+```
+```
+# PUT https://api.github.com/repos/ChadGoymer/githapi/collaborators/ChrisWalkerUK
+[1] TRUE
+```
+
+### Deleting Collaborators
+
+To remove a collaborator's permissions on a repository (or project or 
+organization) use `delete_collaborator()`:
+
+```r
+delete_collaborator("ChrisWalkerUK", repo = "ChadGoymer/githapi")
+```
+```
+# DELETE https://api.github.com/repos/ChadGoymer/githapi/collaborators/ChrisWalkerUK
+[1] TRUE
+```
+
+## Organizations
+
+In GitHub, if you want to maintain repositories with a groups of other users it
+is convenient to define an organization. Organizations own repositories and 
+projects in the same way as users, but owners can also define access through
+teams and membership.
+
+### Viewing Organizations
+
+The `view_organizations()` function allows you to view all the organizations
+registered with GitHub. However, if you would just like to see the ones you are
+a member of then supply your login name:
+
+```r
+view_organizations("ChadGoymer")
+```
+```
+# GET https://api.github.com/users/ChadGoymer/orgs?per_page=100
+# A tibble: 1 x 3
+        id login     description          
+*    <int> <chr>     <chr>                
+1 58723431 HairyCoos We are the Hairy Coos
+```
+
+To view a single organization use `view_organization()`:
+
+```r
+view_organization("HairyCoos")
+```
+```
+# GET https://api.github.com/orgs/HairyCoos
+List of 27
+  id                             : int 58723431
+  login                          : chr "HairyCoos"
+  name                           : chr "Hairy Coos"
+  description                    : chr "We are the Hairy Coos"
+  company                        : chr "Hairy Coos"
+  blog                           : chr NA
+  location                       : chr "The Highlands"
+  email                          : chr "chad.goymer@gmail.com"
+  is_verified                    : logi FALSE
+  has_organization_projects      : logi TRUE
+  has_repository_projects        : logi TRUE
+  public_repos                   : int 0
+  public_gists                   : int 0
+  total_private_repos            : int 0
+  owned_private_repos            : int 0
+  private_gists                  : int 0
+  disk_usage                     : num 0
+  collaborators                  : int 0
+  billing_email                  : chr "chad.goymer@gmail.com"
+  plan_name                      : chr "free"
+  plan_space                     : int 976562499
+  plan_private_repos             : int 10000
+  default_repository_permission  : chr "read"
+  two_factor_requirement_enabled : logi FALSE
+  members_can_create_repositories: logi TRUE
+  html_url                       : chr "https://github.com/HairyCoos"
+  created_at                     : POSIXct[1:1], format: "2019-12-10 07:35:49"
+```
+
+### Updating Organizations
+
+If you are an admin for the organization you can update some of the 
+organizations properties using `update_organization()`:
+
+```r
+update_organization(
+  org      = "HairyCoos",
+  location = "The Highlands, Scotland"
+)
+```
+```
+# PATCH https://api.github.com/orgs/HairyCoos
+List of 27
+  id                             : int 58723431
+  login                          : chr "HairyCoos"
+  name                           : chr "Hairy Coos"
+  description                    : chr "We are the Hairy Coos"
+  company                        : chr "Hairy Coos"
+  blog                           : chr NA
+  location                       : chr "The Highlands, Scotland"
+  email                          : chr "chad.goymer@gmail.com"
+  is_verified                    : logi FALSE
+  has_organization_projects      : logi TRUE
+  has_repository_projects        : logi TRUE
+  public_repos                   : int 0
+  public_gists                   : int 0
+  total_private_repos            : int 0
+  owned_private_repos            : int 0
+  private_gists                  : int 0
+  disk_usage                     : num 0
+  collaborators                  : int 0
+  billing_email                  : chr "chad.goymer@gmail.com"
+  plan_name                      : chr "free"
+  plan_space                     : int 976562499
+  plan_private_repos             : int 10000
+  default_repository_permission  : chr "read"
+  two_factor_requirement_enabled : logi FALSE
+  members_can_create_repositories: logi TRUE
+  html_url                       : chr "https://github.com/HairyCoos"
+  created_at                     : POSIXct[1:1], format: "2019-12-10 07:35:49"
+```
+
+## Teams
+
+Within an organization you can create multiple teams and assign permissions to
+each repo by team rather than by users. This is a useful way to manage 
+permissions when you have a large organization.
+
+### Creating Teams
+
+With {githapi} it is easy to create a team, assuming you have permissions, with
+the `create_team()` function:
+
+```r
+create_team(
+  name        = "HeadCoos",
+  org         = "HairyCoos",
+  description = "The coos in charge"
+)
+```
+```
+# POST https://api.github.com/orgs/HairyCoos/teams
+List of 13
+  id           : int 4837654
+  name         : chr "HeadCoos"
+  slug         : chr "headcoos"
+  description  : chr "The coos in charge"
+  privacy      : chr "secret"
+  permission   : chr "pull"
+  parent       : chr NA
+  organization : chr "HairyCoos"
+  members_count: int 1
+  repos_count  : int 0
+  html_url     : chr "https://github.com/orgs/HairyCoos/teams/headcoos"
+  created_at   : POSIXct[1:1], format: "2021-05-25 10:10:43"
+  updated_at   : POSIXct[1:1], format: "2021-05-25 10:10:43"
+```
+
+### Viewing Teams
+
+To view all the teams associated with an organization use `view_teams()`:
+
+```r
+view_teams("HairyCoos")
+```
+```
+# GET https://api.github.com/orgs/HairyCoos/teams?per_page=100
+# A tibble: 1 x 8
+       id name    slug    description    privacy permission parent html_url                    
+*   <int> <chr>   <chr>   <chr>          <chr>   <chr>      <chr>  <chr>                       
+1 4837654 HeadCo~ headco~ The coos in c~ secret  pull       NA     https://github.com/orgs/Hai~
+```
+
+`view_teams()` returns a tibble of team properties, but you can also view
+the properties of a single teams using `view_team()`:
+
+```r
+view_team("HeadCoos", org = "HairyCoos")
+```
+```
+# GET https://api.github.com/teams/4837654
+List of 13
+  id           : int 4837654
+  name         : chr "HeadCoos"
+  slug         : chr "headcoos"
+  description  : chr "The coos in charge"
+  privacy      : chr "secret"
+  permission   : chr "pull"
+  parent       : chr NA
+  organization : chr "HairyCoos"
+  members_count: int 1
+  repos_count  : int 0
+  html_url     : chr "https://github.com/orgs/HairyCoos/teams/headcoos"
+  created_at   : POSIXct[1:1], format: "2021-05-25 10:10:43"
+  updated_at   : POSIXct[1:1], format: "2021-05-25 10:10:43"
+```
+
+### Updating Teams
+
+Teams can be updated using the `update_team()` function:
+
+```r
+update_team(
+  team        = "HeadCoos", 
+  description = "Most valuable coos", 
+  org         = "HairyCoos"
+)
+```
+```
+# PATCH https://api.github.com/teams/4837654
+List of 13
+  id           : int 4837654
+  name         : chr "HeadCoos"
+  slug         : chr "headcoos"
+  description  : chr "Most valuable coos"
+  privacy      : chr "secret"
+  permission   : chr "pull"
+  parent       : chr NA
+  organization : chr "HairyCoos"
+  members_count: int 1
+  repos_count  : int 0
+  html_url     : chr "https://github.com/orgs/HairyCoos/teams/headcoos"
+  created_at   : POSIXct[1:1], format: "2021-05-25 10:10:43"
+  updated_at   : POSIXct[1:1], format: "2021-05-25 17:04:30"
+```
+
+Note: to add or change a team's permissions on a repository or project use 
+`update_repository()` or `update_project()` respectively.
+
+### Deleting Teams
+
+Finally a team can be deleted entirely using `delete_team()`:
+
+```r
+delete_team("HeadCoos", org = "HairyCoos")
+```
+```
+# DELETE https://api.github.com/teams/4837654
+[1] TRUE
+```
+
+## Team Membership
+
+
+### Updating Membership
+
+To invite another user into an organization or team use the 
+`update_membership()` function: 
+
+```r
+update_membership(
+  user = "ChrisWalkerUK", 
+  team = "HeadCoos", 
+  org  = "HairyCoos"
+)
+```
+```
+# PUT https://api.github.com/teams/4837654/memberships/ChrisWalkerUK
+List of 5
+  user        : chr "ChrisWalkerUK"
+  organization: chr "HairyCoos"
+  team        : chr "HeadCoos"
+  role        : chr "member"
+  state       : chr "active"
+```
+
+### Viewing Membership
+
+To view the all the memberships for the authenticated user use
+`view_memberships()`:
+
+```r
+view_memberships()
+```
+```
+# GET https://api.github.com/user/memberships/orgs?per_page=100
+# A tibble: 1 x 4
+  user       organization role  state 
+* <chr>      <chr>        <chr> <chr> 
+1 ChadGoymer HairyCoos    admin active
+```
+
+To view all the members of a team use `view_users()`:
+
+```r
+view_users(org = "HairyCoos", team = "HeadCoos")
+```
+```
+# GET https://api.github.com/teams/4837654/members?role=all&per_page=100
+# A tibble: 2 x 4
+        id login         site_admin html_url                        
+*    <int> <chr>         <lgl>      <chr>                           
+1  2853390 ChadGoymer    FALSE      https://github.com/ChadGoymer   
+2 56346116 ChrisWalkerUK FALSE      https://github.com/ChrisWalkerUK
+```
+
+To view the membership for a specific user use `view_membership()`:
+
+```r
+view_membership(
+  user = "ChrisWalkerUK", 
+  org  = "HairyCoos", 
+  team = "HeadCoos"
+)
+```
+```
+# GET https://api.github.com/teams/4837654/memberships/ChrisWalkerUK
+List of 5
+  user        : chr "ChrisWalkerUK"
+  organization: chr "HairyCoos"
+  team        : chr "HeadCoos"
+  role        : chr "member"
+  state       : chr "active"
+```
+
+### Deleting Membership
+
+Finally, removing a member from a team can be achieved with 
+`delete_membership()`:
+
+```r
+delete_membership(
+  user = "ChrisWalkerUK", 
+  org  = "HairyCoos", 
+  team = "HeadCoos"
+)
+```
+```
+# DELETE https://api.github.com/teams/4837654/memberships/ChrisWalkerUK
+[1] TRUE
+```
