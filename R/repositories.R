@@ -123,6 +123,7 @@ create_repository <- function(
   allow_merge_commit     = TRUE,
   allow_rebase_merge     = TRUE,
   delete_branch_on_merge = FALSE,
+  env                    = NULL,
   ...
 ) {
   assert(
@@ -201,14 +202,14 @@ create_repository <- function(
       "'org' must be a string:\n  ", org
     )
     info("Creating repository '", name, "' for organization '", org, "'")
-    url <- gh_url("orgs", org, "repos")
+    url <- gh_url("orgs", org, "repos", env = env)
   }
   else {
     info("Creating repository '", name, "' for authenticated user")
-    url <- gh_url("user/repos")
+    url <- gh_url("user/repos", env = env)
   }
 
-  repo_lst <- gh_request("POST", url = url, payload = payload, ...)
+  repo_lst <- gh_request("POST", url = url, payload = payload, env = env, ...)
 
   perm_order <- values$repository$team_permission
   permission <- last(
@@ -398,6 +399,7 @@ update_repository <- function(
   archived,
   team,
   permission = "pull",
+  env        = NULL,
   ...
 ) {
   assert(
@@ -414,8 +416,8 @@ update_repository <- function(
     )
     org <- dirname(repo)
 
-    team_slug <- gh_url("orgs", org, "teams") %>%
-      gh_find(property = "name", value = team, ...) %>%
+    team_slug <- gh_url("orgs", org, "teams", env = env) %>%
+      gh_find(property = "name", value = team, env = env, ...) %>%
       pluck("slug")
 
     assert(
@@ -433,12 +435,12 @@ update_repository <- function(
     payload$permission <- permission
 
     info("Updating permissions for team '", team, "' on repo '", repo, "'")
-    gh_url("orgs", org, "teams", team_slug, "repos", repo) %>%
-      gh_request("PUT", payload = payload, ...)
+    gh_url("orgs", org, "teams", team_slug, "repos", repo, env = env) %>%
+      gh_request("PUT", payload = payload, env = env, ...)
 
     gh_json <- "application/vnd.github.v3.repository+json"
-    repo_lst <- gh_url("orgs", org, "teams", team_slug, "repos", repo) %>%
-      gh_request("GET", accept = gh_json, ...)
+    repo_lst <- gh_url("orgs", org, "teams", team_slug, "repos", repo, env = env) %>%
+      gh_request("GET", accept = gh_json, env = env, ...)
   }
   else {
     if (!is_missing_or_null(name)) {
@@ -547,8 +549,8 @@ update_repository <- function(
     }
 
     info("Updating repository '", repo, "'")
-    repo_lst <- gh_url("repos", repo) %>%
-      gh_request("PATCH", payload = payload, ...)
+    repo_lst <- gh_url("repos", repo, env = env) %>%
+      gh_request("PATCH", payload = payload, env = env, ...)
   }
 
   perm_order <- values$repository$team_permission
@@ -727,6 +729,7 @@ view_repositories <- function(
   sort      = "created",
   direction = "desc",
   n_max     = 1000,
+  env       = NULL,
   ...
 ) {
   assert(
@@ -751,7 +754,8 @@ view_repositories <- function(
       "users", user, "repos",
       type      = "all",
       sort      = sort,
-      direction = direction
+      direction = direction,
+      env       = env
     )
   }
   else if (!is_missing_or_null(org)) {
@@ -766,7 +770,8 @@ view_repositories <- function(
         "orgs", org, "repos",
         type      = "all",
         sort      = sort,
-        direction = direction
+        direction = direction,
+        env       = env
       )
     }
     else {
@@ -774,8 +779,8 @@ view_repositories <- function(
         is_scalar_character(team),
         "'team' must be a string:\n  ", team
       )
-      team_slug <- gh_url("orgs", org, "teams") %>%
-        gh_find(property = "name", value = team, ...) %>%
+      team_slug <- gh_url("orgs", org, "teams", env = env) %>%
+        gh_find(property = "name", value = team, env = env, ...) %>%
         pluck("slug")
 
       info("Viewing repositories for team '", team, "' in org '", org, "'")
@@ -783,7 +788,8 @@ view_repositories <- function(
         "orgs", org, "teams", team_slug, "repos",
         type      = "all",
         sort      = sort,
-        direction = direction
+        direction = direction,
+        env       = env
       )
     }
   }
@@ -793,11 +799,12 @@ view_repositories <- function(
       "user/repos",
       type      = "all",
       sort      = sort,
-      direction = direction
+      direction = direction,
+      env       = env
     )
   }
 
-  repositories_lst <- gh_page(url = url, n_max = n_max, ...)
+  repositories_lst <- gh_page(url = url, n_max = n_max, env = env, ...)
 
   info("Transforming results", level = 4)
   repositories_gh <- bind_properties(repositories_lst, properties$repository)
@@ -827,6 +834,7 @@ view_repository <- function(
   repo,
   team,
   org,
+  env = NULL,
   ...
 ) {
   assert(
@@ -836,16 +844,16 @@ view_repository <- function(
 
   if (is_missing_or_null(team)) {
     info("Viewing repository '", repo, "'")
-    repo_lst <- gh_url("repos", repo) %>%
-      gh_request("GET", ...)
+    repo_lst <- gh_url("repos", repo, env = env) %>%
+      gh_request("GET", env = env, ...)
   }
   else {
     assert(
       is_scalar_character(team),
       "'team' must be a string:\n  ", team
     )
-    team_slug <- gh_url("orgs", org, "teams") %>%
-      gh_find(property = "name", value = team, ...) %>%
+    team_slug <- gh_url("orgs", org, "teams", env = env) %>%
+      gh_find(property = "name", value = team, env = env, ...) %>%
       pluck("slug")
 
     assert(
@@ -855,8 +863,8 @@ view_repository <- function(
 
     info("Viewing repository '", repo, "' for team '", team, "'")
     gh_json <- "application/vnd.github.v3.repository+json"
-    repo_lst <- gh_url("orgs", org, "teams", team_slug, "repos", repo) %>%
-      gh_request("GET", accept = gh_json, ...)
+    repo_lst <- gh_url("orgs", org, "teams", team_slug, "repos", repo, env = env) %>%
+      gh_request("GET", accept = gh_json, env = env, ...)
   }
 
   perm_order <- values$repository$team_permission
@@ -883,6 +891,7 @@ view_repository <- function(
 #'
 browse_repository <- function(
   repo,
+  env = NULL,
   ...
 ) {
   assert(
@@ -891,7 +900,8 @@ browse_repository <- function(
   )
 
   info("Browsing repository '", repo, "'")
-  repo <- gh_url("repos", repo) %>% gh_request("GET", ...)
+  repo <- gh_url("repos", repo, env = env) %>%
+    gh_request("GET", env = env, ...)
   httr::BROWSE(repo$html_url)
 
   info("Done", level = 7)
@@ -944,6 +954,7 @@ browse_repository <- function(
 #'
 delete_repository <- function(
   repo,
+  env = NULL,
   ...
 ) {
   assert(
@@ -952,7 +963,8 @@ delete_repository <- function(
   )
 
   info("Deleting repository '", repo, "'")
-  response <- gh_url("repos", repo) %>% gh_request("DELETE", ...)
+  response <- gh_url("repos", repo, env = env) %>%
+    gh_request("DELETE", env = env, ...)
 
   info("Done", level = 7)
   structure(
