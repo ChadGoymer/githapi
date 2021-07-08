@@ -41,6 +41,7 @@ create_branch <- function(
   name,
   ref,
   repo,
+  env = NULL,
   ...
 ) {
   assert(
@@ -63,12 +64,12 @@ create_branch <- function(
   payload <- list(ref = str_c("refs/heads/", name), sha = ref)
 
   info("Creating branch '", name, "' in repository '", repo, "'")
-  branch_lst <- gh_url("repos", repo, "git/refs") %>%
-    gh_request("POST", payload = payload, ...)
+  branch_lst <- gh_url("repos", repo, "git/refs", env = env) %>%
+    gh_request("POST", payload = payload, env = env, ...)
 
   info("Transforming results", level = 4)
-  branch_gh <- gh_url("repos", repo, "branches", name) %>%
-    gh_request("GET", ...) %>%
+  branch_gh <- gh_url("repos", repo, "branches", name, env = env) %>%
+    gh_request("GET", env = env, ...) %>%
     select_properties(properties$branch)
 
   info("Done", level = 7)
@@ -129,6 +130,7 @@ update_branch <- function(
   ref,
   repo,
   force = FALSE,
+  env   = NULL,
   ...
 ) {
   assert(
@@ -153,12 +155,12 @@ update_branch <- function(
   )
 
   info("Updating branch '", branch, "' in repository '", repo, "'")
-  branch_lst <- gh_url("repos", repo, "git/refs/heads", branch) %>%
-    gh_request("PATCH", payload = list(sha = ref, force = force), ...)
+  branch_lst <- gh_url("repos", repo, "git/refs/heads", branch, env = env) %>%
+    gh_request("PATCH", payload = list(sha = ref, force = force), env = env, ...)
 
   info("Transforming results", level = 4)
-  branch_gh <- gh_url("repos", repo, "branches", branch) %>%
-    gh_request("GET", ...) %>%
+  branch_gh <- gh_url("repos", repo, "branches", branch, env = env) %>%
+    gh_request("GET", env = env, ...) %>%
     select_properties(properties$branch)
 
   info("Done", level = 7)
@@ -216,6 +218,7 @@ update_branch <- function(
 view_branches <- function(
   repo,
   n_max = 1000,
+  env   = NULL,
   ...
 ) {
   assert(
@@ -224,8 +227,8 @@ view_branches <- function(
   )
 
   info("Viewing branches for repository '", repo, "'")
-  branches_lst <- gh_url("repos", repo, "branches") %>%
-    gh_page(n_max = n_max, ...)
+  branches_lst <- gh_url("repos", repo, "branches", env = env) %>%
+    gh_page(n_max = n_max, env = env, ...)
 
   info("Transforming results", level = 4)
   branches_gh <- bind_properties(branches_lst, properties$branch)
@@ -243,6 +246,7 @@ view_branches <- function(
 view_branch <- function(
   branch,
   repo,
+  env = NULL,
   ...
 ) {
   assert(
@@ -255,8 +259,8 @@ view_branch <- function(
   )
 
   info("Viewing branch '", branch, "' in repository '", repo, "'")
-  branch_lst <- gh_url("repos", repo, "branches", branch) %>%
-    gh_request("GET", ...)
+  branch_lst <- gh_url("repos", repo, "branches", branch, env = env) %>%
+    gh_request("GET", env = env, ...)
 
   info("Transforming results", level = 4)
   branch_gh <- select_properties(branch_lst, properties$branch)
@@ -295,6 +299,7 @@ view_branch <- function(
 delete_branch <- function(
   branch,
   repo,
+  env = NULL,
   ...
 ) {
   assert(
@@ -307,8 +312,8 @@ delete_branch <- function(
   )
 
   info("Deleting branch '", branch, "' in repository '", repo, "'")
-  response <- gh_url("repos", repo, "git/refs/heads", branch) %>%
-    gh_request("DELETE", ...)
+  response <- gh_url("repos", repo, "git/refs/heads", branch, env = env) %>%
+    gh_request("DELETE", env = env, ...)
 
   info("Done", level = 7)
   structure(
