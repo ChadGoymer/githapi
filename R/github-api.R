@@ -1,3 +1,21 @@
+get_option <- function(
+  option,
+  env = NULL
+) {
+  assert_character(option, n = 1)
+
+  if (is_null(env)) {
+    getOption(option)
+  } else {
+    assert_character(env, n = 1)
+    if (env %in% names(.cache$config)) {
+      .cache$config[[env]][[option]]
+    } else {
+      getOption(option)
+    }
+  }
+}
+
 #  FUNCTION: gh_token ----------------------------------------------------------
 #
 #' Get a token for accessing GitHub
@@ -48,14 +66,19 @@
 #' @export
 #'
 gh_token <- function(
-  token   = getOption("github.token"),
-  oauth   = getOption("github.oauth"),
-  proxy   = getOption("github.proxy"),
-  id      = getOption("githapi.id"),
-  secret  = getOption("githapi.secret"),
-  cache   = getOption("githapi.cache"),
+  token   = NULL,
+  oauth   = NULL,
+  proxy   = NULL,
+  id      = NULL,
+  secret  = NULL,
+  cache   = NULL,
+  env     = NULL,
   refresh = FALSE
 ) {
+  if (is_null(token)) {
+    token <- get_option("github.token", env = env)
+  }
+
   if (!is_null(token)) {
     assert(
       is_sha(token) || "Token" %in% class(token),
@@ -65,33 +88,45 @@ gh_token <- function(
     return(token)
   }
 
-  if (!refresh && !is_null(.cache$token)) {
-    info("> Retrieving cached token", level = 6)
-    return(.cache$token)
+  if (!refresh) {
+    if (!is_null(env) && !is_null(.cache[[env]][["token"]])) {
+      info("> Retrieving cached token for env '", env, "'", level = 6)
+      return(.cache[[env]][["token"]])
+    } else if (!is_null(.cache[["token"]])) {
+      info("> Retrieving cached token", level = 6)
+      return(.cache[["token"]])
+    }
   }
 
-  assert(
-    is_scalar_character(oauth),
-    "'oauth' must be a string:\n  ", oauth
-  )
-  assert(
-    is_scalar_character(id),
-    "'id' must be a string:\n  ", id
-  )
-  assert(
-    is_scalar_character(secret),
-    "'secret' must be a string:\n  ", secret
-  )
+  if (is_null(oauth)) {
+    oauth <- get_option("github.oauth", env = env)
+  }
+  assert_character(oauth, n = 1)
+
+  if (is_null(id)) {
+    id <- get_option("githapi.id", env = env)
+  }
+  assert_character(id, n = 1)
+
+  if (is_null(secret)) {
+    secret <- get_option("githapi.secret", env = env)
+  }
+  assert_character(secret, n = 1)
+
+  if (is_null(cache)) {
+    cache <- get_option("githapi.cache", env = env)
+  }
   assert(
     is_scalar_logical(cache) || is_scalar_character(cache),
     "'cache' must be a boolean or a string:\n  ", cache
   )
 
+  if (is_null(proxy)) {
+    proxy <- get_option("github.proxy", env = env)
+  }
+
   if (!is_null(proxy)) {
-    assert(
-      is_scalar_character(proxy),
-      "'proxy' must be a string:\n  ", proxy
-    )
+    assert_character(proxy, n = 1)
     httr::set_config(httr::use_proxy(proxy))
     httr::set_config(httr::config(connecttimeout = 60))
     on.exit(httr::reset_config())
@@ -131,7 +166,11 @@ gh_token <- function(
     )
   }
 
-  .cache$token <- token
+  if (is_null(env)) {
+    .cache[["token"]] <- token
+  } else {
+    .cache[[env]][["token"]] <- token
+  }
   token
 }
 
@@ -173,12 +212,13 @@ gh_token <- function(
 #'
 gh_url <- function(
   ...,
-  api = getOption("github.api")
+  api = NULL,
+  env = NULL
 ) {
-  assert(
-    is_url(api),
-    "'api' must be a valid URL:\n  ", api
-  )
+  if (is_null(api)) {
+    api <- get_option("github.api", env = env)
+  }
+  assert_url(api)
 
   dots <- list(...) %>% compact() %>% unlist()
 
@@ -294,39 +334,28 @@ gh_request <- function(
   payload = NULL,
   headers = NULL,
   accept  = "application/vnd.github.v3+json",
-  token   = getOption("github.token"),
-  proxy   = getOption("github.proxy"),
+  proxy   = NULL,
+  token   = NULL,
+  env     = NULL,
   ...
 ) {
-  assert(
-    is_url(url),
-    "'url' must be a valid URL:\n  ", url
-  )
-  assert(
-    is_scalar_character(type),
-    "'type' must be a string:\n  ", type
-  )
-  assert(
-    type %in% c("GET", "POST", "PATCH", "PUT", "DELETE"),
-    "'type' must be either 'GET', 'POST', 'PATCH','PUT' or 'DELETE':\n  ", type
-  )
-  assert(
-    is_null(headers) || is_character(headers),
-    "'headers' must be a character vector:\n  ", headers
-  )
-  assert(
-    is_scalar_character(accept),
-    "'accept' must be a string:\n  ", accept
-  )
+  assert_url(url)
+  assert_character(type, n = 1)
+  assert_in(type, values = c("GET", "POST", "PATCH", "PUT", "DELETE"))
+  is_null(headers) || assert_character(headers)
+  assert_character(accept, n = 1)
+
+  if (is_null(proxy)) {
+    proxy <- get_option("github.proxy", env = env)
+  }
+
+  token <- gh_token(proxy = proxy, token = token, env = env)
 
   headers <- httr::add_headers(.headers = headers) %>%
     c(httr::accept(accept))
 
   if (!is_null(payload)) {
-    assert(
-      is_list(payload),
-      "'payload' must be a list:\n  ", payload
-    )
+    assert_list(payload)
     info("> Parsing payload", level = 6)
     payload <- jsonlite::toJSON(
       x          = payload,
@@ -337,7 +366,6 @@ gh_request <- function(
     headers <- c(headers, httr::content_type_json())
   }
 
-  token <- gh_token(proxy = proxy, token = token)
   if (is_sha(token)) {
     headers <- headers %>%
       c(httr::add_headers(Authorization = str_c("token ", token)))
@@ -348,10 +376,7 @@ gh_request <- function(
   }
 
   if (!is_null(proxy)) {
-    assert(
-      is_scalar_character(proxy),
-      "'proxy' must be a string:\n  ", proxy
-    )
+    assert_character(proxy, n = 1)
     httr::set_config(httr::use_proxy(proxy))
     on.exit(httr::reset_config())
   }
@@ -469,38 +494,23 @@ gh_page <- function(
   page_size = 100,
   headers   = NULL,
   accept    = "application/vnd.github.v3+json",
-  token     = gh_token(),
-  proxy     = getOption("github.proxy"),
+  proxy     = NULL,
+  token     = NULL,
+  env       = NULL,
   ...
 ) {
-  assert(
-    is_url(url),
-    "'url' must be a valid URL:\n  ", url
-  )
-  assert(
-    is_scalar_integerish(n_max) && isTRUE(n_max > 0),
-    "'n_max' must be a positive integer:\n  ", n_max
-  )
-  assert(
-    is_scalar_integerish(page_size) && isTRUE(page_size > 0),
-    "'page_size' must be a positive integer:\n  ", page_size
-  )
-  assert(
-    is_null(headers) || is_character(headers),
-    "'headers' must be a character vector:\n  ", headers
-  )
-  assert(
-    is_scalar_character(accept),
-    "'accept' must be a string:\n  ", accept
-  )
-  assert(
-    is_sha(token) || "Token" %in% class(token),
-    "'token' must be a string or a Token object:\n  ", token
-  )
-  assert(
-    is_null(proxy) || is_scalar_character(proxy),
-    "'proxy' must be a string:\n  ", proxy
-  )
+  assert_url(url)
+  assert_natural(n_max, n = 1)
+  assert_natural(page_size, n = 1)
+  is_null(headers) || assert_character(headers)
+  assert_character(accept, n = 1)
+
+  if (is_null(proxy)) {
+    proxy <- get_option("github.proxy", env = env)
+  }
+  is_null(proxy) || assert_character(proxy, n = 1)
+
+  token <- gh_token(proxy = proxy, token = token, env = env)
 
   parsed_url <- httr::parse_url(url)
   per_page   <- c(rep(page_size, n_max %/% page_size), n_max %% page_size)
@@ -518,6 +528,7 @@ gh_page <- function(
       token   = token,
       headers = headers,
       proxy   = proxy,
+      env     = env,
       ...
     )
 
@@ -612,46 +623,24 @@ gh_find <- function(
   page_size = 100,
   headers   = NULL,
   accept    = "application/vnd.github.v3+json",
-  token     = gh_token(),
-  proxy     = getOption("github.proxy"),
+  proxy     = NULL,
+  token     = NULL,
   ...
 ) {
-  assert(
-    is_url(url),
-    "'url' must be a valid URL:\n  ", url
-  )
-  assert(
-    is_scalar_character(property),
-    "'property' must be a string:\n  ", property
-  )
-  assert(
-    is_scalar_atomic(value),
-    "'value' must be a scalar:\n  ", value
-  )
-  assert(
-    is_scalar_integerish(max_pages) && isTRUE(max_pages > 0),
-    "'max_pages' must be a positive integer:\n  ", max_pages
-  )
-  assert(
-    is_scalar_integerish(page_size) && isTRUE(page_size > 0),
-    "'page_size' must be a positive integer:\n  ", page_size
-  )
-  assert(
-    is_null(headers) || is_character(headers),
-    "'headers' must be a character vector:\n  ", headers
-  )
-  assert(
-    is_scalar_character(accept),
-    "'accept' must be a string:\n  ", accept
-  )
-  assert(
-    is_sha(token) || "Token" %in% class(token),
-    "'token' must be a string or a Token object:\n  ", token
-  )
-  assert(
-    is_null(proxy) || is_scalar_character(proxy),
-    "'proxy' must be a string:\n  ", proxy
-  )
+  assert_url(url)
+  assert_character(property, n = 1)
+  assert_atomic(value, n = 1)
+  assert_natural(max_pages, n = 1)
+  assert_natural(page_size, n = 1)
+  is_null(headers) || assert_character(headers)
+  assert_character(accept, n = 1)
+
+  if (is_null(proxy)) {
+    proxy <- get_option("github.proxy", env = env)
+  }
+  is_null(proxy) || assert_character(proxy, n = 1)
+
+  token <- gh_token(proxy = proxy, token = token, env = env)
 
   parsed_url <- httr::parse_url(url)
   parsed_url$query$per_page <- as.character(page_size)
@@ -665,6 +654,7 @@ gh_find <- function(
       token   = token,
       headers = headers,
       proxy   = proxy,
+      env     = env,
       ...
     )
 
@@ -744,22 +734,13 @@ gh_download <- function(
   path,
   headers = NULL,
   accept  = NULL,
-  token   = getOption("github.token"),
-  proxy   = getOption("github.proxy"),
+  proxy   = NULL,
+  token   = NULL,
   ...
 ) {
-  assert(
-    is_url(url),
-    "'url' must be a valid URL:\n  ", url
-  )
-  assert(
-    is_dir(dirname(path)) && is_writeable(dirname(path)),
-    "'path' must be a writeable path:\n  ", path
-  )
-  assert(
-    is_null(headers) || is_character(headers),
-    "'headers' must be a character vector:\n  ", headers
-  )
+  assert_url(url)
+  assert_dir(dirname(path)) && assert_writeable(dirname(path))
+  is_null(headers) || assert_character(headers)
 
   headers <- httr::add_headers(.headers = headers)
 
@@ -767,7 +748,12 @@ gh_download <- function(
     headers <- c(headers, httr::accept(accept))
   }
 
-  token <- gh_token(proxy = proxy, token = token)
+  if (is_null(proxy)) {
+    proxy <- get_option("github.proxy", env = env)
+  }
+
+  token <- gh_token(proxy = proxy, token = token, env = env)
+
   if (is_sha(token)) {
     headers <- c(
       headers,
@@ -779,10 +765,7 @@ gh_download <- function(
   }
 
   if (!is_null(proxy)) {
-    assert(
-      is_scalar_character(proxy),
-      "'proxy' must be a string:\n  ", proxy
-    )
+    assert_character(proxy, n = 1)
     httr::set_config(httr::use_proxy(proxy))
     on.exit(httr::reset_config())
   }
