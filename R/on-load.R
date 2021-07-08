@@ -10,6 +10,7 @@
     config_path <- system.file("config.json", package = "githapi")
   }
   config <- jsonlite::read_json(config_path, simplifyVector = TRUE)
+  .cache$config <- lapply(config, function(e) as.list(unlist(e)))
 
   if (Sys.getenv("ENVIRONMENT") %in% names(config)) {
     config <- config[[Sys.getenv("ENVIRONMENT")]]
