@@ -625,6 +625,7 @@ gh_find <- function(
   accept    = "application/vnd.github.v3+json",
   proxy     = NULL,
   token     = NULL,
+  env       = NULL,
   ...
 ) {
   assert_url(url)
@@ -736,6 +737,7 @@ gh_download <- function(
   accept  = NULL,
   proxy   = NULL,
   token   = NULL,
+  env     = NULL,
   ...
 ) {
   assert_url(url)
